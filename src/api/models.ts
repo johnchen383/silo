@@ -300,6 +300,8 @@ interface ChapterHebrewSubtitle {
     content: (string | FormattedText | VerseFootnoteReference)[];
 }
 
+export type ChapterVerseContent = (string | FormattedText | InlineHeading | InlineLineBreak | VerseFootnoteReference);
+
 /**
  * A verse in a chapter.
  */
@@ -318,7 +320,7 @@ export interface ChapterVerse {
      * The list of content for the verse.
      * Each element in the list could be a string, formatted text, or a footnote reference.
      */
-    content: (string | FormattedText | InlineHeading | InlineLineBreak | VerseFootnoteReference)[];
+    content: ChapterVerseContent[];
 }
 
 /**

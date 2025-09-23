@@ -1,3 +1,5 @@
+@use "../theme" as *;
+
 .chapter-container {
     height: 100%;
     width: 80dvh;
@@ -13,6 +15,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        color: $primary;
 
         .book {
             font-size: 2rem;
@@ -25,39 +28,91 @@
         }
     }
 
-    .verse
-    {
-        .verse-num {
-            font-size: 0.8rem;
-            vertical-align: super;
-            margin-right: 0.2rem;
-        }
+    .hebrew-subtitle {
+        font-style: italic;
+        font-weight: 400;
+        margin-bottom: 1rem;
+    }
 
+    .verse,
+    .hebrew-subtitle {
         .text {
             margin-right: 0.2rem;
 
-            &.poem {
+            &.selah {
                 display: block;
-                margin-left: 1.5rem;
-                font-style: italic;
+                width: 100%;
+                text-align: end;
             }
 
-            &.red {
-                color: red;
+            &.poem {
+                font-style: italic;
+                line-height: 1.8;
+
+                &.indented {
+                    margin-left: 0.2rem;
+                }
+
+                &.breakup {
+                    display: block;
+                }
             }
         }
     }
 
-    .spacer
-    {
+    .spacer {
         margin-bottom: 0.8rem;
+
+        &.small {
+            margin-bottom: 0rem;
+        }
     }
 
-    .chapter-subheading
-    {
+    .chapter-subheading {
         font-size: 1.2rem;
         font-weight: 600;
         margin-top: 1.5rem;
         margin-bottom: 0.5rem;
+    }
+
+    .verse-num,
+    .footnote,
+    .footnote-num {
+        font-size: 0.8rem;
+        vertical-align: 0.3rem;
+        margin-right: 0.2rem;
+        color: $accent;
+
+        &.footnote {
+            cursor: pointer;
+            user-select: none;
+            color: $highlight;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .footnotes {
+        margin-top: 1.5rem;
+        color: $highlight;
+        font-size: 0.8rem;
+        line-height: 1.4;
+
+        .footnote-container
+        {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .footnote-num {
+            vertical-align: 0rem;
+            color: $highlight;
+            margin-right: 0.5rem;
+            width: 1.3rem;
+            text-align: right;
+            display: inline-block;
+        }
     }
 }

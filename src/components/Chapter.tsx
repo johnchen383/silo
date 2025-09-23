@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { GetBSB } from "../api/bsb";
-import type { ChapterVerse, TranslationBookChapter } from "../api/models";
+import type { ChapterVerse, TranslationBookChapter, ChapterVerseContent } from "../api/models";
 import { useNavigate, useParams } from "react-router-dom";
 import { CONST_BIBLE_ROUTE, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL } from "../consts/bible_data";
 
@@ -13,56 +13,8 @@ const ChapterHeader: React.FC<{ book: string, number: number }> = ({ book, numbe
     </div>
 );
 
-const LineBreak: React.FC<{idx: number}> = ({ idx }) => <span key={idx}><br/><div className="spacer"></div></span>;
+const LineBreak: React.FC<{ idx: number, small: boolean }> = ({ idx, small }) => <span key={idx}><br /><div className={`spacer ${small ? 'small' : ''}`}></div></span>;
 
-const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
-    return (
-        <span className="verse">
-            <sup className="verse-num">{verse.number}</sup>
-            {verse.content.map((c, i) => {
-                if (typeof c === "string") {
-                    return (
-                        <span key={i} className="text">
-                            {c}
-                        </span>
-                    );
-                }
-
-                // Handle other types
-                if ("text" in c) {
-                    return (
-                        <span key={i} className={`text ${c.poem ? "poem" : ""} ${c.wordsOfJesus ? "red" : ""} `}>
-                            {c.text}
-                        </span>
-                    );
-                }
-
-                if ("heading" in c) {
-                    return (
-                        <span key={i} className="inline-heading">
-                            {c.heading}
-                        </span>
-                    );
-                }
-
-                if ("lineBreak" in c) {
-                    return <LineBreak idx={i} />;;
-                }
-
-                if ("footnoteRef" in c) {
-                    return (
-                        <sup key={i} className="footnote">
-                            TODO
-                        </sup>
-                    );
-                }
-
-                // fallback
-                return null;
-            })}
-        </span>
-    );
-};
 
 const Chapter = () => {
     // TODO: implement verse logic
@@ -75,6 +27,84 @@ const Chapter = () => {
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
     const navigate = useNavigate();
+    const footnote_ref = useRef<HTMLDivElement>(null);
+
+
+    function VerseContent(
+        c: ChapterVerseContent,
+        i: number,
+        arr: ChapterVerseContent[]
+    ): React.ReactNode {
+        if (typeof c === "string") {
+            return (
+                <span key={i} className={`text ${c === "Selah" ? "selah" : ""}`}>
+                    {c}
+                </span>
+            );
+        }
+
+        if ("text" in c) {
+            let next_element_footnote = false;
+
+            if (i < arr.length - 1) {
+                const next = arr[i + 1];
+                if (typeof next !== "string" && "noteId" in next) {
+                    next_element_footnote = true;
+                }
+            }
+
+            return (
+                <span
+                    key={i}
+                    className={`text ${c.poem ? `poem ${i === 0 ? "" : "indented"} ${(i === 0 || next_element_footnote) ? "" : "breakup"}` : ""
+                        } ${c.wordsOfJesus ? "red" : ""}`}
+                >
+                    {c.text}
+                </span>
+            );
+        }
+
+        if ("heading" in c) {
+            return (
+                <span key={i} className="inline-heading">
+                    UNFORMATTED HEADING (CONTACT DEVELOPER)
+                </span>
+            );
+        }
+
+        if ("lineBreak" in c) {
+            if (i > 0) {
+                const prev = arr[i - 1];
+                if (typeof prev !== "string" && ("text" in prev || "lineBreak" in prev)) {
+                    return null;
+                }
+            }
+            return <LineBreak key={i} idx={i} small={false} />;
+        }
+
+        if ("noteId" in c) {
+            return (
+                <sup key={i} className="footnote" onClick={ScrollToBottom}>
+                    {c.noteId + 1}
+                </sup>
+            );
+        }
+
+        return null;
+    }
+
+    const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
+        return (
+            <span className="verse">
+                <sup className="verse-num">{verse.number}</sup>
+                {verse.content.map(VerseContent)}
+            </span>
+        );
+    };
+
+    const ScrollToBottom = () => {
+        footnote_ref.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
     useEffect(() => {
         const Initialise = async () => {
@@ -130,17 +160,16 @@ const Chapter = () => {
                             }
 
                             if (cont.type === "line_break") {
-                                // Only skip <br /> if the previous element exists and was a heading
-                                if (idx > 0 && arr[idx - 1].type === "heading") {
+                                if (idx > 0 && (arr[idx - 1].type === "heading" || arr[idx - 1].type === "hebrew_subtitle" || arr[idx - 1].type === "line_break")) {
                                     return null;
                                 }
-                                return <LineBreak idx={idx} />;
+                                return <LineBreak idx={idx} small={false} />;
                             }
 
                             if (cont.type === "hebrew_subtitle") {
                                 return (
                                     <h4 key={idx} className="hebrew-subtitle">
-                                        TODO: HEBREW
+                                        {cont.content.map(VerseContent)}
                                     </h4>
                                 );
                             }
@@ -148,6 +177,16 @@ const Chapter = () => {
                             return null;
                         })}
 
+                    </div>
+                    <div className="footnotes" ref={i === 0 ? footnote_ref : null}>
+                        {c.chapter.footnotes.map((note, idx) => {
+                            return (
+                                <div key={idx} className="footnote-container">
+                                    <sup className="footnote-num">{note.noteId + 1}</sup>
+                                    <span className="footnote-text">{note.text}</span>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             ))}
