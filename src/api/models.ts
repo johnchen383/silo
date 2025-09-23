@@ -303,7 +303,7 @@ interface ChapterHebrewSubtitle {
 /**
  * A verse in a chapter.
  */
-interface ChapterVerse {
+export interface ChapterVerse {
     /**
      * Indicates that the content is a verse.
      */

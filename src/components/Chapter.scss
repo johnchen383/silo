@@ -1,0 +1,62 @@
+.chapter-container {
+    height: 100dvh;
+    width: 80dvh;
+    // background-color: orange;
+    padding: 2rem;
+
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    .chapter-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .book {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .chapter {
+            font-size: 3.5rem;
+            font-weight: 800;
+        }
+    }
+
+    .verse
+    {
+        .verse-num {
+            font-size: 0.8rem;
+            vertical-align: super;
+            margin-right: 0.2rem;
+        }
+
+        .text {
+            margin-right: 0.2rem;
+
+            &.poem {
+                display: block;
+                margin-left: 1.5rem;
+                font-style: italic;
+            }
+
+            &.red {
+                color: red;
+            }
+        }
+    }
+
+    .spacer
+    {
+        margin-bottom: 0.8rem;
+    }
+
+    .chapter-subheading
+    {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+}

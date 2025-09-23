@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import './index.css'
+import './index.scss'
 
 // PWA service worker (auto handled by vite-plugin-pwa)
 import { registerSW } from 'virtual:pwa-register'
