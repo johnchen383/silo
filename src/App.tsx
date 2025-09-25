@@ -4,7 +4,7 @@ import { CONST_DEFAULT_CHAPTER_URL } from "./consts/bible_data";
 import Scaffold from "./components/Scaffold";
 import { useAuth } from "./providers/auth_provider";
 import Login from "./components/Login";
-import { useEffect, type JSX } from "react";
+import { type JSX } from "react";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { user } = useAuth();
