@@ -215,7 +215,8 @@ const Chapter = () => {
                         </div>
                     </div>
                 ))}
-
+                <div className="spacer"></div>
+                <div className="info" style={{fontSize: "0.7rem", textAlign: "center"}}>hash: {__COMMIT_HASH__}</div>
             </div>
             <div id="DOC_EL_CHAPTER_SELECTOR" className="chapter-selector">
                 {selected_book
