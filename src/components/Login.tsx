@@ -3,8 +3,12 @@ import { supabase } from "../supabase";
 
 export default function Login() {
     async function handleGoogleLogin() {
+        console.log(window.location.origin);
         const { error } = await supabase.auth.signInWithOAuth({
             provider: "google",
+            options: {
+                redirectTo: window.location.origin,
+            },
         });
         if (error) console.error(error.message);
     }
