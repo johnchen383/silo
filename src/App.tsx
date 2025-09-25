@@ -18,18 +18,6 @@ const App = () => {
   if (loading) {
     return <></>;
   }
-
-  useEffect(() => {
-    function setFullHeight() {
-      document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
-    }
-
-    window.addEventListener('resize', setFullHeight);
-    setFullHeight();
-
-    return () => window.removeEventListener('resize', setFullHeight);
-  }, []);
-
   return (
     <BrowserRouter>
       <Routes>
