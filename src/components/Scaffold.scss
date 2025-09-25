@@ -1,5 +1,5 @@
 .scaffold {
-    height: 100dvh;
+    height: calc(var(--vh));
     width: 100svw;
     display: flex;
     flex-direction: column;
