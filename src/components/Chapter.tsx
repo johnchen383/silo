@@ -5,8 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CONST_BIBLE_ROUTE, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL } from "../consts/bible_data";
 
 import "./Chapter.scss";
-import { useAuth } from "../providers/auth_provider";
-import { supabase } from "../supabase";
+// import { useAuth } from "../providers/auth_provider";
+// import { supabase } from "../supabase";
 
 const ChapterHeader: React.FC<{ book: string, number: number }> = ({ book, number }) => (
     <div className="chapter-header">
