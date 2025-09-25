@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CONST_BIBLE_ROUTE, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL } from "../consts/bible_data";
 
 import "./Chapter.scss";
+import { useAuth } from "../providers/auth_provider";
+import { supabase } from "../supabase";
 
 const ChapterHeader: React.FC<{ book: string, number: number }> = ({ book, number }) => (
     <div className="chapter-header">
@@ -28,6 +30,23 @@ const Chapter = () => {
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
     const navigate = useNavigate();
     const footnote_ref = useRef<HTMLDivElement>(null);
+
+    // const {user} = useAuth();
+
+    // const handleAddNote = async () => {
+    //     if (!user) return;
+
+    //     const { error } = await supabase.from("notes").insert([
+    //         {
+    //             user_id: user.id,
+    //             content: "Test note",
+    //         },
+    //     ]);
+
+    //     if (error) {
+    //         console.error("Error inserting note:", error);
+    //     }
+    // };
 
 
     function VerseContent(
