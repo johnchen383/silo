@@ -23,6 +23,11 @@ html, body {
   overscroll-behavior-x: none;
 }
 
+svg {
+  cursor: pointer;
+  color: $on-surface;
+}
+
 body {
   margin: 0px;
   padding: 0px;

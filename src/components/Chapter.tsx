@@ -28,8 +28,13 @@ const Chapter = () => {
 
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
+    const [selected_book, set_selected_book] = useState<string>("");
     const navigate = useNavigate();
     const footnote_ref = useRef<HTMLDivElement>(null);
+
+    const close_chapter_selector = () => {
+        document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
+    }
 
     // const {user} = useAuth();
 
@@ -160,56 +165,84 @@ const Chapter = () => {
     }, [book, chapter, verse]);
 
     return (
-        <div className="chapter-container">
-            {current_chapters.map((c, i) => (
-                <div key={i} className="chapter-block">
-                    <ChapterHeader book={c.book.name} number={c.chapter.number} />
-                    <div className="verses">
-                        {c.chapter.content.map((cont, idx, arr) => {
-                            if (cont.type === "heading") {
-                                return (
-                                    <h3 key={idx} className="chapter-subheading">
-                                        {cont.content}
-                                    </h3>
-                                );
-                            }
-
-                            if (cont.type === "verse") {
-                                return <Verse key={idx} verse={cont} />;
-                            }
-
-                            if (cont.type === "line_break") {
-                                if (idx > 0 && (arr[idx - 1].type === "heading" || arr[idx - 1].type === "hebrew_subtitle" || arr[idx - 1].type === "line_break")) {
-                                    return null;
+        <>
+            <div className="chapter-container">
+                {current_chapters.map((c, i) => (
+                    <div key={i} className="chapter-block">
+                        <ChapterHeader book={c.book.name} number={c.chapter.number} />
+                        <div className="verses">
+                            {c.chapter.content.map((cont, idx, arr) => {
+                                if (cont.type === "heading") {
+                                    return (
+                                        <h3 key={idx} className="chapter-subheading">
+                                            {cont.content}
+                                        </h3>
+                                    );
                                 }
-                                return <LineBreak idx={idx} small={false} />;
-                            }
 
-                            if (cont.type === "hebrew_subtitle") {
+                                if (cont.type === "verse") {
+                                    return <Verse key={idx} verse={cont} />;
+                                }
+
+                                if (cont.type === "line_break") {
+                                    if (idx > 0 && (arr[idx - 1].type === "heading" || arr[idx - 1].type === "hebrew_subtitle" || arr[idx - 1].type === "line_break")) {
+                                        return null;
+                                    }
+                                    return <LineBreak idx={idx} small={false} />;
+                                }
+
+                                if (cont.type === "hebrew_subtitle") {
+                                    return (
+                                        <h4 key={idx} className="hebrew-subtitle">
+                                            {cont.content.map(VerseContent)}
+                                        </h4>
+                                    );
+                                }
+
+                                return null;
+                            })}
+
+                        </div>
+                        <div className="footnotes" ref={i === 0 ? footnote_ref : null}>
+                            {c.chapter.footnotes.map((note, idx) => {
                                 return (
-                                    <h4 key={idx} className="hebrew-subtitle">
-                                        {cont.content.map(VerseContent)}
-                                    </h4>
-                                );
-                            }
-
-                            return null;
-                        })}
-
+                                    <div key={idx} className="footnote-container">
+                                        <sup className="footnote-num">{note.noteId + 1}</sup>
+                                        <span className="footnote-text">{note.text}</span>
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
-                    <div className="footnotes" ref={i === 0 ? footnote_ref : null}>
-                        {c.chapter.footnotes.map((note, idx) => {
-                            return (
-                                <div key={idx} className="footnote-container">
-                                    <sup className="footnote-num">{note.noteId + 1}</sup>
-                                    <span className="footnote-text">{note.text}</span>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
-            ))}
-        </div>
+                ))}
+
+            </div>
+            <div id="DOC_EL_CHAPTER_SELECTOR" className="chapter-selector">
+                {selected_book
+                    ? Array.from({ length: CONST_BOOKS_NUM_CHAPTERS[selected_book] }, (_, i) => i + 1).map((num) => (
+                        <button
+                            key={num}
+                            className={`chapter-button ${Number(chapter) === num ? "active" : ""}`}
+                            onClick={() => {
+                                close_chapter_selector();
+                                navigate(`${CONST_BIBLE_ROUTE}/${selected_book}/${num}`);
+                                window.setTimeout(() => {set_selected_book("");}, 300);
+                            }}>
+                            {num}
+                        </button>
+                    ))
+                    :
+                    Array.from(CONST_BOOKS).map((b, i) => (
+                        <button
+                            key={i}
+                            className={`book-button ${book?.toUpperCase() === b ? "active" : ""}`}
+                            onClick={() => set_selected_book(b)}
+                        >
+                            {b}
+                        </button>
+                    ))}
+            </div>
+        </>
     )
 }
 

@@ -100,8 +100,7 @@
         font-size: 0.8rem;
         line-height: 1.4;
 
-        .footnote-container
-        {
+        .footnote-container {
             display: flex;
             flex-direction: row;
         }
@@ -114,5 +113,20 @@
             text-align: right;
             display: inline-block;
         }
+    }
+}
+
+.chapter-selector {
+    position: fixed;
+    width: 80dvh;
+    max-width: 100%;
+    top: 100dvh;
+    z-index: 100;
+    background-color: $surface;
+    height: 100%;
+    transition: top 0.3s ease-in-out;
+
+    &.open {
+        top: 0dvh;
     }
 }

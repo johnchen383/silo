@@ -1,0 +1,15 @@
+@use "../theme" as *;
+
+.topbar
+{
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+    width: 80dvh;
+    max-width: 100%;
+    padding: 0.5rem 0.5rem;
+    z-index: 1;
+    background-color: $surface;
+}
