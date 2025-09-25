@@ -32,10 +32,6 @@ const Chapter = () => {
     const navigate = useNavigate();
     const footnote_ref = useRef<HTMLDivElement>(null);
 
-    const close_chapter_selector = () => {
-        document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
-    }
-
     // const {user} = useAuth();
 
     // const handleAddNote = async () => {
@@ -216,7 +212,7 @@ const Chapter = () => {
                     </div>
                 ))}
                 <div className="spacer"></div>
-                <div className="info" style={{fontSize: "0.7rem", textAlign: "center"}}>hash: {__COMMIT_HASH__}</div>
+                <div className="info" style={{ fontSize: "0.7rem", textAlign: "center" }}>hash: {__COMMIT_HASH__}</div>
             </div>
             <div id="DOC_EL_CHAPTER_SELECTOR" className="chapter-selector">
                 {selected_book
@@ -225,9 +221,12 @@ const Chapter = () => {
                             key={num}
                             className={`chapter-button ${Number(chapter) === num ? "active" : ""}`}
                             onClick={() => {
-                                close_chapter_selector();
+                                document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
                                 navigate(`${CONST_BIBLE_ROUTE}/${selected_book}/${num}`);
-                                window.setTimeout(() => {set_selected_book("");}, 300);
+                                window.setTimeout(() => {
+                                    set_selected_book("");
+                                    document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("visible");
+                                }, 300);
                             }}>
                             {num}
                         </button>

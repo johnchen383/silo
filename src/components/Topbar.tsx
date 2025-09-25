@@ -3,7 +3,7 @@ import "./Topbar.scss";
 
 const Topbar = () => {
     const open_chapter_selector = () => {
-        document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.add("open");
+        document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.add("open", "visible");
     }
     return (
         <div className="topbar">

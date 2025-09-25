@@ -120,13 +120,18 @@
     position: fixed;
     width: 80dvh;
     max-width: 100%;
-    top: 100dvh;
+    top: 100%;
     z-index: 100;
     background-color: $surface;
     height: 100%;
     transition: top 0.3s ease-in-out;
+    opacity: 0;
 
     &.open {
-        top: 0dvh;
+        top: 0%;
+    }
+
+    &.visible {
+        opacity: 1;
     }
 }
