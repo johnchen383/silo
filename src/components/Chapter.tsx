@@ -5,13 +5,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CONST_BIBLE_ROUTE, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL } from "../consts/bible_data";
 
 import "./Chapter.scss";
+import ChapterSelector from "./ChapterSelector";
+import useEvent from "../hooks/useEvent";
 // import { useAuth } from "../providers/auth_provider";
 // import { supabase } from "../supabase";
 
 const ChapterHeader: React.FC<{ book: string, number: number }> = ({ book, number }) => (
-    <div className="chapter-header">
-        <div className="book">{book}</div>
-        <div className="chapter">{number}</div>
+    <div className={`chapter-header`}>
+        <div className={`book`}>{book}</div>
+        <div className={`chapter`}>{number}</div>
     </div>
 );
 
@@ -28,9 +30,23 @@ const Chapter = () => {
 
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
-    const [selected_book, set_selected_book] = useState<string>("");
     const navigate = useNavigate();
     const footnote_ref = useRef<HTMLDivElement>(null);
+
+    const handle_vertical_scroll = (e: WheelEvent) => {
+        if (e.deltaY > 0)
+        {
+            // scrolling down
+            document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
+        }
+        else if (e.deltaY < 0)
+        {
+            // scrolling up
+            document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+        }
+    }
+
+    useEvent("wheel", handle_vertical_scroll, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
     // const {user} = useAuth();
 
@@ -115,8 +131,8 @@ const Chapter = () => {
 
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
-            <span className="verse">
-                <sup className="verse-num">{verse.number}</sup>
+            <span className={`verse`}>
+                <sup className={`verse-num`}>{ verse.number }</sup>
                 {verse.content.map(VerseContent)}
             </span>
         );
@@ -157,12 +173,13 @@ const Chapter = () => {
             set_current_chapters([data]);
         }
 
+        document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
         Initialise();
     }, [book, chapter, verse]);
 
     return (
         <>
-            <div className="chapter-container">
+            <div id="DOC_EL_CHAPTER_CONTAINER" className={`chapter-container`}>
                 {current_chapters.map((c, i) => (
                     <div key={i} className="chapter-block">
                         <ChapterHeader book={c.book.name} number={c.chapter.number} />
@@ -170,7 +187,7 @@ const Chapter = () => {
                             {c.chapter.content.map((cont, idx, arr) => {
                                 if (cont.type === "heading") {
                                     return (
-                                        <h3 key={idx} className="chapter-subheading">
+                                        <h3 key={idx} className={`chapter-subheading`}>
                                             {cont.content}
                                         </h3>
                                     );
@@ -199,7 +216,7 @@ const Chapter = () => {
                             })}
 
                         </div>
-                        <div className="footnotes" ref={i === 0 ? footnote_ref : null}>
+                        <div className={`footnotes`} ref={i === 0 ? footnote_ref : null}>
                             {c.chapter.footnotes.map((note, idx) => {
                                 return (
                                     <div key={idx} className="footnote-container">
@@ -214,34 +231,7 @@ const Chapter = () => {
                 <div className="spacer"></div>
                 <div className="info" style={{ fontSize: "0.7rem", textAlign: "center" }}>hash: {__COMMIT_HASH__}</div>
             </div>
-            <div id="DOC_EL_CHAPTER_SELECTOR" className="chapter-selector">
-                {selected_book
-                    ? Array.from({ length: CONST_BOOKS_NUM_CHAPTERS[selected_book] }, (_, i) => i + 1).map((num) => (
-                        <button
-                            key={num}
-                            className={`chapter-button ${Number(chapter) === num ? "active" : ""}`}
-                            onClick={() => {
-                                document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
-                                navigate(`${CONST_BIBLE_ROUTE}/${selected_book}/${num}`);
-                                window.setTimeout(() => {
-                                    set_selected_book("");
-                                    document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("visible");
-                                }, 300);
-                            }}>
-                            {num}
-                        </button>
-                    ))
-                    :
-                    Array.from(CONST_BOOKS).map((b, i) => (
-                        <button
-                            key={i}
-                            className={`book-button ${book?.toUpperCase() === b ? "active" : ""}`}
-                            onClick={() => set_selected_book(b)}
-                        >
-                            {b}
-                        </button>
-                    ))}
-            </div>
+            <ChapterSelector />
         </>
     )
 }

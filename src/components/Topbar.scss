@@ -1,7 +1,6 @@
 @use "../theme" as *;
 
-.topbar
-{
+.topbar {
     position: fixed;
     display: flex;
     flex-direction: row;
@@ -12,4 +11,11 @@
     padding: 0.5rem 0.5rem;
     z-index: 1;
     background-color: $surface;
+    top: 0;
+    transition: top 0.5s ease-in-out;
+
+    &.hidden {
+        top: -100%;
+        transition: top 1s ease-in-out;
+    }
 }
