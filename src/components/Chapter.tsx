@@ -7,6 +7,7 @@ import { CONST_BIBLE_ROUTE, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT
 import "./Chapter.scss";
 import ChapterSelector from "./ChapterSelector";
 import useEvent from "../hooks/useEvent";
+import useScrollDirection from "../hooks/useScroll";
 // import { useAuth } from "../providers/auth_provider";
 // import { supabase } from "../supabase";
 
@@ -45,6 +46,13 @@ const Chapter = () => {
     }
 
     useEvent("wheel", handle_vertical_scroll, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
+    useScrollDirection((direction) => {
+        if (direction === "down") {
+            document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
+        } else if (direction === "up") {
+            document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+        }
+    }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
     // const {user} = useAuth();
 
