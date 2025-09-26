@@ -5,6 +5,7 @@
   font-family: Inter, Arial, sans-serif;
 
   background-color: $surface;
+  // background-color: red;
   color: $on-surface;
 
   font-synthesis: none;
@@ -27,6 +28,11 @@ svg {
   cursor: pointer;
   color: $on-surface;
 }
+
+button, a, svg {
+  -webkit-tap-highlight-color: transparent;
+}
+
 
 body {
   margin: 0px;

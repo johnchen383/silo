@@ -29,6 +29,14 @@
     }
 
     .navigation {
+        margin-right: 0.5rem;
+    }
+
+    .inner-container {
+        padding: 0rem 2rem;
+    }
+
+    .navigation {
         display: flex;
         flex-direction: row;
         justify-content: end;
