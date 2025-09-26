@@ -34,13 +34,11 @@ const Chapter = () => {
     const footnote_ref = useRef<HTMLDivElement>(null);
 
     const handle_vertical_scroll = (e: WheelEvent) => {
-        if (e.deltaY > 0)
-        {
+        if (e.deltaY > 0) {
             // scrolling down
             document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
         }
-        else if (e.deltaY < 0)
-        {
+        else if (e.deltaY < 0) {
             // scrolling up
             document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
         }
@@ -132,7 +130,7 @@ const Chapter = () => {
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
             <span className={`verse`}>
-                <sup className={`verse-num`}>{ verse.number }</sup>
+                <sup className={`verse-num`}>{verse.number}</sup>
                 {verse.content.map(VerseContent)}
             </span>
         );
