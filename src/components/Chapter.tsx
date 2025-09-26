@@ -163,6 +163,7 @@ const Chapter = () => {
                 return;
             }
 
+            document.getElementById("DOC_EL_LOADER")?.classList.add("visible");
             const data = await GetBSB<TranslationBookChapter>(`/api/BSB/${target_book}/${target_chapter}.json`);
 
             if (verse && Number(verse) > data.numberOfVerses) {
@@ -171,6 +172,7 @@ const Chapter = () => {
             }
 
             set_current_chapters([data]);
+            document.getElementById("DOC_EL_LOADER")?.classList.remove("visible");
         }
 
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");

@@ -19,3 +19,36 @@
         transition: top 1s ease-in-out;
     }
 }
+
+.loader {
+    position: fixed;
+    width: 80dvh;
+    height: 0.3rem;
+    z-index: 100;
+    bottom: 0;
+    overflow: hidden;
+    background: #bcbbbb;
+    display: none;
+
+    &.visible
+    {
+        display: block;
+    }
+}
+
+.loader::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(92, 92, 92, 0.3), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    100% {
+        left: 100%;
+    }
+}
