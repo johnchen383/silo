@@ -119,8 +119,11 @@
             color: $highlight;
             margin-right: 0.5rem;
             width: 1.3rem;
+            flex: 0 0 1.3rem;
             text-align: right;
             display: inline-block;
+            font-size: 0.7rem;
+            font-variant-numeric: tabular-nums;
         }
     }
 
