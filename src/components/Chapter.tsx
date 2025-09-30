@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from "react"
 import { GetBSB } from "../api/bsb";
 import type { ChapterVerse, TranslationBookChapter, ChapterVerseContent } from "../api/models";
 import { useNavigate, useParams } from "react-router-dom";
-import { CONST_BIBLE_ROUTE, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL } from "../consts/bible_data";
+import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL } from "../consts/bible_data";
 
 import "./Chapter.scss";
 import ChapterSelector from "./ChapterSelector";
 import useEvent from "../hooks/useEvent";
 import useScrollDirection from "../hooks/useScroll";
+import { useHorizontalDrag } from "../hooks/useDrag";
+import { Icon } from "@iconify/react";
 // import { useAuth } from "../providers/auth_provider";
 // import { supabase } from "../supabase";
 
@@ -54,6 +56,18 @@ const Chapter = () => {
         }
     }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
+    const prev_chapter: BibleRouteParams = {
+        book: book || "GEN",
+        chapter: chapter ? String(Number(chapter) - 1) : "1",
+        verse: "1"
+    };
+
+    const next_chapter: BibleRouteParams = {
+        book: book || "GEN",
+        chapter: chapter ? String(Number(chapter) + 1) : "1",
+        verse: "1"
+    };
+
     // const {user} = useAuth();
 
     // const handleAddNote = async () => {
@@ -70,6 +84,12 @@ const Chapter = () => {
     //         console.error("Error inserting note:", error);
     //     }
     // };
+
+    const { dx, isDragging } = useHorizontalDrag({
+        onSwipeLeft: () => navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`),
+        onSwipeRight: () => navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`),
+        swipeThreshold: 20,
+    });
 
 
     function VerseContent(
@@ -238,6 +258,20 @@ const Chapter = () => {
                 ))}
                 <div className="spacer"></div>
                 <div className="info" style={{ fontSize: "0.7rem", textAlign: "center" }}>hash: {__COMMIT_HASH__}</div>
+            </div>
+            <div className="horizontal-arrow">
+                {
+                    <div className={`item left ${isDragging && dx > 0 ? "visible" : ""}`}>
+                        <Icon icon="basil:caret-left-outline" width="32" height="32" />
+                        <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[prev_chapter.book]} ${prev_chapter.chapter}`}</div>
+                    </div>
+                }
+                {
+                    <div className={`item right ${isDragging && dx < 0 ? "visible" : ""}`}>
+                        <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[next_chapter.book]} ${next_chapter.chapter}`}</div>
+                        <Icon icon="basil:caret-right-outline" width="32" height="32" />
+                    </div>
+                }
             </div>
             <ChapterSelector />
         </>
