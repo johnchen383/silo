@@ -21,4 +21,44 @@ function useScrollDirection(handler: (direction: "up" | "down") => void, element
   }, [handler]);
 }
 
+export function useHorizontalScrollDirection(
+  handler: (direction: "left" | "right") => void,
+  element: any = window,
+  onScrollEnd?: () => void, // optional scroll end callback
+  scrollEndDelay = 100 // ms
+) {
+  const lastScrollX = useRef(0);
+  const scrollTimeout = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    function handleScroll() {
+      const currentX = element.scrollLeft;
+
+      if (currentX < lastScrollX.current) {
+        handler("left");
+      } else if (currentX > lastScrollX.current) {
+        handler("right");
+      }
+
+      lastScrollX.current = currentX;
+
+      // Clear previous timeout
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+
+      // Set a new timeout for scroll end
+      if (onScrollEnd) {
+        scrollTimeout.current = window.setTimeout(() => {
+          onScrollEnd();
+        }, scrollEndDelay);
+      }
+    }
+
+    element?.addEventListener("scroll", handleScroll);
+    return () => {
+      element?.removeEventListener("scroll", handleScroll);
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    };
+  }, [handler, element, onScrollEnd, scrollEndDelay]);
+}
+
 export default useScrollDirection;

@@ -7,8 +7,7 @@ import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME, CONST_BOOKS, CONST_BOOKS_
 import "./Chapter.scss";
 import ChapterSelector from "./ChapterSelector";
 import useEvent from "../hooks/useEvent";
-import useScrollDirection from "../hooks/useScroll";
-import { useHorizontalDrag } from "../hooks/useDrag";
+import useScrollDirection, { useHorizontalScrollDirection } from "../hooks/useScroll";
 import { Icon } from "@iconify/react";
 // import { useAuth } from "../providers/auth_provider";
 // import { supabase } from "../supabase";
@@ -33,6 +32,7 @@ const Chapter = () => {
 
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
+    const [dx, set_dx] = useState(0);
     const navigate = useNavigate();
     const footnote_ref = useRef<HTMLDivElement>(null);
 
@@ -56,17 +56,28 @@ const Chapter = () => {
         }
     }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
+    const next_chapter: BibleRouteParams = {
+        book: book || "GEN",
+        chapter: chapter ? String(Number(chapter) + 1) : "1",
+        verse: "1"
+    };
+
     const prev_chapter: BibleRouteParams = {
         book: book || "GEN",
         chapter: chapter ? String(Number(chapter) - 1) : "1",
         verse: "1"
     };
 
-    const next_chapter: BibleRouteParams = {
-        book: book || "GEN",
-        chapter: chapter ? String(Number(chapter) + 1) : "1",
-        verse: "1"
-    };
+    useHorizontalScrollDirection((direction) => {
+        if (direction === "right") {
+            set_dx(-1);
+            // navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
+        } else if (direction === "left") {
+            set_dx(1);
+            // navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
+        }
+    }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"), () => { set_dx(0); });
+    
 
     // const {user} = useAuth();
 
@@ -85,11 +96,11 @@ const Chapter = () => {
     //     }
     // };
 
-    const { dx, isDragging } = useHorizontalDrag({
-        onSwipeLeft: () => navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`),
-        onSwipeRight: () => navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`),
-        swipeThreshold: 20,
-    });
+    // const { dx, isDragging } = useHorizontalDrag({
+    //     onSwipeLeft: () => navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`),
+    //     onSwipeRight: () => navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`),
+    //     swipeThreshold: 20,
+    // });
 
 
     function VerseContent(
@@ -208,66 +219,69 @@ const Chapter = () => {
     return (
         <>
             <div id="DOC_EL_CHAPTER_CONTAINER" className={`chapter-container`}>
-                {current_chapters.map((c, i) => (
-                    <div key={i} className="chapter-block">
-                        <ChapterHeader book={c.book.name} number={c.chapter.number} />
-                        <div className="verses">
-                            {c.chapter.content.map((cont, idx, arr) => {
-                                if (cont.type === "heading") {
-                                    return (
-                                        <h3 key={idx} className={`chapter-subheading`}>
-                                            {cont.content}
-                                        </h3>
-                                    );
-                                }
-
-                                if (cont.type === "verse") {
-                                    return <Verse key={idx} verse={cont} />;
-                                }
-
-                                if (cont.type === "line_break") {
-                                    if (idx > 0 && (arr[idx - 1].type === "heading" || arr[idx - 1].type === "hebrew_subtitle" || arr[idx - 1].type === "line_break")) {
-                                        return null;
+                <div className="filler" style={{ width: "200vw", height: "1px" }} />
+                <div className="content">
+                    {current_chapters.map((c, i) => (
+                        <div key={i} className="chapter-block">
+                            <ChapterHeader book={c.book.name} number={c.chapter.number} />
+                            <div className="verses">
+                                {c.chapter.content.map((cont, idx, arr) => {
+                                    if (cont.type === "heading") {
+                                        return (
+                                            <h3 key={idx} className={`chapter-subheading`}>
+                                                {cont.content}
+                                            </h3>
+                                        );
                                     }
-                                    return <LineBreak idx={idx} small={false} />;
-                                }
 
-                                if (cont.type === "hebrew_subtitle") {
+                                    if (cont.type === "verse") {
+                                        return <Verse key={idx} verse={cont} />;
+                                    }
+
+                                    if (cont.type === "line_break") {
+                                        if (idx > 0 && (arr[idx - 1].type === "heading" || arr[idx - 1].type === "hebrew_subtitle" || arr[idx - 1].type === "line_break")) {
+                                            return null;
+                                        }
+                                        return <LineBreak idx={idx} small={false} />;
+                                    }
+
+                                    if (cont.type === "hebrew_subtitle") {
+                                        return (
+                                            <h4 key={idx} className="hebrew-subtitle">
+                                                {cont.content.map(VerseContent)}
+                                            </h4>
+                                        );
+                                    }
+
+                                    return null;
+                                })}
+
+                            </div>
+                            <div className={`footnotes`} ref={i === 0 ? footnote_ref : null}>
+                                {c.chapter.footnotes.map((note, idx) => {
                                     return (
-                                        <h4 key={idx} className="hebrew-subtitle">
-                                            {cont.content.map(VerseContent)}
-                                        </h4>
-                                    );
-                                }
-
-                                return null;
-                            })}
-
+                                        <div key={idx} className="footnote-container">
+                                            <sup className="footnote-num">{note.noteId + 1}</sup>
+                                            <span className="footnote-text">{note.text}</span>
+                                        </div>
+                                    )
+                                })}
+                            </div>
                         </div>
-                        <div className={`footnotes`} ref={i === 0 ? footnote_ref : null}>
-                            {c.chapter.footnotes.map((note, idx) => {
-                                return (
-                                    <div key={idx} className="footnote-container">
-                                        <sup className="footnote-num">{note.noteId + 1}</sup>
-                                        <span className="footnote-text">{note.text}</span>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-                ))}
-                <div className="spacer"></div>
-                <div className="info" style={{ fontSize: "0.7rem", textAlign: "center" }}>hash: {__COMMIT_HASH__}</div>
+                    ))}
+                    <div className="spacer"></div>
+                    <div className="info" style={{ fontSize: "0.7rem", textAlign: "center" }}>hash: {__COMMIT_HASH__}</div>
+                </div>
             </div>
             <div className="horizontal-arrow">
                 {
-                    <div className={`item left ${isDragging && dx > 0 ? "visible" : ""}`}>
+                    <div className={`item left ${dx > 0 ? "visible" : ""}`}>
                         <Icon icon="basil:caret-left-outline" width="32" height="32" />
                         <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[prev_chapter.book]} ${prev_chapter.chapter}`}</div>
                     </div>
                 }
                 {
-                    <div className={`item right ${isDragging && dx < 0 ? "visible" : ""}`}>
+                    <div className={`item right ${dx < 0 ? "visible" : ""}`}>
                         <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[next_chapter.book]} ${next_chapter.chapter}`}</div>
                         <Icon icon="basil:caret-right-outline" width="32" height="32" />
                     </div>

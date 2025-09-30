@@ -10,9 +10,15 @@
     opacity: 1;
 
     overflow-y: scroll;
+    overflow-x: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
     position: relative;
+
+    .content {
+        position: sticky;
+        left: 0;
+    }
 
     .chapter-header {
         display: flex;
