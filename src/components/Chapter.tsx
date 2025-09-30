@@ -77,7 +77,7 @@ const Chapter = () => {
             // navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
         }
     }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"), () => { set_dx(0); });
-    
+
 
     // const {user} = useAuth();
 
@@ -221,6 +221,20 @@ const Chapter = () => {
             <div id="DOC_EL_CHAPTER_CONTAINER" className={`chapter-container`}>
                 <div className="filler" style={{ width: "200vw", height: "1px" }} />
                 <div className="content">
+                    <div className="horizontal-arrow">
+                        {
+                            <div className={`item left ${dx > 0 ? "visible" : ""}`}>
+                                <Icon icon="basil:caret-left-outline" width="32" height="32" />
+                                <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[prev_chapter.book]} ${prev_chapter.chapter}`}</div>
+                            </div>
+                        }
+                        {
+                            <div className={`item right ${dx < 0 ? "visible" : ""}`}>
+                                <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[next_chapter.book]} ${next_chapter.chapter}`}</div>
+                                <Icon icon="basil:caret-right-outline" width="32" height="32" />
+                            </div>
+                        }
+                    </div>
                     {current_chapters.map((c, i) => (
                         <div key={i} className="chapter-block">
                             <ChapterHeader book={c.book.name} number={c.chapter.number} />
@@ -270,22 +284,8 @@ const Chapter = () => {
                         </div>
                     ))}
                     <div className="spacer"></div>
-                    <div className="info" style={{ fontSize: "0.7rem", textAlign: "center" }}>hash: {__COMMIT_HASH__}</div>
+                    <div className="info" style={{ fontSize: "0.7rem", textAlign: "center", paddingBottom: "5rem" }}>hash: {__COMMIT_HASH__}</div>
                 </div>
-            </div>
-            <div className="horizontal-arrow">
-                {
-                    <div className={`item left ${dx > 0 ? "visible" : ""}`}>
-                        <Icon icon="basil:caret-left-outline" width="32" height="32" />
-                        <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[prev_chapter.book]} ${prev_chapter.chapter}`}</div>
-                    </div>
-                }
-                {
-                    <div className={`item right ${dx < 0 ? "visible" : ""}`}>
-                        <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[next_chapter.book]} ${next_chapter.chapter}`}</div>
-                        <Icon icon="basil:caret-right-outline" width="32" height="32" />
-                    </div>
-                }
             </div>
             <ChapterSelector />
         </>

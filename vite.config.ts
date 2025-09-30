@@ -12,13 +12,13 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'robots.txt'],
+      includeAssets: [],
       manifest: {
         name: 'Silo',
         short_name: 'Silo',
-        description: 'A place to share theological ideas.',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
+        description: 'Scriptural notetaking, reimagined.',
+        theme_color: '#FAF9F6',
+        background_color: '#FAF9F6',
         display: 'standalone',
         scope: '/',
         start_url: '/',
