@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { GetBSB } from "../api/bsb";
 import type { ChapterVerse, TranslationBookChapter, ChapterVerseContent } from "../api/models";
 import { useNavigate, useParams } from "react-router-dom";
@@ -34,7 +34,6 @@ const Chapter = () => {
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
     const [dx, set_dx] = useState(0);
     const navigate = useNavigate();
-    const footnote_ref = useRef<HTMLDivElement>(null);
 
     const handle_vertical_scroll = (e: WheelEvent) => {
         if (e.deltaY > 0) {
@@ -176,8 +175,12 @@ const Chapter = () => {
     };
 
     const ScrollToBottom = () => {
-        footnote_ref.current?.scrollIntoView({ behavior: "smooth" });
+        document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollTo({ top: document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollHeight, behavior: "smooth" });
     };
+
+    const ScrollToTop = () => {
+        document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
     useEffect(() => {
         const Initialise = async () => {
@@ -209,6 +212,7 @@ const Chapter = () => {
             }
 
             set_current_chapters([data]);
+            ScrollToTop();
             document.getElementById("DOC_EL_LOADER")?.classList.remove("visible");
         }
 
@@ -271,7 +275,7 @@ const Chapter = () => {
                                 })}
 
                             </div>
-                            <div className={`footnotes`} ref={i === 0 ? footnote_ref : null}>
+                            <div className={`footnotes`}>
                                 {c.chapter.footnotes.map((note, idx) => {
                                     return (
                                         <div key={idx} className="footnote-container">
