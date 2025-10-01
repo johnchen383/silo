@@ -90,12 +90,12 @@ const Chapter = () => {
                 {
                     <div className={`item left`} onClick={() => navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`)}>
                         <Icon icon="basil:caret-left-outline" width="32" height="32" />
-                        <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[prev_chapter.book]} ${prev_chapter.chapter}`}</div>
+                        <div className="label">{`${prev_chapter.book} ${prev_chapter.chapter}`}</div>
                     </div>
                 }
                 {
                     <div className={`item right`} onClick={() => navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`)}>
-                        <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[next_chapter.book]} ${next_chapter.chapter}`}</div>
+                        <div className="label">{`${next_chapter.book} ${next_chapter.chapter}`}</div>
                         <Icon icon="basil:caret-right-outline" width="32" height="32" />
                     </div>
                 }
@@ -105,10 +105,10 @@ const Chapter = () => {
 
     const handle_touch_end = (_: TouchEvent) => {
         const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
-        if (scroll_left < HOR_SCROLL_LEFT - 50) {
+        if (scroll_left < HOR_SCROLL_LEFT - 100) {
             navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
         }
-        else if (scroll_left > HOR_SCROLL_LEFT + 50) {
+        else if (scroll_left > HOR_SCROLL_LEFT + 100) {
             navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
         }
 
