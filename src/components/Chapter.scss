@@ -134,12 +134,21 @@
     .filler {
         margin-top: 6rem;
         height: 10px;
-        width: calc(min(80dvh, 100vw) + 2 * 14rem);
+        width: calc(min(80dvh, 100vw) + 2 * 12rem);
         position: absolute;
-        opacity: 0;
+        opacity: 1;
+        visibility: hidden;
 
         &.visible {
-            opacity: 1;
+            visibility: visible;
+        }
+
+        &.active {
+            .horizontal-arrow > .item {
+                opacity: 1;
+                color: $primary;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            }
         }
     }
 
@@ -167,14 +176,14 @@
             transform: translateY(-50%);
             font-weight: 500;
 
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             transition:
                 opacity 0.3s ease,
                 margin 0.3s ease;
 
             opacity: 0;
             &.visible {
-                opacity: 1;
+                opacity: 0.7;
             }
 
             &.left {

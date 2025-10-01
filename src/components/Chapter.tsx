@@ -2,12 +2,12 @@ import { useEffect, useState } from "react"
 import { GetBSB } from "../api/bsb";
 import type { ChapterVerse, TranslationBookChapter, ChapterVerseContent } from "../api/models";
 import { useNavigate, useParams } from "react-router-dom";
-import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL } from "../consts/bible_data";
+import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME, CONST_BOOKS, CONST_BOOKS_ARR, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL } from "../consts/bible_data";
 
 import "./Chapter.scss";
 import ChapterSelector from "./ChapterSelector";
 import useEvent from "../hooks/useEvent";
-import useScrollDirection, { useHorizontalScrollDirection } from "../hooks/useScroll";
+import useScrollDirection from "../hooks/useScroll";
 import { Icon } from "@iconify/react";
 // import { useAuth } from "../providers/auth_provider";
 // import { supabase } from "../supabase";
@@ -23,7 +23,7 @@ const LineBreak: React.FC<{ idx: number, small: boolean }> = ({ idx, small }) =>
 
 
 const Chapter = () => {
-    const HOR_SCROLL_LEFT = 250;
+    const HOR_SCROLL_LEFT = 200;
 
     // TODO: implement verse logic
     type BibleRouteParams = {
@@ -63,33 +63,62 @@ const Chapter = () => {
         document.getElementById("DOC_EL_HOR_SCROLL")?.style.setProperty("top", document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTop + "px");
     }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
+    const next_chapter: BibleRouteParams = {
+        book: Number(chapter) == CONST_BOOKS_NUM_CHAPTERS[book!]
+            ? (
+                book == "REV" ? "GEN" : CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) + 1]
+            ) : book!,
+        chapter: Number(chapter) == CONST_BOOKS_NUM_CHAPTERS[book!] ? "1" : String(Number(chapter) + 1),
+        verse: "1"
+    };
+
+    const prev_chapter: BibleRouteParams = {
+        book: Number(chapter) == 1
+            ? (
+                book == "GEN" ? "REV" : CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) - 1]
+            ) : book!,
+        chapter: Number(chapter) == 1 ? (
+                book == "GEN" ? String(CONST_BOOKS_NUM_CHAPTERS["REV"]) : String(CONST_BOOKS_NUM_CHAPTERS[CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) - 1]])
+            ) : String(Number(chapter) - 1),
+        verse: "1"
+    };
+
     const handle_touch_end = (_: TouchEvent) => {
+        if (document.getElementById("DOC_EL_HOR_SCROLL")?.classList.contains("active")) {
+            document.getElementById("DOC_EL_HOR_SCROLL")?.classList.remove("visible");
+            if (document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft! < HOR_SCROLL_LEFT) {
+                console.log(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`)
+                navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
+            }
+            else {
+                navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
+            }
+        }
+
         document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTo({ left: HOR_SCROLL_LEFT, behavior: "smooth" });
     }
 
     useEvent("touchend", handle_touch_end, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
-    const next_chapter: BibleRouteParams = {
-        book: book || "GEN",
-        chapter: chapter ? String(Number(chapter) + 1) : "1",
-        verse: "1"
-    };
+    useEvent("scroll", (_: any) => {
+        const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
 
-    const prev_chapter: BibleRouteParams = {
-        book: book || "GEN",
-        chapter: chapter ? String(Number(chapter) - 1) : "1",
-        verse: "1"
-    };
-
-    useHorizontalScrollDirection((direction) => {
-        if (direction === "right") {
-
-            // navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
-        } else if (direction === "left") {
-            // set_dx(1);
-            // navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
+        if (scroll_left == HOR_SCROLL_LEFT) {
+            // reset
+            document.getElementById("DOC_EL_HOR_SCROLL")?.classList.remove("visible");
         }
-    }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"), () => { });
+        else {
+            document.getElementById("DOC_EL_HOR_SCROLL")?.classList.add("visible");
+        }
+
+        let extent = Math.abs(HOR_SCROLL_LEFT - scroll_left);
+        if (extent > HOR_SCROLL_LEFT - 50) {
+            document.getElementById("DOC_EL_HOR_SCROLL")?.classList?.add("active");
+        }
+        else {
+            document.getElementById("DOC_EL_HOR_SCROLL")?.classList?.remove("active");
+        }
+    }, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
 
     // const {user} = useAuth();
@@ -220,10 +249,10 @@ const Chapter = () => {
 
             set_current_chapters([data]);
             document.getElementById("DOC_EL_LOADER")?.classList.remove("visible");
-            document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollLeft = HOR_SCROLL_LEFT;
-            document.getElementById("DOC_EL_HOR_SCROLL")?.classList.add("visible");
-
-            window.setTimeout(ScrollToTop, 300);
+            ScrollToTop();
+            window.setTimeout(() => {
+                document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollLeft = HOR_SCROLL_LEFT;
+            }, 1000);
         }
 
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
