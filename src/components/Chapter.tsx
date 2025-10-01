@@ -40,11 +40,6 @@ const Chapter = () => {
     }
 
     const handle_vertical_scroll = (e: WheelEvent) => {
-        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-            // Block horizontal scroll from trackpad
-            e.preventDefault();
-        }
-
         if (e.deltaY > 0) {
             on_scroll_down()
         }
