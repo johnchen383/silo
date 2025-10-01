@@ -23,6 +23,8 @@ const LineBreak: React.FC<{ idx: number, small: boolean }> = ({ idx, small }) =>
 
 
 const Chapter = () => {
+    const HOR_SCROLL_LEFT = 250;
+
     // TODO: implement verse logic
     type BibleRouteParams = {
         book: string;
@@ -32,10 +34,14 @@ const Chapter = () => {
 
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
-    const [dx, set_dx] = useState(0);
     const navigate = useNavigate();
 
     const handle_vertical_scroll = (e: WheelEvent) => {
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+            // Block horizontal scroll from trackpad
+            e.preventDefault();
+        }
+
         if (e.deltaY > 0) {
             // scrolling down
             document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
@@ -53,7 +59,15 @@ const Chapter = () => {
         } else if (direction === "up") {
             document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
         }
+
+        document.getElementById("DOC_EL_HOR_SCROLL")?.style.setProperty("top", document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTop + "px");
     }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
+
+    const handle_touch_end = (_: TouchEvent) => {
+        document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTo({ left: HOR_SCROLL_LEFT, behavior: "smooth" });
+    }
+
+    useEvent("touchend", handle_touch_end, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
     const next_chapter: BibleRouteParams = {
         book: book || "GEN",
@@ -69,13 +83,13 @@ const Chapter = () => {
 
     useHorizontalScrollDirection((direction) => {
         if (direction === "right") {
-            set_dx(-1);
+
             // navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
         } else if (direction === "left") {
-            set_dx(1);
+            // set_dx(1);
             // navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
         }
-    }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"), () => { set_dx(0); });
+    }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"), () => { });
 
 
     // const {user} = useAuth();
@@ -94,13 +108,6 @@ const Chapter = () => {
     //         console.error("Error inserting note:", error);
     //     }
     // };
-
-    // const { dx, isDragging } = useHorizontalDrag({
-    //     onSwipeLeft: () => navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`),
-    //     onSwipeRight: () => navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`),
-    //     swipeThreshold: 20,
-    // });
-
 
     function VerseContent(
         c: ChapterVerseContent,
@@ -167,7 +174,7 @@ const Chapter = () => {
 
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
-            <span className={`verse`}>
+            <span className={`verse`} onClick={() => { console.log(verse) }}>
                 <sup className={`verse-num`}>{verse.number}</sup>
                 {verse.content.map(VerseContent)}
             </span>
@@ -212,8 +219,11 @@ const Chapter = () => {
             }
 
             set_current_chapters([data]);
-            ScrollToTop();
             document.getElementById("DOC_EL_LOADER")?.classList.remove("visible");
+            document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollLeft = HOR_SCROLL_LEFT;
+            document.getElementById("DOC_EL_HOR_SCROLL")?.classList.add("visible");
+
+            window.setTimeout(ScrollToTop, 300);
         }
 
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
@@ -223,22 +233,23 @@ const Chapter = () => {
     return (
         <>
             <div id="DOC_EL_CHAPTER_CONTAINER" className={`chapter-container`}>
-                <div className="filler" style={{ width: "200vw", height: "1px" }} />
-                <div className="content">
+                <div id="DOC_EL_HOR_SCROLL" className="filler">
                     <div className="horizontal-arrow">
                         {
-                            <div className={`item left ${dx > 0 ? "visible" : ""}`}>
+                            <div className={`item left visible`}>
                                 <Icon icon="basil:caret-left-outline" width="32" height="32" />
                                 <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[prev_chapter.book]} ${prev_chapter.chapter}`}</div>
                             </div>
                         }
                         {
-                            <div className={`item right ${dx < 0 ? "visible" : ""}`}>
+                            <div className={`item right visible`}>
                                 <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[next_chapter.book]} ${next_chapter.chapter}`}</div>
                                 <Icon icon="basil:caret-right-outline" width="32" height="32" />
                             </div>
                         }
                     </div>
+                </div>
+                <div className="content">
                     {current_chapters.map((c, i) => (
                         <div key={i} className="chapter-block">
                             <ChapterHeader book={c.book.name} number={c.chapter.number} />

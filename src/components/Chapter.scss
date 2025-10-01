@@ -43,6 +43,10 @@
         margin-bottom: 1rem;
     }
 
+    .verse {
+        cursor: pointer;
+    }
+
     .verse,
     .hebrew-subtitle {
         .text {
@@ -127,8 +131,20 @@
         }
     }
 
+    .filler {
+        margin-top: 6rem;
+        height: 10px;
+        width: calc(min(80dvh, 100vw) + 2 * 14rem);
+        position: absolute;
+        opacity: 0;
+
+        &.visible {
+            opacity: 1;
+        }
+    }
+
     .horizontal-arrow {
-        position: fixed;
+        position: relative;
         z-index: 10;
         top: 50%;
         width: 100%;
@@ -168,7 +184,7 @@
                 padding-right: 1.2rem;
 
                 &.visible {
-                    margin-left: 3rem;
+                    margin-left: 1.5rem;
                 }
             }
 
@@ -178,7 +194,7 @@
                 right: 0.5rem;
                 padding-left: 1.2rem;
                 &.visible {
-                    margin-right: 3rem;
+                    margin-right: 1.5rem;
                 }
             }
         }

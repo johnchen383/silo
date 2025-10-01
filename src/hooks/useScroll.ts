@@ -25,7 +25,7 @@ export function useHorizontalScrollDirection(
   handler: (direction: "left" | "right") => void,
   element: any = window,
   onScrollEnd?: () => void, // optional scroll end callback
-  scrollEndDelay = 100 // ms
+  scrollEndDelay = 500 // ms
 ) {
   const lastScrollX = useRef(0);
   const scrollTimeout = useRef<number | undefined>(undefined);
