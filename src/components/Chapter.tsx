@@ -12,13 +12,6 @@ import { Icon } from "@iconify/react";
 // import { useAuth } from "../providers/auth_provider";
 // import { supabase } from "../supabase";
 
-const ChapterHeader: React.FC<{ book: string, number: number }> = ({ book, number }) => (
-    <div className={`chapter-header`}>
-        <div className={`book`}>{book}</div>
-        <div className={`chapter`}>{number}</div>
-    </div>
-);
-
 const LineBreak: React.FC<{ idx: number, small: boolean }> = ({ idx, small }) => <span key={idx}><br /><div className={`spacer ${small ? 'small' : ''}`}></div></span>;
 
 
@@ -36,6 +29,16 @@ const Chapter = () => {
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
     const navigate = useNavigate();
 
+    const on_scroll_up = () => {
+        document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+        // document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
+    }
+
+    const on_scroll_down = () => {
+        document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
+        // document.getElementById("DOC_EL_PAGINATION")?.classList.remove("active");
+    }
+
     const handle_vertical_scroll = (e: WheelEvent) => {
         if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
             // Block horizontal scroll from trackpad
@@ -43,24 +46,20 @@ const Chapter = () => {
         }
 
         if (e.deltaY > 0) {
-            // scrolling down
-            document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
+            on_scroll_down()
         }
         else if (e.deltaY < 0) {
-            // scrolling up
-            document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+            on_scroll_up()
         }
     }
 
     useEvent("wheel", handle_vertical_scroll, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
     useScrollDirection((direction) => {
         if (direction === "down") {
-            document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
+            on_scroll_down()
         } else if (direction === "up") {
-            document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+            on_scroll_up()
         }
-
-        document.getElementById("DOC_EL_HOR_SCROLL")?.style.setProperty("top", document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTop + "px");
     }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
     const next_chapter: BibleRouteParams = {
@@ -78,48 +77,45 @@ const Chapter = () => {
                 book == "GEN" ? "REV" : CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) - 1]
             ) : book!,
         chapter: Number(chapter) == 1 ? (
-                book == "GEN" ? String(CONST_BOOKS_NUM_CHAPTERS["REV"]) : String(CONST_BOOKS_NUM_CHAPTERS[CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) - 1]])
-            ) : String(Number(chapter) - 1),
+            book == "GEN" ? String(CONST_BOOKS_NUM_CHAPTERS["REV"]) : String(CONST_BOOKS_NUM_CHAPTERS[CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) - 1]])
+        ) : String(Number(chapter) - 1),
         verse: "1"
     };
 
+    const ChapterHeader = () => (
+        <div className={`chapter-header`}>
+            <div className={`book`}>{CONST_BOOK_SYMBOL_TO_NAME[book!]}</div>
+            <div className={`chapter`}>{chapter}</div>
+            <div id="DOC_EL_PAGINATION" className="horizontal-arrow">
+                {
+                    <div className={`item left`} onClick={() => navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`)}>
+                        <Icon icon="basil:caret-left-outline" width="32" height="32" />
+                        <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[prev_chapter.book]} ${prev_chapter.chapter}`}</div>
+                    </div>
+                }
+                {
+                    <div className={`item right`} onClick={() => navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`)}>
+                        <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[next_chapter.book]} ${next_chapter.chapter}`}</div>
+                        <Icon icon="basil:caret-right-outline" width="32" height="32" />
+                    </div>
+                }
+            </div>
+        </div>
+    );
+
     const handle_touch_end = (_: TouchEvent) => {
-        if (document.getElementById("DOC_EL_HOR_SCROLL")?.classList.contains("active")) {
-            document.getElementById("DOC_EL_HOR_SCROLL")?.classList.remove("visible");
-            if (document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft! < HOR_SCROLL_LEFT) {
-                console.log(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`)
-                navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
-            }
-            else {
-                navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
-            }
+        const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
+        if (scroll_left < HOR_SCROLL_LEFT - 50) {
+            navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
+        }
+        else if (scroll_left > HOR_SCROLL_LEFT + 50) {
+            navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
         }
 
         document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTo({ left: HOR_SCROLL_LEFT, behavior: "smooth" });
     }
 
     useEvent("touchend", handle_touch_end, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
-
-    useEvent("scroll", (_: any) => {
-        const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
-
-        if (scroll_left == HOR_SCROLL_LEFT) {
-            // reset
-            document.getElementById("DOC_EL_HOR_SCROLL")?.classList.remove("visible");
-        }
-        else {
-            document.getElementById("DOC_EL_HOR_SCROLL")?.classList.add("visible");
-        }
-
-        let extent = Math.abs(HOR_SCROLL_LEFT - scroll_left);
-        if (extent > HOR_SCROLL_LEFT - 50) {
-            document.getElementById("DOC_EL_HOR_SCROLL")?.classList?.add("active");
-        }
-        else {
-            document.getElementById("DOC_EL_HOR_SCROLL")?.classList?.remove("active");
-        }
-    }, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
-
 
     // const {user} = useAuth();
 
@@ -239,6 +235,7 @@ const Chapter = () => {
                 return;
             }
 
+            document.getElementById("DOC_EL_PAGINATION")?.classList.remove("active");
             document.getElementById("DOC_EL_LOADER")?.classList.add("visible");
             const data = await GetBSB<TranslationBookChapter>(`/api/BSB/${target_book}/${target_chapter}.json`);
 
@@ -252,6 +249,7 @@ const Chapter = () => {
             ScrollToTop();
             window.setTimeout(() => {
                 document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollLeft = HOR_SCROLL_LEFT;
+                document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
             }, 1000);
         }
 
@@ -262,26 +260,11 @@ const Chapter = () => {
     return (
         <>
             <div id="DOC_EL_CHAPTER_CONTAINER" className={`chapter-container`}>
-                <div id="DOC_EL_HOR_SCROLL" className="filler">
-                    <div className="horizontal-arrow">
-                        {
-                            <div className={`item left visible`}>
-                                <Icon icon="basil:caret-left-outline" width="32" height="32" />
-                                <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[prev_chapter.book]} ${prev_chapter.chapter}`}</div>
-                            </div>
-                        }
-                        {
-                            <div className={`item right visible`}>
-                                <div className="label">{`${CONST_BOOK_SYMBOL_TO_NAME[next_chapter.book]} ${next_chapter.chapter}`}</div>
-                                <Icon icon="basil:caret-right-outline" width="32" height="32" />
-                            </div>
-                        }
-                    </div>
-                </div>
+                <div className="filler" />
                 <div className="content">
                     {current_chapters.map((c, i) => (
                         <div key={i} className="chapter-block">
-                            <ChapterHeader book={c.book.name} number={c.chapter.number} />
+                            <ChapterHeader />
                             <div className="verses">
                                 {c.chapter.content.map((cont, idx, arr) => {
                                     if (cont.type === "heading") {
