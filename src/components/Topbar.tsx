@@ -9,9 +9,8 @@ const Topbar = () => {
         <>
             <div id="DOC_EL_TOPBAR" className="topbar">
                 <Icon icon="basil:book-outline" width="36" height="36" onClick={open_chapter_selector} />
-
+                <Icon icon="solar:settings-outline" width="36" height="36" onClick={open_chapter_selector} />
             </div>
-            <div id="DOC_EL_LOADER" className="loader"></div> 
         </>
     )
 }

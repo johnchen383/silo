@@ -107,6 +107,10 @@
 
     .verse {
         cursor: pointer;
+
+        &.selected {
+            border-bottom: 0.1rem dotted $on-surface;
+        }
     }
 
     .verse,

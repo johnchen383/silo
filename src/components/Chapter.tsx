@@ -27,15 +27,19 @@ const Chapter = () => {
 
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
+    const [selected_verse, set_selected_verse] = useState<number>(0);
+
     const navigate = useNavigate();
 
     const on_scroll_up = () => {
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+        document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
         // document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
     }
 
     const on_scroll_down = () => {
         document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
+        document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
         // document.getElementById("DOC_EL_PAGINATION")?.classList.remove("active");
     }
 
@@ -83,7 +87,7 @@ const Chapter = () => {
             <div className={`chapter`}>{chapter}</div>
             <div id="DOC_EL_PAGINATION" className="horizontal-arrow">
                 {
-                    <div className={`item left`} onClick={() => navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`)}>
+                    <div className={`item left`} onClick={() => {navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`)}}>
                         <Icon icon="basil:caret-left-outline" width="32" height="32" />
                         <div className="label">{`${prev_chapter.book} ${prev_chapter.chapter}`}</div>
                     </div>
@@ -99,6 +103,8 @@ const Chapter = () => {
     );
 
     const handle_touch_end = (_: TouchEvent) => {
+        document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
+
         const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
         if (scroll_left < HOR_SCROLL_LEFT - 100) {
             navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
@@ -194,7 +200,7 @@ const Chapter = () => {
 
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
-            <span className={`verse`} onClick={() => { console.log(verse) }}>
+            <span className={`verse ${selected_verse == verse.number ? 'selected' : ''}`} onClick={() => { set_selected_verse(verse.number) }}>
                 <sup className={`verse-num`}>{verse.number}</sup>
                 {verse.content.map(VerseContent)}
             </span>
@@ -230,8 +236,6 @@ const Chapter = () => {
                 return;
             }
 
-            document.getElementById("DOC_EL_PAGINATION")?.classList.remove("active");
-            document.getElementById("DOC_EL_LOADER")?.classList.add("visible");
             const data = await GetBSB<TranslationBookChapter>(`/api/BSB/${target_book}/${target_chapter}.json`);
 
             if (verse && Number(verse) > data.numberOfVerses) {
@@ -240,7 +244,6 @@ const Chapter = () => {
             }
 
             set_current_chapters([data]);
-            document.getElementById("DOC_EL_LOADER")?.classList.remove("visible");
             ScrollToTop();
             window.setTimeout(() => {
                 document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollLeft = HOR_SCROLL_LEFT;
@@ -249,6 +252,7 @@ const Chapter = () => {
         }
 
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+        set_selected_verse(0);
         Initialise();
     }, [book, chapter, verse]);
 
