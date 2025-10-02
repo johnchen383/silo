@@ -24,17 +24,17 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/silo_icon.png',
+            src: '/silo_icon_book.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/silo_icon.png',
+            src: '/silo_icon_book.png',
             sizes: '512x512',
             type: 'image/png'
           },
           {
-            src: '/silo_icon.png',
+            src: '/silo_icon_book.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
