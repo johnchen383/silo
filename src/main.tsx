@@ -6,12 +6,15 @@ import { Analytics } from '@vercel/analytics/react';
 // PWA service worker (auto handled by vite-plugin-pwa)
 import { registerSW } from 'virtual:pwa-register'
 import { AuthProvider } from './providers/auth_provider.tsx'
+import { AppStateProvider } from './providers/app_provider.tsx';
 
 registerSW({ immediate: true })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <AuthProvider>
-        <App />
-        <Analytics />
+        <AppStateProvider>
+            <App />
+            <Analytics />
+        </AppStateProvider>
     </AuthProvider>
 )

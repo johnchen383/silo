@@ -5,6 +5,7 @@ import Scaffold from "./components/Scaffold";
 import { useAuth } from "./providers/auth_provider";
 import Login from "./components/Login";
 import { type JSX } from "react";
+import { useAppProvider } from "./providers/app_provider";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { user } = useAuth();
@@ -12,19 +13,26 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
   return user ? children : <Navigate to="/login" replace />;
 }
 
+function IndexRoute({ children }: { children: JSX.Element }) {
+  const { setSelectedPage } = useAppProvider();
+  setSelectedPage("read")
+  return children;
+}
+
 const App = () => {
   const { loading } = useAuth();
-
   if (loading) {
     return <></>;
   }
+
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<ScaffoldWrapper />}>
-          <Route path="/" element={<Navigate to={`${CONST_DEFAULT_CHAPTER_URL}`} replace />} />
+          <Route path="/" element={<IndexRoute><Navigate to={`${CONST_DEFAULT_CHAPTER_URL}`} replace /></IndexRoute>} />
           <Route path="/login" element={<Login />} />
-          <Route path="/bible/:book/:chapter/:verse?" element={<PrivateRoute><Chapter /></PrivateRoute>} />
+          <Route path="/read/:book/:chapter/:verse?" element={<PrivateRoute><Chapter /></PrivateRoute>} />
+          <Route path="/read" element={<Navigate to={`${CONST_DEFAULT_CHAPTER_URL}`} replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

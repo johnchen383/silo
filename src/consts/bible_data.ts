@@ -1,4 +1,4 @@
-export const CONST_BIBLE_ROUTE = "/bible";
+export const CONST_BIBLE_ROUTE = "/read";
 
 export const CONST_DEFAULT_CHAPTER_URL = `${CONST_BIBLE_ROUTE}/GEN/1`;
 

@@ -1,0 +1,27 @@
+@use "../theme" as *;
+
+.preload
+{
+    visibility: hidden;
+}
+
+.tabbar {
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 80dvh;
+    max-width: 100%;
+    padding: 0.5rem 0.5rem;
+    z-index: 100;
+    background-color: $surface;
+    bottom: 0;
+    transition: bottom 0.5s ease-in-out;
+    // box-shadow: 0 6px 6px -4px rgba(0, 0, 0, 0.1);
+
+    &.hidden {
+        bottom: -100%;
+        transition: bottom 1s ease-in-out;
+    }
+}

@@ -33,12 +33,14 @@ const Chapter = () => {
 
     const on_scroll_up = () => {
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+        document.getElementById("DOC_EL_TABBAR")?.classList.remove("hidden");
         document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
         // document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
     }
 
     const on_scroll_down = () => {
         document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
+        document.getElementById("DOC_EL_TABBAR")?.classList.add("hidden");
         document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
         // document.getElementById("DOC_EL_PAGINATION")?.classList.remove("active");
     }
