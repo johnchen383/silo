@@ -87,7 +87,7 @@ const Chapter = () => {
             <div className={`chapter`}>{chapter}</div>
             <div id="DOC_EL_PAGINATION" className="horizontal-arrow">
                 {
-                    <div className={`item left`} onClick={() => {navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`)}}>
+                    <div className={`item left`} onClick={() => { navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`) }}>
                         <Icon icon="basil:caret-left-outline" width="32" height="32" />
                         <div className="label">{`${prev_chapter.book} ${prev_chapter.chapter}`}</div>
                     </div>
@@ -159,13 +159,18 @@ const Chapter = () => {
             }
 
             return (
-                <span
-                    key={i}
-                    className={`text ${c.poem ? `poem ${i === 0 ? "" : "indented"} ${(i === 0 || next_element_footnote) ? "" : "breakup"}` : ""
-                        } ${c.wordsOfJesus ? "red" : ""}`}
-                >
-                    {c.text}
-                </span>
+                <>
+                    <span
+                        key={i}
+                        className={`text ${c.poem ? `poem ${i === 0 ? "" : "indented"}` : ""
+                            } ${c.wordsOfJesus ? "red" : ""}`}
+                    >
+                        {c.text}
+                    </span>
+                    {
+                        (!next_element_footnote) ? <br /> : <></>
+                    }
+                </>
             );
         }
 
@@ -188,10 +193,24 @@ const Chapter = () => {
         }
 
         if ("noteId" in c) {
+            let next_element_poem = false;
+
+            if (i < arr.length - 1) {
+                const next = arr[i + 1];
+                if (typeof next !== "string" && "poem" in next && next.poem) {
+                    next_element_poem = true;
+                }
+            }
+
             return (
-                <sup key={i} className="footnote" onClick={ScrollToBottom}>
-                    {c.noteId + 1}
-                </sup>
+                <>
+                    <sup key={i} className="footnote" onClick={ScrollToBottom}>
+                        {c.noteId + 1}
+                    </sup>
+                    {
+                        (next_element_poem || i == arr.length - 1) ? <br /> : <></>
+                    }
+                </>
             );
         }
 
