@@ -1,0 +1,30 @@
+.construction {
+    width: 80svh;
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.6;
+
+    img {
+        object-fit: contain;
+        width: 60%;
+        margin-bottom: 2rem;
+    }
+
+    .caption
+    {
+        font-size: 1.3rem;
+    }
+
+    .label
+    {
+        margin-top: 1rem;
+        padding: 0rem 5rem;
+    }
+
+    padding: 3rem;
+    text-align: center;
+}

@@ -6,6 +6,7 @@ import { useAuth } from "./providers/auth_provider";
 import Login from "./components/Login";
 import { type JSX } from "react";
 import { useAppProvider } from "./providers/app_provider";
+import UnderConstruction from "./components/UnderConstruction";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { user } = useAuth();
@@ -31,6 +32,9 @@ const App = () => {
         <Route element={<ScaffoldWrapper />}>
           <Route path="/" element={<IndexRoute><Navigate to={`${CONST_DEFAULT_CHAPTER_URL}`} replace /></IndexRoute>} />
           <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<UnderConstruction />} />
+          <Route path="/notes" element={<UnderConstruction />} />
+          <Route path="/profile" element={<UnderConstruction />} />
           <Route path="/read/:book/:chapter/:verse?" element={<PrivateRoute><Chapter /></PrivateRoute>} />
           <Route path="/read" element={<Navigate to={`${CONST_DEFAULT_CHAPTER_URL}`} replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
