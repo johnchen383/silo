@@ -30,19 +30,19 @@ const Tabbar = () => {
                 <div className="content">
                     <div className="item" onClick={() => handle_tab_navigation('home')}>
                         <Icon icon={selectedPage == 'home' ? "fluent:home-32-filled" : "fluent:home-32-regular"} width="25" height="25" />
-                        <div className="label" style={{ fontSize: 12 }}>Home</div>
+                        <div className="label" style={{ fontSize: 14 }}>Home</div>
                     </div>
                     <div className="item" onClick={() => handle_tab_navigation('read')} >
                         <Icon icon={selectedPage == 'read' ? "famicons:book" : "famicons:book-outline"} width="25" height="25" />
-                        <div className="label" style={{ fontSize: 12 }}>Read</div>
+                        <div className="label" style={{ fontSize: 14 }}>Read</div>
                     </div>
                     <div className="item" onClick={() => handle_tab_navigation('notes')}>
                         <Icon icon={selectedPage == 'notes' ? "solar:notes-bold" : "solar:notes-outline"} width="25" height="25" />
-                        <div className="label" style={{ fontSize: 12 }}>Notes</div>
+                        <div className="label" style={{ fontSize: 14 }}>Notes</div>
                     </div>
                     <div className="item" onClick={() => handle_tab_navigation('profile')}>
                         <Icon icon={selectedPage == 'profile' ? "fluent:person-32-filled" : "fluent:person-32-regular"} width="25" height="25" />
-                        <div className="label" style={{ fontSize: 12 }}>Profile</div>
+                        <div className="label" style={{ fontSize: 14 }}>Profile</div>
                     </div>
                 </div>
             </div>

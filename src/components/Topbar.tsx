@@ -13,8 +13,8 @@ const Topbar = () => {
             {selectedPage == 'read'
                 ?
                 <div id="DOC_EL_TOPBAR" className="topbar">
-                    <Icon icon="basil:book-outline" width="32" height="32" onClick={open_chapter_selector} />
-                    <Icon icon="solar:settings-outline" width="32" height="32" onClick={() => setChapterContentViewSettings({...chapterContentViewSettings, manusriptMode: !chapterContentViewSettings.manusriptMode})} />
+                    <Icon icon="basil:book-outline" width="36" height="36" onClick={open_chapter_selector} />
+                    <Icon icon="solar:settings-outline" width="36" height="36" onClick={() => setChapterContentViewSettings({...chapterContentViewSettings, manusriptMode: !chapterContentViewSettings.manusriptMode})} />
                 </div>
                 : <></>
             }

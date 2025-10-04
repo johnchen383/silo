@@ -15,129 +15,29 @@ import { useAppProvider } from "../providers/app_provider";
 
 const LineBreak: React.FC<{ idx: number, small: boolean }> = ({ idx, small }) => <span key={idx}><br /><div className={`spacer ${small ? 'small' : ''}`}></div></span>;
 
+import React from 'react'
 
-const Chapter = () => {
-    const HOR_SCROLL_LEFT = 200;
+interface ChapterContentProps {
+    chapter: TranslationBookChapter;
+}
 
-    // TODO: implement verse logic
-    type BibleRouteParams = {
-        book: string;
-        chapter: string;
-        verse: string;
-    };
+type BibleRouteParams = {
+    book: string;
+    chapter: string;
+    verse: string;
+};
 
-    const { book, chapter, verse } = useParams<BibleRouteParams>();
-    const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
-    const [selected_verse, set_selected_verse] = useState<number>(0);
+export const ChapterContent = (props: ChapterContentProps) => {
     const { chapterContentViewSettings } = useAppProvider();
+    const [selected_verse, set_selected_verse] = useState<number>(0);
 
-    const navigate = useNavigate();
+    useEffect(() => {
+        set_selected_verse(0);
+    }, [])
 
-    const on_scroll_up = () => {
-        document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
-        document.getElementById("DOC_EL_TABBAR")?.classList.remove("hidden");
-        document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
-        // document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
-    }
-
-    const on_scroll_down = () => {
-        document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
-        document.getElementById("DOC_EL_TABBAR")?.classList.add("hidden");
-        document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
-        // document.getElementById("DOC_EL_PAGINATION")?.classList.remove("active");
-    }
-
-    const handle_vertical_scroll = (e: WheelEvent) => {
-        if (e.deltaY > 0) {
-            on_scroll_down()
-        }
-        else if (e.deltaY < 0) {
-            on_scroll_up()
-        }
-    }
-
-    useEvent("wheel", handle_vertical_scroll, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
-    useScrollDirection((direction) => {
-        if (direction === "down") {
-            on_scroll_down()
-        } else if (direction === "up") {
-            on_scroll_up()
-        }
-    }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
-
-    const next_chapter: BibleRouteParams = {
-        book: Number(chapter) == CONST_BOOKS_NUM_CHAPTERS[book!]
-            ? (
-                book == "REV" ? "GEN" : CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) + 1]
-            ) : book!,
-        chapter: Number(chapter) == CONST_BOOKS_NUM_CHAPTERS[book!] ? "1" : String(Number(chapter) + 1),
-        verse: "1"
+    const ScrollToBottom = () => {
+        document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollTo({ top: document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollHeight, behavior: "smooth" });
     };
-
-    const prev_chapter: BibleRouteParams = {
-        book: Number(chapter) == 1
-            ? (
-                book == "GEN" ? "REV" : CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) - 1]
-            ) : book!,
-        chapter: Number(chapter) == 1 ? (
-            book == "GEN" ? String(CONST_BOOKS_NUM_CHAPTERS["REV"]) : String(CONST_BOOKS_NUM_CHAPTERS[CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) - 1]])
-        ) : String(Number(chapter) - 1),
-        verse: "1"
-    };
-
-    const ChapterHeader = () => (
-        <div className={`chapter-header`}>
-            <div className={`book`}>{CONST_BOOK_SYMBOL_TO_NAME[book!]}</div>
-            <div className={`chapter`}>{chapter}</div>
-            <div id="DOC_EL_PAGINATION" className="horizontal-arrow">
-                {
-                    <div className={`item left`} onClick={() => { navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`) }}>
-                        <Icon icon="basil:caret-left-outline" width="32" height="32" />
-                        <div className="label">{`${prev_chapter.book} ${prev_chapter.chapter}`}</div>
-                    </div>
-                }
-                {
-                    <div className={`item right`} onClick={() => navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`)}>
-                        <div className="label">{`${next_chapter.book} ${next_chapter.chapter}`}</div>
-                        <Icon icon="basil:caret-right-outline" width="32" height="32" />
-                    </div>
-                }
-            </div>
-        </div>
-    );
-
-    const handle_touch_end = (_: TouchEvent) => {
-        document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
-
-        const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
-        if (scroll_left < HOR_SCROLL_LEFT - 100) {
-            navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
-        }
-        else if (scroll_left > HOR_SCROLL_LEFT + 100) {
-            navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
-        }
-
-        document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTo({ left: HOR_SCROLL_LEFT, behavior: "smooth" });
-    }
-
-    useEvent("touchend", handle_touch_end, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
-
-    // const {user} = useAuth();
-
-    // const handleAddNote = async () => {
-    //     if (!user) return;
-
-    //     const { error } = await supabase.from("notes").insert([
-    //         {
-    //             user_id: user.id,
-    //             content: "Test note",
-    //         },
-    //     ]);
-
-    //     if (error) {
-    //         console.error("Error inserting note:", error);
-    //     }
-    // };
 
     function VerseContent(
         c: ChapterVerseContent,
@@ -230,13 +130,181 @@ const Chapter = () => {
         );
     };
 
-    const ScrollToBottom = () => {
-        document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollTo({ top: document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollHeight, behavior: "smooth" });
+    return (
+        <>
+
+            <div className="verses">
+                {props.chapter.chapter.content.map((cont, idx, arr) => {
+                    if (cont.type === "heading") {
+                        if (!chapterContentViewSettings.manusriptMode) {
+                            return (
+                                <h3 key={idx} className={`chapter-subheading`}>
+                                    {cont.content}
+                                </h3>
+                            );
+                        }
+                        else {
+                            return <LineBreak idx={idx} small={false} />;
+                        }
+                    }
+
+                    if (cont.type === "verse") {
+                        return <Verse key={idx} verse={cont} />;
+                    }
+
+                    if (cont.type === "line_break") {
+                        if (idx > 0 && (arr[idx - 1].type === "heading" || arr[idx - 1].type === "hebrew_subtitle" || arr[idx - 1].type === "line_break")) {
+                            return null;
+                        }
+                        return <LineBreak idx={idx} small={true} />;
+                    }
+
+                    if (cont.type === "hebrew_subtitle") {
+                        return (
+                            <h4 key={idx} className="hebrew-subtitle">
+                                {cont.content.map(VerseContent)}
+                            </h4>
+                        );
+                    }
+
+                    return null;
+                })}
+
+            </div>
+            <div className={`footnotes`}>
+                {props.chapter.chapter.footnotes.map((note, idx) => {
+                    return (
+                        <div key={idx} className="footnote-container">
+                            <sup className="footnote-num">{note.noteId + 1}</sup>
+                            <span className="footnote-text">{note.text}</span>
+                        </div>
+                    )
+                })}
+            </div>
+        </>
+    )
+}
+
+
+const Chapter = () => {
+    const HOR_SCROLL_LEFT = 200;
+
+    // TODO: implement verse logic
+    const { book, chapter, verse } = useParams<BibleRouteParams>();
+    const [current_chapter, set_current_chapter] = useState<TranslationBookChapter | null>(null);
+
+    const navigate = useNavigate();
+
+    const on_scroll_up = () => {
+        document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+        document.getElementById("DOC_EL_TABBAR")?.classList.remove("hidden");
+    }
+
+    const on_scroll_down = () => {
+        document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
+        document.getElementById("DOC_EL_TABBAR")?.classList.add("hidden");
+    }
+
+    const handle_vertical_scroll = (e: WheelEvent) => {
+        if (e.deltaY > 0) {
+            on_scroll_down()
+        }
+        else if (e.deltaY < 0) {
+            on_scroll_up()
+        }
+    }
+
+    useEvent("wheel", handle_vertical_scroll, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
+    useScrollDirection((direction) => {
+        if (direction === "down") {
+            on_scroll_down()
+        } else if (direction === "up") {
+            on_scroll_up()
+        }
+    }, document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
+
+    const next_chapter: BibleRouteParams = {
+        book: Number(chapter) == CONST_BOOKS_NUM_CHAPTERS[book!]
+            ? (
+                book == "REV" ? "GEN" : CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) + 1]
+            ) : book!,
+        chapter: Number(chapter) == CONST_BOOKS_NUM_CHAPTERS[book!] ? "1" : String(Number(chapter) + 1),
+        verse: "1"
     };
+
+    const prev_chapter: BibleRouteParams = {
+        book: Number(chapter) == 1
+            ? (
+                book == "GEN" ? "REV" : CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) - 1]
+            ) : book!,
+        chapter: Number(chapter) == 1 ? (
+            book == "GEN" ? String(CONST_BOOKS_NUM_CHAPTERS["REV"]) : String(CONST_BOOKS_NUM_CHAPTERS[CONST_BOOKS_ARR[CONST_BOOKS_ARR.findIndex((v) => v == book) - 1]])
+        ) : String(Number(chapter) - 1),
+        verse: "1"
+    };
+
+    const ChapterHeader = () => (
+        <div className={`chapter-header`}>
+            <div className={`book`}>{CONST_BOOK_SYMBOL_TO_NAME[book!]}</div>
+            <div className={`chapter`}>{chapter}</div>
+            <div id="DOC_EL_PAGINATION" className="horizontal-arrow">
+                {
+                    <div className={`item left`} onClick={() => { navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`) }}>
+                        <Icon icon="basil:caret-left-outline" width="32" height="32" />
+                        <div className="label">{`${prev_chapter.book} ${prev_chapter.chapter}`}</div>
+                    </div>
+                }
+                {
+                    <div className={`item right`} onClick={() => navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`)}>
+                        <div className="label">{`${next_chapter.book} ${next_chapter.chapter}`}</div>
+                        <Icon icon="basil:caret-right-outline" width="32" height="32" />
+                    </div>
+                }
+            </div>
+        </div>
+    );
+
+    const handle_touch_end = (_: TouchEvent) => {
+        const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
+        if (scroll_left < HOR_SCROLL_LEFT - 100) {
+            navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
+        }
+        else if (scroll_left > HOR_SCROLL_LEFT + 100) {
+            navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
+        }
+
+        document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTo({ left: HOR_SCROLL_LEFT, behavior: "smooth" });
+    }
+
+    useEvent("touchend", handle_touch_end, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
+
+    // const {user} = useAuth();
+
+    // const handleAddNote = async () => {
+    //     if (!user) return;
+
+    //     const { error } = await supabase.from("notes").insert([
+    //         {
+    //             user_id: user.id,
+    //             content: "Test note",
+    //         },
+    //     ]);
+
+    //     if (error) {
+    //         console.error("Error inserting note:", error);
+    //     }
+    // };
 
     const ScrollToTop = () => {
         document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollTo({ top: 0, behavior: "smooth" });
     }
+
+    useEffect(() => {
+        window.setTimeout(() => {
+            document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollLeft = HOR_SCROLL_LEFT;
+            document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
+        }, 1000);
+    })
 
     useEffect(() => {
         const Initialise = async () => {
@@ -266,16 +334,11 @@ const Chapter = () => {
                 return;
             }
 
-            set_current_chapters([data]);
+            set_current_chapter(data);
             ScrollToTop();
-            window.setTimeout(() => {
-                document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollLeft = HOR_SCROLL_LEFT;
-                document.getElementById("DOC_EL_PAGINATION")?.classList.add("active");
-            }, 1000);
         }
 
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
-        set_selected_verse(0);
         Initialise();
     }, [book, chapter, verse]);
 
@@ -284,60 +347,10 @@ const Chapter = () => {
             <div id="DOC_EL_CHAPTER_CONTAINER" className={`chapter-container`}>
                 <div className="filler" />
                 <div className="content">
-                    {current_chapters.map((c, i) => (
-                        <div key={i} className="chapter-block">
-                            <ChapterHeader />
-                            <div className="verses">
-                                {c.chapter.content.map((cont, idx, arr) => {
-                                    if (cont.type === "heading") {
-                                        if (!chapterContentViewSettings.manusriptMode) {
-                                            return (
-                                                <h3 key={idx} className={`chapter-subheading`}>
-                                                    {cont.content}
-                                                </h3>
-                                            );
-                                        }
-                                        else
-                                        {
-                                            return <LineBreak idx={idx} small={false} />;
-                                        }
-                                    }
-
-                                    if (cont.type === "verse") {
-                                        return <Verse key={idx} verse={cont} />;
-                                    }
-
-                                    if (cont.type === "line_break") {
-                                        if (idx > 0 && (arr[idx - 1].type === "heading" || arr[idx - 1].type === "hebrew_subtitle" || arr[idx - 1].type === "line_break")) {
-                                            return null;
-                                        }
-                                        return <LineBreak idx={idx} small={true} />;
-                                    }
-
-                                    if (cont.type === "hebrew_subtitle") {
-                                        return (
-                                            <h4 key={idx} className="hebrew-subtitle">
-                                                {cont.content.map(VerseContent)}
-                                            </h4>
-                                        );
-                                    }
-
-                                    return null;
-                                })}
-
-                            </div>
-                            <div className={`footnotes`}>
-                                {c.chapter.footnotes.map((note, idx) => {
-                                    return (
-                                        <div key={idx} className="footnote-container">
-                                            <sup className="footnote-num">{note.noteId + 1}</sup>
-                                            <span className="footnote-text">{note.text}</span>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </div>
-                    ))}
+                    <div className="chapter-block">
+                        <ChapterHeader />
+                        {current_chapter ? <ChapterContent chapter={current_chapter} /> : <></>}
+                    </div>
                     <div className="spacer"></div>
                     <div className="info" style={{ fontSize: "0.7rem", textAlign: "center", paddingBottom: "5rem" }}>hash: {__COMMIT_HASH__}</div>
                 </div>
