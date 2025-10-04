@@ -1,27 +1,43 @@
 @use "../theme" as *;
 
-.preload
-{
+.preload {
     visibility: hidden;
 }
 
 .tabbar {
     position: fixed;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 80dvh;
-    max-width: 100%;
     padding: 0.5rem 0.5rem;
-    z-index: 100;
+    z-index: 10;
     background-color: $surface;
     bottom: 0;
     transition: bottom 0.5s ease-in-out;
-    // box-shadow: 0 6px 6px -4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &.hidden {
         bottom: -100%;
         transition: bottom 1s ease-in-out;
+    }
+
+    .content {
+        width: 80dvh;
+        max-width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        margin-top: 0.2rem;
+    }
+
+    .item {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2rem;
+        position: relative;
     }
 }

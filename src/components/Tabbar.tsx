@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Tabbar = () => {
     const { selectedPage, setSelectedPage } = useAppProvider();
     const navigate = useNavigate();
-    
+
 
     const handle_tab_navigation = (page: Page) => {
         setSelectedPage(page);
@@ -27,17 +27,23 @@ const Tabbar = () => {
                 <Icon icon="fluent:person-32-regular" />
             </div>
             <div id="DOC_EL_TABBAR" className="tabbar">
-                <div className="item">
-                    <Icon icon={selectedPage == 'home' ? "fluent:home-32-filled" : "fluent:home-32-regular"} width="36" height="36" onClick={() => handle_tab_navigation('home')} />
-                </div>
-                <div className="item">
-                    <Icon icon={selectedPage == 'read' ? "famicons:book" : "famicons:book-outline"} width="36" height="36" onClick={() => handle_tab_navigation('read')} />
-                </div>
-                <div className="item">
-                    <Icon icon={selectedPage == 'notes' ? "solar:notes-bold" : "solar:notes-outline"} width="36" height="36" onClick={() => handle_tab_navigation('notes')} />
-                </div>
-                <div className="item">
-                    <Icon icon={selectedPage == 'profile' ? "fluent:person-32-filled" : "fluent:person-32-regular"} width="36" height="36" onClick={() => handle_tab_navigation('profile')} />
+                <div className="content">
+                    <div className="item" onClick={() => handle_tab_navigation('home')}>
+                        <Icon icon={selectedPage == 'home' ? "fluent:home-32-filled" : "fluent:home-32-regular"} width="25" height="25" />
+                        <div className="label" style={{ fontSize: 12 }}>Home</div>
+                    </div>
+                    <div className="item" onClick={() => handle_tab_navigation('read')} >
+                        <Icon icon={selectedPage == 'read' ? "famicons:book" : "famicons:book-outline"} width="25" height="25" />
+                        <div className="label" style={{ fontSize: 12 }}>Read</div>
+                    </div>
+                    <div className="item" onClick={() => handle_tab_navigation('notes')}>
+                        <Icon icon={selectedPage == 'notes' ? "solar:notes-bold" : "solar:notes-outline"} width="25" height="25" />
+                        <div className="label" style={{ fontSize: 12 }}>Notes</div>
+                    </div>
+                    <div className="item" onClick={() => handle_tab_navigation('profile')}>
+                        <Icon icon={selectedPage == 'profile' ? "fluent:person-32-filled" : "fluent:person-32-regular"} width="25" height="25" />
+                        <div className="label" style={{ fontSize: 12 }}>Profile</div>
+                    </div>
                 </div>
             </div>
         </>

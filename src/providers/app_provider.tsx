@@ -13,7 +13,7 @@ const AppStateContext = createContext<AppStateContextType | undefined>(
 );
 
 export function AppStateProvider({ children }: { children: React.ReactNode }) {
-    const [selectedPage, setSelectedPage] = useState<Page>("home");
+    const [selectedPage, setSelectedPage] = useState<Page>("read");
 
     return (
         <AppStateContext.Provider value={{ selectedPage, setSelectedPage }}>
