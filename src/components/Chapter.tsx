@@ -13,7 +13,7 @@ import { useAppProvider } from "../providers/app_provider";
 // import { useAuth } from "../providers/auth_provider";
 // import { supabase } from "../supabase";
 
-const LineBreak: React.FC<{ idx: number, small: boolean }> = ({ idx, small }) => <span key={idx}><br /><div className={`spacer ${small ? 'small' : ''}`}></div></span>;
+const LineBreak: React.FC<{ small: boolean }> = ({ small }) => <span><br /><div className={`spacer ${small ? 'small' : ''}`}></div></span>;
 
 import React from 'react'
 
@@ -21,19 +21,25 @@ interface ChapterContentProps {
     chapter: TranslationBookChapter;
 }
 
-type BibleRouteParams = {
+export type BibleRouteParams = {
     book: string;
     chapter: string;
     verse: string;
 };
 
 export const ChapterContent = (props: ChapterContentProps) => {
-    const { chapterContentViewSettings } = useAppProvider();
+    const { chapterContentViewSettings, setLastChapterViewed } = useAppProvider();
     const [selected_verse, set_selected_verse] = useState<number>(0);
+    const { book, chapter, verse } = useParams<BibleRouteParams>();
 
     useEffect(() => {
         set_selected_verse(0);
-    }, [])
+        setLastChapterViewed({
+            book: book ?? "GEN",
+            chapter: chapter ?? "1",
+            verse: verse ?? "1",
+        })
+    }, [book, chapter, verse])
 
     const ScrollToBottom = () => {
         document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollTo({ top: document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollHeight, behavior: "smooth" });
@@ -63,9 +69,8 @@ export const ChapterContent = (props: ChapterContentProps) => {
             }
 
             return (
-                <>
+                <span key={i}>
                     <span
-                        key={i}
                         className={`text ${c.poem ? `poem ${i === 0 ? "" : "indented"}` : ""
                             } ${c.wordsOfJesus ? "red" : ""}`}
                     >
@@ -74,7 +79,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
                     {
                         (!next_element_footnote) ? <br /> : <></>
                     }
-                </>
+                </span>
             );
         }
 
@@ -93,7 +98,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
                     return null;
                 }
             }
-            return <LineBreak key={i} idx={i} small={false} />;
+            return <LineBreak key={i} small={false} />;
         }
 
         if ("noteId" in c) {
@@ -107,14 +112,14 @@ export const ChapterContent = (props: ChapterContentProps) => {
             }
 
             return (
-                <>
-                    <sup key={i} className="footnote" onClick={ScrollToBottom}>
+                <span key={i}>
+                    <sup className="footnote" onClick={ScrollToBottom}>
                         {c.noteId + 1}
                     </sup>
                     {
                         (next_element_poem || i == arr.length - 1) ? <br /> : <></>
                     }
-                </>
+                </span>
             );
         }
 
@@ -132,7 +137,6 @@ export const ChapterContent = (props: ChapterContentProps) => {
 
     return (
         <>
-
             <div className="verses">
                 {props.chapter.chapter.content.map((cont, idx, arr) => {
                     if (cont.type === "heading") {
@@ -144,7 +148,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
                             );
                         }
                         else {
-                            return <LineBreak idx={idx} small={false} />;
+                            return <LineBreak key={idx} small={false} />;
                         }
                     }
 
@@ -156,7 +160,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
                         if (idx > 0 && (arr[idx - 1].type === "heading" || arr[idx - 1].type === "hebrew_subtitle" || arr[idx - 1].type === "line_break")) {
                             return null;
                         }
-                        return <LineBreak idx={idx} small={true} />;
+                        return <LineBreak key={idx} small={true} />;
                     }
 
                     if (cont.type === "hebrew_subtitle") {

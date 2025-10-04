@@ -1,5 +1,6 @@
 // AppStateProvider.tsx
 import React, { createContext, useContext, useState } from "react";
+import type { BibleRouteParams } from "../components/Chapter";
 
 export type Page = "home" | "read" | "notes" | "profile";
 
@@ -13,6 +14,8 @@ interface AppStateContextType {
     setSelectedPage: (page: Page) => void;
     chapterContentViewSettings: ChapterContentViewSettings;
     setChapterContentViewSettings: (settings: ChapterContentViewSettings) => void;
+    lastChapterViewed: BibleRouteParams;
+    setLastChapterViewed: (chapter: BibleRouteParams) => void;
 }
 
 const AppStateContext = createContext<AppStateContextType | undefined>(
@@ -32,9 +35,22 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     const [chapterContentViewSettings, setChapterContentViewSettings] = useState<ChapterContentViewSettings>({
         manusriptMode: true
     })
+    const [lastChapterViewed, setLastChapterViewed] = useState<BibleRouteParams>(
+        {
+            book: "GEN",
+            chapter: "1",
+            verse: '1'
+        }
+    )
 
     return (
-        <AppStateContext.Provider value={{ selectedPage, setSelectedPage, chapterContentViewSettings, setChapterContentViewSettings }}>
+        <AppStateContext.Provider value={{
+                selectedPage,
+                setSelectedPage,
+                chapterContentViewSettings,
+                setChapterContentViewSettings,
+                lastChapterViewed,
+                setLastChapterViewed }}>
             {children}
         </AppStateContext.Provider>
     );

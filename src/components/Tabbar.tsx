@@ -2,16 +2,25 @@ import { Icon } from "@iconify/react";
 import "./Tabbar.scss";
 import { useAppProvider, type Page } from "../providers/app_provider";
 import { useNavigate } from "react-router-dom";
+import { CONST_BIBLE_ROUTE } from "../consts/bible_data";
 
 
 const Tabbar = () => {
-    const { selectedPage, setSelectedPage } = useAppProvider();
+    const { selectedPage, setSelectedPage, lastChapterViewed } = useAppProvider();
     const navigate = useNavigate();
 
 
     const handle_tab_navigation = (page: Page) => {
         setSelectedPage(page);
-        navigate(`/${page}`);
+
+        if (page == "read")
+        {
+            navigate(`${CONST_BIBLE_ROUTE}/${lastChapterViewed.book}/${lastChapterViewed.chapter}/${lastChapterViewed.verse}`)
+        }
+        else
+        {
+            navigate(`/${page}`);
+        }
     }
 
     return (
