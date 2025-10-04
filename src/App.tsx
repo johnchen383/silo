@@ -32,9 +32,9 @@ const App = () => {
         <Route element={<ScaffoldWrapper />}>
           <Route path="/" element={<IndexRoute><Navigate to={`${CONST_DEFAULT_CHAPTER_URL}`} replace /></IndexRoute>} />
           <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<UnderConstruction />} />
-          <Route path="/notes" element={<UnderConstruction />} />
-          <Route path="/profile" element={<UnderConstruction />} />
+          <Route path="/home" element={<PrivateRoute><UnderConstruction /></PrivateRoute>} />
+          <Route path="/notes" element={<PrivateRoute><UnderConstruction /></PrivateRoute>} />
+          <Route path="/profile" element={<PrivateRoute><UnderConstruction /></PrivateRoute>} />
           <Route path="/read/:book/:chapter/:verse?" element={<PrivateRoute><Chapter /></PrivateRoute>} />
           <Route path="/read" element={<Navigate to={`${CONST_DEFAULT_CHAPTER_URL}`} replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
