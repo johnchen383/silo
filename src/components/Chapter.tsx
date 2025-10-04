@@ -9,6 +9,7 @@ import ChapterSelector from "./ChapterSelector";
 import useEvent from "../hooks/useEvent";
 import useScrollDirection from "../hooks/useScroll";
 import { Icon } from "@iconify/react";
+import { useAppProvider } from "../providers/app_provider";
 // import { useAuth } from "../providers/auth_provider";
 // import { supabase } from "../supabase";
 
@@ -28,6 +29,7 @@ const Chapter = () => {
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const [current_chapters, set_current_chapters] = useState<TranslationBookChapter[]>([]);
     const [selected_verse, set_selected_verse] = useState<number>(0);
+    const { chapterContentViewSettings } = useAppProvider();
 
     const navigate = useNavigate();
 
@@ -222,7 +224,7 @@ const Chapter = () => {
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
             <span className={`verse ${selected_verse == verse.number ? 'selected' : ''}`} onClick={() => { set_selected_verse(verse.number) }}>
-                <sup className={`verse-num`}>{verse.number}</sup>
+                {!chapterContentViewSettings.manusriptMode ? <sup className={`verse-num`}>{verse.number}</sup> : <></>}
                 {verse.content.map(VerseContent)}
             </span>
         );
@@ -288,11 +290,17 @@ const Chapter = () => {
                             <div className="verses">
                                 {c.chapter.content.map((cont, idx, arr) => {
                                     if (cont.type === "heading") {
-                                        return (
-                                            <h3 key={idx} className={`chapter-subheading`}>
-                                                {cont.content}
-                                            </h3>
-                                        );
+                                        if (!chapterContentViewSettings.manusriptMode) {
+                                            return (
+                                                <h3 key={idx} className={`chapter-subheading`}>
+                                                    {cont.content}
+                                                </h3>
+                                            );
+                                        }
+                                        else
+                                        {
+                                            return <LineBreak idx={idx} small={false} />;
+                                        }
                                     }
 
                                     if (cont.type === "verse") {
@@ -303,7 +311,7 @@ const Chapter = () => {
                                         if (idx > 0 && (arr[idx - 1].type === "heading" || arr[idx - 1].type === "hebrew_subtitle" || arr[idx - 1].type === "line_break")) {
                                             return null;
                                         }
-                                        return <LineBreak idx={idx} small={false} />;
+                                        return <LineBreak idx={idx} small={true} />;
                                     }
 
                                     if (cont.type === "hebrew_subtitle") {
