@@ -25,22 +25,24 @@ const ChapterSelector = () => {
                     {selected_book
                         ? <>
                             <div className="category-title">{CONST_BOOK_SYMBOL_TO_NAME[selected_book]}</div>
-                            <div className='chapter-button active' onClick={() => set_selected_book("")}>{selected_book}</div>
-                            {Array.from({ length: CONST_BOOKS_NUM_CHAPTERS[selected_book] }, (_, i) => i + 1).map((num) => (
-                                <div
-                                    key={num}
-                                    className={`chapter-button`}
-                                    onClick={() => {
-                                        navigate(`${CONST_BIBLE_ROUTE}/${selected_book}/${num}`);
-                                        document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
-                                        window.setTimeout(() => {
-                                            set_selected_book("");
-                                            document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("visible");
-                                        }, 300);
-                                    }}>
-                                    {num}
-                                </div>
-                            ))}
+                            <div className="chapters-container">
+                                <div className='chapter-button active' onClick={() => set_selected_book("")}>{selected_book}</div>
+                                {Array.from({ length: CONST_BOOKS_NUM_CHAPTERS[selected_book] }, (_, i) => i + 1).map((num) => (
+                                    <div
+                                        key={num}
+                                        className={`chapter-button`}
+                                        onClick={() => {
+                                            navigate(`${CONST_BIBLE_ROUTE}/${selected_book}/${num}`);
+                                            document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
+                                            window.setTimeout(() => {
+                                                set_selected_book("");
+                                                document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("visible");
+                                            }, 300);
+                                        }}>
+                                        {num}
+                                    </div>
+                                ))}
+                            </div>
                         </>
                         :
                         Object.entries(CONST_CATEGORISED_BOOKS).map(([category, books]) => (

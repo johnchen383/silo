@@ -44,6 +44,14 @@
         padding-top: 1rem;
     }
 
+    .books-container, .chapters-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(3.5rem, auto));
+        justify-content: start; // single line stays left
+        justify-items: center; // wrapped rows center
+        gap: 0.4rem;
+    }
+
     .book-button,
     .chapter-button {
         display: inline-block;

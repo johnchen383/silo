@@ -299,10 +299,6 @@ const Chapter = () => {
     //     }
     // };
 
-    const ScrollToTop = () => {
-        document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
     useEffect(() => {
         window.setTimeout(() => {
             document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollLeft = HOR_SCROLL_LEFT;
@@ -339,7 +335,7 @@ const Chapter = () => {
             }
 
             set_current_chapter(data);
-            ScrollToTop();
+            document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTop = 0;
         }
 
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
