@@ -85,3 +85,19 @@ We’ll also be sharing quarterly video updates. To stay in the loop, [join our 
 I’m John — first and foremost a servant of our Lord Jesus Christ, with a lifelong passion for exploring "blue sky" ideas, especially at the intersection of faith and software. I’m based in Sydney, working as a software developer, studying theology part-time, and building Silo in the bits I have left. If you're ever in the area, [I'm always down to connect and grab a coffee](https://www.linkedin.com/in/johnc383/).
 
 Over the years I’ve had countless ideas — many never make it past the drawing board, and only a few see the light of day. Silo, however, feels different. I truly believe that, under God, it might transform the way people engage with His Word.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

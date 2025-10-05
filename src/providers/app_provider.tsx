@@ -16,6 +16,8 @@ interface AppStateContextType {
     setChapterContentViewSettings: (settings: ChapterContentViewSettings) => void;
     lastChapterViewed: BibleRouteParams;
     setLastChapterViewed: (chapter: BibleRouteParams) => void;
+    inApp: boolean;
+    setInApp: (inApp: boolean) => void;
 }
 
 const AppStateContext = createContext<AppStateContextType | undefined>(
@@ -42,6 +44,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
             verse: '1'
         }
     )
+    const [inApp, setInApp] = useState(() => {
+        const path = window.location.pathname;
+        if (path === "/" || path.startsWith("/notes") || path.startsWith("/profile") || path.startsWith("/read") || path.startsWith("/home"))
+            return true;
+        
+        return false;
+    });
 
     return (
         <AppStateContext.Provider value={{
@@ -50,7 +59,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
                 chapterContentViewSettings,
                 setChapterContentViewSettings,
                 lastChapterViewed,
-                setLastChapterViewed }}>
+                setLastChapterViewed,
+                inApp,
+                setInApp }}>
             {children}
         </AppStateContext.Provider>
     );

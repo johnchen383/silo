@@ -6,9 +6,8 @@ import { CONST_BIBLE_ROUTE } from "../consts/bible_data";
 
 
 const Tabbar = () => {
-    const { selectedPage, setSelectedPage, lastChapterViewed } = useAppProvider();
+    const { selectedPage, setSelectedPage, lastChapterViewed, inApp } = useAppProvider();
     const navigate = useNavigate();
-
 
     const handle_tab_navigation = (page: Page) => {
         setSelectedPage(page);
@@ -22,6 +21,9 @@ const Tabbar = () => {
             navigate(`/${page}`);
         }
     }
+
+    if (!inApp)
+        return <></>;
 
     return (
         <>

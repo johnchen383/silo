@@ -1,0 +1,126 @@
+@use "../theme" as *;
+
+.about-container {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 1rem;
+    overflow-y: scroll;
+    width: 100vw;
+    scroll-behavior: smooth;
+
+    .spacer {
+        height: 1px;
+        width: 100%;
+        margin-top: 5rem;
+    }
+
+    figure {
+        text-align: center;
+        max-width: 220px;
+        margin: auto;
+
+        img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        figcaption {
+            font-size: 0.875rem;
+            color: #555;
+            margin-top: 0.1rem;
+        }
+    }
+
+    .markdown-body {
+        max-width: 800px;
+        width: 100%;
+        padding: 2rem 1.1rem;
+        line-height: 1.6;
+
+        details {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 1.25rem 0;
+            padding: 0.5rem 1rem;
+
+            max-height: 100px;
+            overflow: hidden;
+            transition: all 0.6s ease;
+
+            &[open] {
+                max-height: 2000px;
+            }
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 0.5rem 0;
+            list-style: none;
+            outline: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h4,
+        h5,
+        h6 {
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        p {
+            margin: 1rem 0;
+        }
+
+        a {
+            color: #0078ff;
+            text-decoration: none;
+            font-weight: 500;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        ul,
+        ol {
+            margin: 1rem 0 1rem 1.5rem;
+        }
+
+        blockquote {
+            border-left: 2px solid $accent;
+            padding-left: 1rem;
+            margin: 1rem 0;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        em {
+            text-align: center;
+            display: block;
+        }
+    }
+}
