@@ -1,0 +1,1 @@
+cp ./public/README.md .

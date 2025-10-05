@@ -1,21 +1,26 @@
 # Silo
 
-#### Scriptural Notetaking, Reimagined.
+> If you're anything like me, taking notes on Scripture often feels unfruitful. I’ve amassed stacks of sermon outlines with notes I scarcely revisit. I've found most digital alternatives also miss the mark — either clunky Bible apps or generic note-takers not built for Scripture. I've also found myself longing for meaningful discussion beyond bible studies or post-service yarns, yet struggle to find spaces where that can naturally happen.
 
-Silo was born out of a simple desire: to make meditating on God’s Word **clear, intentional, and communal**. Tired of sermon notes piling up or handwriting you can’t read later? Silo helps you **capture your reflections alongside Scripture**, then **share** and **discuss** them with others.  
+<figure>
+  <img src="/stuffed.jpg" alt="Life without Silo, a bible stuffed with sermon outlines" />
+  <figcaption><b>Exhibit A:</b> outlines aplenty<br/>(credit: Nathan Hill Marks)</figcaption>
+</figure>
 
-Think of it as **digital marginalia** — your quiet meditations turned into conversations that inspire, challenge, and help us grow together in Christ.
+**Silo** is a scriptural note-taking app, designed to make meditating on God’s Word **clear, intentional, and shared**. It helps you **reflect deeply in private**, while keeping your insights **interconnected and easy to revisit**. And when the time is right, you can **share and build on those reflections together** — breaking down the **silos** between our thoughts, our studies, and one another.
 
-### Jump to
-- [Our Why](#user-content-our-why)
-- [Why Us](#user-content-why-us)
-- [Getting Involved](#user-content-getting-involved)
-- [Who's We](#user-content-whos-we)
+Think of it as **digital marginalia** — your quiet meditations transformed into conversations that inspire, challenge, and help us grow together in Christ.
 
-## Our Why
+### Jump to:
+- [Mission](#user-content-mission)
+- [Our Edge](#user-content-our-edge)
+- [Get Involved](#user-content-getting-involved)
+- [The Team](#user-content-the-team)
+
+## Mission
 _"To search the Scriptures, dwell in them daily, and be refined together in Christ"_
 
-<details>
+<details open>
   <summary>1. Search the scriptures</summary>
 
 If the Bereans were around today, we'd hope Silo would be their Bible app of choice. Our heart is to encourage the searching of Scripture — **to think deeply, wrestle honestly, capture insights, and return to them with clarity**.
@@ -45,8 +50,8 @@ Scripture reminds us that engaging with the Word was never meant to be just a so
 
 </details>
 
-## Why Us
-<details>
+## Our Edge
+<details open>
   <summary>1. Rich scriptural notetaking, without the bloat</summary>
   TBD
 </details>
@@ -66,6 +71,10 @@ Scripture reminds us that engaging with the Word was never meant to be just a so
   <summary>5. Grassroots and community driven</summary>
   TBD
 </details>
+<details>
+  <summary>6. Cross platform and portable</summary>
+  TBD
+</details>
 
 ## Getting Involved
 Silo is currently in its pilot release as we gather feedback and refine the experience before a wider launch.  
@@ -74,10 +83,10 @@ If you’re interested in what we’re building — whether that’s from a deve
 
 We’ll also be sharing quarterly video updates. To stay in the loop, [join our mailing list](#), and if you ever miss one, all past updates can be found [here](/about/updates).
 
-## Who's We
-> Well more of a "royal we" at the moment ahaha. Silo is currently a team of uno — though [always on the lookout](#user-content-getting-involved) for like-minded peeps who share the heart behind this project.
+## The Team
+> More of a "royal we" at the moment ahaha. Silo is currently a team of uno — though [always on the lookout](#user-content-getting-involved) for like-minded peeps who share the heart behind this project.
 
-<figure class="profile">
+<figure>
   <img src="/john.jpg" alt="John" />
   <figcaption>Me ft. barrel<br/>(close enough to a silo right)</figcaption>
 </figure>
