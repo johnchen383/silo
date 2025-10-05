@@ -53,33 +53,33 @@ Scripture reminds us that engaging with the Word was never meant to be just a so
 ## Our Edge
 <details open>
   <summary>1. Rich scriptural notetaking, without the bloat</summary>
-  TBD
+  We're single-minded in our mission to make Silo the most thoughtful way to take notes on Scripture — and nothing else. Capture insights by verse, passage, or theme using text, voice, images, or sketches. Explore how your notes connect and how your thoughts deepen over time.
 </details>
 <details>
   <summary>2. Elegant, minimalist user-centred design</summary>
-  TBD
+  We believe beauty and simplicity matter — especially when engaging with Scripture. A lot of existing apps feel cluttered and unintuitive, distracting from reflection. Silo is designed to be the opposite: calm, elegant, and effortless, so you can focus on what truly matters — the Word itself.
 </details>
 <details>
   <summary>3. Community oriented</summary>
-  TBD
+  We believe Scripture is best understood in community. Silo makes reflection a shared experience — ask questions, share insights, and engage in thoughtful conversation through replies and reactions.
 </details>
 <details>
   <summary>4. Committed to free access</summary>
-  TBD
+  We're convinced that engaging with God's Word should never come at a cost. We endeavour for Silo to remain free for all users, for as long as it remains sustainable. All code is additionally open-sourced under MIT license, in alignment with this commitment. 
 </details>
 <details>
   <summary>5. Grassroots and community driven</summary>
-  TBD
+  We want the team behind Silo to always be approachable. Frankly, we're convinced this is a win-win for the both of us. With your continual feedback and thoughts, Silo gets to be the best version it can possibly be. And with Silo at it's best, we can serve you better via our tooling in our joint plight to know and love God better. Our inbox is always open, and we'll aim to send our raw, unfiltered quarterly updates to take you on the journey. Learn how to get in touch below.
 </details>
 <details>
   <summary>6. Cross platform and portable</summary>
-  TBD
+  Silo is built to work across all major devices, both served via the web and as dedicated mobile apps. Data is seamlessly synced between all devices meaning that you'll never find yourself not having the right device to jot down that thought.  
 </details>
 
 ## Getting Involved
 Silo is currently in its pilot release as we gather feedback and refine the experience before a wider launch.  
 
-If you’re interested in what we’re building — whether that’s from a development, design, or strategy perspective — we’d love to hear from you. You can reach us at **info.silo@gmail.com**.  
+If you’re interested in what we’re building — whether that’s from a theological, development, design, or strategy perspective — we’d love to hear from you. You can reach us at **info.silo@gmail.com**.  
 
 We’ll also be sharing quarterly video updates. To stay in the loop, [join our mailing list](#), and if you ever miss one, all past updates can be found [here](/about/updates).
 
@@ -95,18 +95,4 @@ I’m John — first and foremost a servant of our Lord Jesus Christ, with a lif
 
 Over the years I’ve had countless ideas — many never make it past the drawing board, and only a few see the light of day. Silo, however, feels different. I truly believe that, under God, it might transform the way people engage with His Word.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+_[back to top](#user-content-silo)_
