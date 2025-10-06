@@ -35,7 +35,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     });
 
     const [chapterContentViewSettings, setChapterContentViewSettings] = useState<ChapterContentViewSettings>({
-        manusriptMode: true
+        manusriptMode: false
     })
     const [lastChapterViewed, setLastChapterViewed] = useState<BibleRouteParams>(
         {

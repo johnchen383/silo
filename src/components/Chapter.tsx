@@ -41,10 +41,6 @@ export const ChapterContent = (props: ChapterContentProps) => {
         })
     }, [book, chapter, verse])
 
-    const ScrollToBottom = () => {
-        document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollTo({ top: document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollHeight, behavior: "smooth" });
-    };
-
     function VerseContent(
         c: ChapterVerseContent,
         i: number,
@@ -113,7 +109,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
 
             return (
                 <span key={i}>
-                    <sup className="footnote" onClick={ScrollToBottom}>
+                    <sup className="footnote">
                         {c.noteId + 1}
                     </sup>
                     {
