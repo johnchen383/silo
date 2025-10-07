@@ -1,16 +1,14 @@
 // AppStateProvider.tsx
 import React, { createContext, useContext, useState } from "react";
-import type { BibleRouteParams } from "../components/Chapter";
+import { type BibleRouteParams } from "../components/Chapter";
 
 export type Page = "home" | "read" | "notes" | "profile";
 
-export interface ChapterContentViewSettings
-{
+export interface ChapterContentViewSettings {
     manusriptMode: boolean
 }
 
-export interface ChapterNavSettings
-{
+export interface ChapterNavSettings {
     showHistory: boolean
     showBookmark: boolean
 }
@@ -22,10 +20,12 @@ interface AppStateContextType {
     setChapterContentViewSettings: (settings: ChapterContentViewSettings) => void;
     chapterNavSettings: ChapterNavSettings;
     setChapterNavSettings: (settings: ChapterNavSettings) => void;
-    lastChapterViewed: BibleRouteParams;
+    lastChaptersViewed: BibleRouteParams[];
     setLastChapterViewed: (chapter: BibleRouteParams) => void;
     inApp: boolean;
     setInApp: (inApp: boolean) => void;
+    bookmarkedChapter: BibleRouteParams | null;
+    setBookmarkedChapter: (chapter: BibleRouteParams | null) => void;
 }
 
 const AppStateContext = createContext<AppStateContextType | undefined>(
@@ -38,7 +38,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         if (path.startsWith("/notes")) return "notes";
         if (path.startsWith("/profile")) return "profile";
         if (path.startsWith("/read")) return "read";
-        
+
         return "home";
     });
 
@@ -49,33 +49,42 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         showBookmark: true,
         showHistory: true,
     })
-    const [lastChapterViewed, setLastChapterViewed] = useState<BibleRouteParams>(
-        {
-            book: "GEN",
-            chapter: "1",
-            verse: '1'
-        }
-    )
+    const [lastChaptersViewed, setLastChaptersViewed] = useState<BibleRouteParams[]>([]);
+    const [bookmarkedChapter, setBookmarkedChapter] = useState<BibleRouteParams | null>(null);
+
     const [inApp, setInApp] = useState(() => {
         const path = window.location.pathname;
         if (path === "/" || path.startsWith("/notes") || path.startsWith("/profile") || path.startsWith("/read") || path.startsWith("/home"))
             return true;
-        
+
         return false;
     });
 
+    const setLastChapterViewed = (chapter: BibleRouteParams) => {
+        setLastChaptersViewed((val) => {
+            const filtered = val.filter(
+                c => c.book !== chapter.book || c.chapter !== chapter.chapter
+            );
+            const updated = [...filtered, chapter];
+            return updated.slice(-5);
+        });
+    }
+
     return (
         <AppStateContext.Provider value={{
-                selectedPage,
-                setSelectedPage,
-                chapterContentViewSettings,
-                setChapterContentViewSettings,
-                chapterNavSettings,
-                setChapterNavSettings,
-                lastChapterViewed,
-                setLastChapterViewed,
-                inApp,
-                setInApp }}>
+            selectedPage,
+            setSelectedPage,
+            chapterContentViewSettings,
+            setChapterContentViewSettings,
+            chapterNavSettings,
+            setChapterNavSettings,
+            lastChaptersViewed,
+            setLastChapterViewed,
+            bookmarkedChapter,
+            setBookmarkedChapter,
+            inApp,
+            setInApp
+        }}>
             {children}
         </AppStateContext.Provider>
     );

@@ -4,20 +4,37 @@ import { useAppProvider, type Page } from "../providers/app_provider";
 import { useNavigate } from "react-router-dom";
 import { CONST_BIBLE_ROUTE } from "../consts/bible_data";
 
-
+const ICONS = [
+    "fluent:home-32-filled",
+    "fluent:home-32-regular",
+    "famicons:book",
+    "famicons:book-outline",
+    "solar:notes-bold",
+    "solar:notes-outline",
+    "fluent:person-32-filled",
+    "fluent:person-32-regular",
+    "fluent:bookmark-16-filled",
+    "fluent:bookmark-16-regular",
+    "solar:history-linear",
+    "basil:cross-solid"
+]
 const Tabbar = () => {
-    const { selectedPage, setSelectedPage, lastChapterViewed, inApp } = useAppProvider();
+    const { selectedPage, setSelectedPage, lastChaptersViewed, inApp } = useAppProvider();
     const navigate = useNavigate();
 
     const handle_tab_navigation = (page: Page) => {
         setSelectedPage(page);
 
-        if (page == "read")
-        {
-            navigate(`${CONST_BIBLE_ROUTE}/${lastChapterViewed.book}/${lastChapterViewed.chapter}/${lastChapterViewed.verse}`)
+        if (page == "read") {
+            const lastChapt = lastChaptersViewed.at(-1);
+            if (!lastChapt) {
+                navigate(`${CONST_BIBLE_ROUTE}`);
+                return;
+            }
+
+            navigate(`${CONST_BIBLE_ROUTE}/${lastChapt.book}/${lastChapt.chapter}/${lastChapt.verse}`)
         }
-        else
-        {
+        else {
             navigate(`/${page}`);
         }
     }
@@ -28,14 +45,11 @@ const Tabbar = () => {
     return (
         <>
             <div className="preload">
-                <Icon icon="fluent:home-32-filled" />
-                <Icon icon="fluent:home-32-regular" />
-                <Icon icon="famicons:book" />
-                <Icon icon="famicons:book-outline" />
-                <Icon icon="solar:notes-bold" />
-                <Icon icon="solar:notes-outline" />
-                <Icon icon="fluent:person-32-filled" />
-                <Icon icon="fluent:person-32-regular" />
+                {
+                    ICONS.map((icon, i) => {
+                        return <Icon key={i} icon={icon} />
+                    })
+                }
             </div>
             <div id="DOC_EL_TABBAR" className="tabbar">
                 <div className="content">

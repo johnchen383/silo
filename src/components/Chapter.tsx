@@ -28,6 +28,12 @@ export type BibleRouteParams = {
     verse: string;
 };
 
+export const DEFAULT_BIBLE_ROUTE: BibleRouteParams = {
+    book: "GEN",
+    chapter: "1",
+    verse: '1'
+}
+
 export const ChapterContent = (props: ChapterContentProps) => {
     const { chapterContentViewSettings, setLastChapterViewed } = useAppProvider();
     const [selected_verse, set_selected_verse] = useState<number>(0);

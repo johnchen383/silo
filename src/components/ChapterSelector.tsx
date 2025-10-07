@@ -3,16 +3,29 @@ import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME, CONST_BOOKS_NUM_CHAPTERS,
 import { useNavigate, useParams } from 'react-router-dom';
 import "./ChapterSelector.scss";
 import { Icon } from '@iconify/react';
+import { useAppProvider } from '../providers/app_provider';
 
 const ChapterSelector = () => {
     const [selected_book, set_selected_book] = useState<string>("");
     const navigate = useNavigate();
     const { book } = useParams<{ book: string; chapter: string }>();
+    const { bookmarkedChapter, lastChaptersViewed } = useAppProvider();
 
     return (
         <div id="DOC_EL_CHAPTER_SELECTOR" className="chapter-selector">
             <div className="container">
                 <div className="navigation">
+                    <div className="bookmark">Bookmark: {bookmarkedChapter ? bookmarkedChapter.book : ''}</div>
+                    <div className="history">
+                        History
+                        {
+                            lastChaptersViewed.map((chapt, i) => {
+                                return <div key={i} className="history-item">
+                                    {chapt.book}
+                                </div>
+                            })
+                        }
+                    </div>
                     <Icon icon="basil:cross-solid" width="36" height="36" onClick={() => {
                         document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
                         window.setTimeout(() => {
