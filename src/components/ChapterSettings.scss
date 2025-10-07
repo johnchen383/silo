@@ -1,0 +1,66 @@
+@use "../theme" as *;
+
+.chapter-settings {
+    position: fixed;
+    width: 80dvh;
+    max-width: 100%;
+    bottom: -100%;
+    z-index: 100;
+    background-color: $surface;
+    min-height: 150px;
+    box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
+    transition: bottom 0.3s ease-in-out;
+    padding: 1rem 2rem;
+
+    .exit {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    &.open {
+        bottom: 0%;
+    }
+
+    .heading {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        text-align: center;
+    }
+
+    .section {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+
+        .subheading {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            font-size: 1.1rem;
+        }
+
+        .item {
+            display: flex;
+            flex-direction: row;
+
+            border-radius: 12px;
+            padding: 0.6rem 0rem;
+
+            .label {
+                display: flex;
+                flex-direction: column;
+
+                .label-heading {
+                    font-size: 1rem;
+                }
+
+                .caption {
+                    color: $accent;
+                    font-size: 0.9rem;
+                    font-style: oblique 15deg;
+                }
+            }
+        }
+    }
+}

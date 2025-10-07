@@ -13,7 +13,7 @@ const ChapterSelector = () => {
         <div id="DOC_EL_CHAPTER_SELECTOR" className="chapter-selector">
             <div className="container">
                 <div className="navigation">
-                    <Icon icon="basil:caret-down-outline" width="36" height="36" onClick={() => {
+                    <Icon icon="basil:cross-solid" width="36" height="36" onClick={() => {
                         document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
                         window.setTimeout(() => {
                             set_selected_book("");

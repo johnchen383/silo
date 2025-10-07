@@ -16,6 +16,7 @@ import { useAppProvider } from "../providers/app_provider";
 const LineBreak: React.FC<{ small: boolean }> = ({ small }) => <span><br /><div className={`spacer ${small ? 'small' : ''}`}></div></span>;
 
 import React from 'react'
+import ChapterSettings from "./ChapterSettings";
 
 interface ChapterContentProps {
     chapter: TranslationBookChapter;
@@ -264,6 +265,11 @@ const Chapter = () => {
         </div>
     );
 
+    const on_general_click = () => {
+        document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTo({ left: HOR_SCROLL_LEFT, behavior: "smooth" });
+        document.getElementById("DOC_EL_CHAPTER_SETTINGS")?.classList.remove("open");
+    }
+
     const handle_touch_end = (_: TouchEvent) => {
         const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
         if (scroll_left < HOR_SCROLL_LEFT - 100) {
@@ -273,7 +279,7 @@ const Chapter = () => {
             navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
         }
 
-        document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTo({ left: HOR_SCROLL_LEFT, behavior: "smooth" });
+        on_general_click();
     }
 
     useEvent("touchend", handle_touch_end, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
@@ -340,7 +346,7 @@ const Chapter = () => {
 
     return (
         <>
-            <div id="DOC_EL_CHAPTER_CONTAINER" className={`chapter-container`}>
+            <div id="DOC_EL_CHAPTER_CONTAINER" className={`chapter-container`} onClick={on_general_click}>
                 <div className="filler" />
                 <div className="content">
                     <div className="chapter-block">
@@ -352,6 +358,7 @@ const Chapter = () => {
                 </div>
             </div>
             <ChapterSelector />
+            <ChapterSettings />
         </>
     )
 }

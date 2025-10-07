@@ -60,3 +60,35 @@ h1, h2, h3, h4, h5, h6 {
 *::after {
   box-sizing: border-box;
 }
+
+// thanks honey :))
+$toggle-height: 20px;
+
+.toggle {
+  margin-left: auto;
+  cursor: pointer;
+  position: relative;
+  width: calc(2 * $toggle-height);
+  height: $toggle-height;
+  border-radius: 15px;
+  background-color: lightgray;
+
+  & .ball {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background-color: $surface;
+    height: calc($toggle-height - 4px);
+    width: calc($toggle-height - 4px);
+    border-radius: 50%;
+    transition: 300ms left ease-in-out;
+  }
+
+  &.active {
+    background-color: $accent;
+
+    & .ball {
+      left: $toggle-height + 2px;
+    }
+  }
+}

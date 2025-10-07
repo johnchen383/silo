@@ -9,11 +9,19 @@ export interface ChapterContentViewSettings
     manusriptMode: boolean
 }
 
+export interface ChapterNavSettings
+{
+    showHistory: boolean
+    showBookmark: boolean
+}
+
 interface AppStateContextType {
     selectedPage: Page;
     setSelectedPage: (page: Page) => void;
     chapterContentViewSettings: ChapterContentViewSettings;
     setChapterContentViewSettings: (settings: ChapterContentViewSettings) => void;
+    chapterNavSettings: ChapterNavSettings;
+    setChapterNavSettings: (settings: ChapterNavSettings) => void;
     lastChapterViewed: BibleRouteParams;
     setLastChapterViewed: (chapter: BibleRouteParams) => void;
     inApp: boolean;
@@ -37,6 +45,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     const [chapterContentViewSettings, setChapterContentViewSettings] = useState<ChapterContentViewSettings>({
         manusriptMode: false
     })
+    const [chapterNavSettings, setChapterNavSettings] = useState<ChapterNavSettings>({
+        showBookmark: true,
+        showHistory: true,
+    })
     const [lastChapterViewed, setLastChapterViewed] = useState<BibleRouteParams>(
         {
             book: "GEN",
@@ -58,6 +70,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
                 setSelectedPage,
                 chapterContentViewSettings,
                 setChapterContentViewSettings,
+                chapterNavSettings,
+                setChapterNavSettings,
                 lastChapterViewed,
                 setLastChapterViewed,
                 inApp,
