@@ -9,29 +9,37 @@ const ChapterSelector = () => {
     const [selected_book, set_selected_book] = useState<string>("");
     const navigate = useNavigate();
     const { book } = useParams<{ book: string; chapter: string }>();
-    const { bookmarkedChapter, lastChaptersViewed } = useAppProvider();
+    const { bookmarkedChapter, chapterNavSettings } = useAppProvider();
+
+    const exit = () => {
+        document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
+        window.setTimeout(() => {
+            set_selected_book("");
+            document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("visible");
+        }, 300);
+    }
 
     return (
         <div id="DOC_EL_CHAPTER_SELECTOR" className="chapter-selector">
             <div className="container">
                 <div className="navigation">
-                    <div className="bookmark">Bookmark: {bookmarkedChapter ? bookmarkedChapter.book : ''}</div>
-                    <div className="history">
-                        History
-                        {
-                            lastChaptersViewed.map((chapt, i) => {
-                                return <div key={i} className="history-item">
-                                    {chapt.book}
+                    <div className="actions">
+                        {bookmarkedChapter && chapterNavSettings.showBookmark ?
+                            <div className="bookmark" onClick={() => {
+                                navigate(`${CONST_BIBLE_ROUTE}/${bookmarkedChapter.book}/${bookmarkedChapter.chapter}`);
+                                exit();
+                            }}>
+                                <Icon icon="fluent:bookmark-16-regular" width="24" height="24" />
+                                <div className="action">
+                                    {`${CONST_BOOK_SYMBOL_TO_NAME[bookmarkedChapter.book]} ${bookmarkedChapter.chapter}`}
                                 </div>
-                            })
+                            </div>
+                            : <>
+                            </>
                         }
                     </div>
                     <Icon icon="basil:cross-solid" width="36" height="36" onClick={() => {
-                        document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
-                        window.setTimeout(() => {
-                            set_selected_book("");
-                            document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("visible");
-                        }, 300);
+                        exit();
                     }} />
                 </div>
                 <div className="inner-container">
@@ -46,11 +54,7 @@ const ChapterSelector = () => {
                                         className={`chapter-button`}
                                         onClick={() => {
                                             navigate(`${CONST_BIBLE_ROUTE}/${selected_book}/${num}`);
-                                            document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("open");
-                                            window.setTimeout(() => {
-                                                set_selected_book("");
-                                                document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.remove("visible");
-                                            }, 300);
+                                            exit();
                                         }}>
                                         {num}
                                     </div>

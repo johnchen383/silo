@@ -28,20 +28,48 @@
         margin-left: 2px;
     }
 
-    .navigation {
-        margin-right: 0.5rem;
-    }
-
     .inner-container {
         padding: 0rem 2rem;
     }
 
     .navigation {
+        margin-right: 0.5rem;
+        margin-left: 2rem;
         display: flex;
         flex-direction: row;
-        justify-content: end;
+        justify-content: space-between;
         padding: 2px;
         padding-top: 1rem;
+        align-items: center;
+
+        svg {
+            margin-right: 0.3rem;
+        }
+
+        .actions
+        {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.4rem;
+
+            .bookmark
+            {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .action
+            {
+                cursor: pointer;
+                padding: 0.1rem 0.2rem;
+                font-size: 0.9rem;
+                text-decoration: underline;
+                text-underline-offset: 5px;
+            }
+        }
     }
 
     .books-container, .chapters-container {

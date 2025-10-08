@@ -66,7 +66,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
                 c => c.book !== chapter.book || c.chapter !== chapter.chapter
             );
             const updated = [...filtered, chapter];
-            return updated.slice(-5);
+            return updated.slice(-6);
         });
     }
 

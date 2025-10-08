@@ -205,11 +205,13 @@ const Chapter = () => {
     const on_scroll_up = () => {
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
         document.getElementById("DOC_EL_TABBAR")?.classList.remove("hidden");
+        document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
     }
 
     const on_scroll_down = () => {
         document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
         document.getElementById("DOC_EL_TABBAR")?.classList.add("hidden");
+        document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
     }
 
     const handle_vertical_scroll = (e: WheelEvent) => {
@@ -274,6 +276,7 @@ const Chapter = () => {
     const on_general_click = () => {
         document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTo({ left: HOR_SCROLL_LEFT, behavior: "smooth" });
         document.getElementById("DOC_EL_CHAPTER_SETTINGS")?.classList.remove("open");
+        document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
     }
 
     const handle_touch_end = (_: TouchEvent) => {
