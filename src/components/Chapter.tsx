@@ -131,7 +131,11 @@ export const ChapterContent = (props: ChapterContentProps) => {
 
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
-            <span className={`verse ${selected_verse == verse.number ? 'selected' : ''}`} onClick={() => { set_selected_verse(verse.number) }}>
+            <span className={`verse ${selected_verse == verse.number ? 'selected' : ''}`} onClick={() =>
+            {
+                set_selected_verse(verse.number);
+                navigator.clipboard.writeText(JSON.stringify(verse.content))
+            }}>
                 {!chapterContentViewSettings.manusriptMode ? <sup className={`verse-num`}>{verse.number}</sup> : <></>}
                 {verse.content.map(VerseContent)}
             </span>
