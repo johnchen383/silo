@@ -72,7 +72,8 @@ const Topbar = () => {
                                     <div id='DOC_EL_HISTORY_ITEMS' className={`history-items`}>
                                         {
                                             [...lastChaptersViewed].reverse().slice(1).map((chapt, i) => {
-                                                return <div className="item" key={i} onClick={() => {
+                                                return <div className="item" key={i} onClick={(e) => {
+                                                    e.stopPropagation();
                                                     navigate(`${CONST_BIBLE_ROUTE}/${chapt.book}/${chapt.chapter}`);
                                                 }}>
                                                     {`${CONST_BOOK_SYMBOL_TO_NAME[chapt.book]} ${chapt.chapter}`}
