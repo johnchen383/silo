@@ -9,6 +9,7 @@ import { useAppProvider } from "./providers/app_provider";
 import UnderConstruction from "./components/UnderConstruction";
 import About from "./components/About";
 import { GET_LAST_CHAPTER_ROUTE } from "./components/Tabbar";
+import { useHistoryProvider } from "./providers/history_provider";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { user } = useAuth();
@@ -24,7 +25,7 @@ function IndexRoute({ children }: { children: JSX.Element }) {
 
 const App = () => {
   const { loading } = useAuth();
-  const { lastChaptersViewed } = useAppProvider();
+  const { lastChaptersViewed } = useHistoryProvider();
   if (loading) {
     return <></>;
   }

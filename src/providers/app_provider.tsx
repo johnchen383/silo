@@ -21,8 +21,6 @@ interface AppStateContextType {
     setChapterContentViewSettings: (settings: ChapterContentViewSettings) => void;
     chapterNavSettings: ChapterNavSettings;
     setChapterNavSettings: (settings: ChapterNavSettings) => void;
-    lastChaptersViewed: BibleRouteParams[];
-    setLastChapterViewed: (chapter: BibleRouteParams) => void;
     inApp: boolean;
     setInApp: (inApp: boolean) => void;
     bookmarkedChapter: BibleRouteParams | null;
@@ -51,7 +49,6 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         showHistory: true,
     })
 
-    const [lastChaptersViewed, setLastChaptersViewed] = useLocalStorage<BibleRouteParams[]>("last-chapters-viewed", []);
     const [bookmarkedChapter, setBookmarkedChapter] = useLocalStorage<BibleRouteParams | null>("bookmarked-chapter", null);
 
     const [inApp, setInApp] = useState(() => {
@@ -61,17 +58,6 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
         return false;
     });
-
-    const setLastChapterViewed = (chapter: BibleRouteParams) => {
-        setLastChaptersViewed((val) => {
-            const filtered = val.filter(
-                c => c.book !== chapter.book || c.chapter !== chapter.chapter
-            );
-            const updated = [...filtered, chapter];
-            return updated.slice(-6);
-        });
-    }
-
     return (
         <AppStateContext.Provider value={{
             selectedPage,
@@ -80,8 +66,6 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
             setChapterContentViewSettings,
             chapterNavSettings,
             setChapterNavSettings,
-            lastChaptersViewed,
-            setLastChapterViewed,
             bookmarkedChapter,
             setBookmarkedChapter,
             inApp,

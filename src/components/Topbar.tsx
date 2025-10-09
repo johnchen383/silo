@@ -5,10 +5,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { BibleRouteParams } from './Chapter';
 import { useEffect } from 'react';
 import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME } from '../consts/bible_data';
+import { useHistoryProvider } from '../providers/history_provider';
 
 const Topbar = () => {
     const { book, chapter, verse } = useParams<BibleRouteParams>();
-    const { selectedPage, inApp, chapterNavSettings, bookmarkedChapter, setBookmarkedChapter, lastChaptersViewed } = useAppProvider();
+    const { selectedPage, inApp, chapterNavSettings, bookmarkedChapter, setBookmarkedChapter } = useAppProvider();
+    const { lastChaptersViewed } = useHistoryProvider();
     const navigate = useNavigate();
 
     useEffect(() => {

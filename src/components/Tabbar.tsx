@@ -4,6 +4,7 @@ import { useAppProvider, type Page } from "../providers/app_provider";
 import { useNavigate } from "react-router-dom";
 import { CONST_BIBLE_ROUTE } from "../consts/bible_data";
 import { DEFAULT_BIBLE_ROUTE, type BibleRouteParams } from "./Chapter";
+import { useHistoryProvider } from "../providers/history_provider";
 
 const ICONS = [
     "fluent:home-32-filled",
@@ -30,7 +31,9 @@ export const GET_LAST_CHAPTER_ROUTE = (lasts: BibleRouteParams[]) => {
 }
 
 const Tabbar = () => {
-    const { selectedPage, setSelectedPage, lastChaptersViewed, inApp } = useAppProvider();
+    const { selectedPage, setSelectedPage, inApp } = useAppProvider();
+    const { lastChaptersViewed } = useHistoryProvider();
+
     const navigate = useNavigate();
 
     const handle_tab_navigation = (page: Page) => {

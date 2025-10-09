@@ -7,14 +7,17 @@ import { Analytics } from '@vercel/analytics/react';
 import { registerSW } from 'virtual:pwa-register'
 import { AuthProvider } from './providers/auth_provider.tsx'
 import { AppStateProvider } from './providers/app_provider.tsx';
+import { HistoryStateProvider } from './providers/history_provider.tsx';
 
 registerSW({ immediate: true })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <AuthProvider>
         <AppStateProvider>
-            <App />
-            <Analytics />
+            <HistoryStateProvider>
+                <App />
+                <Analytics />
+            </HistoryStateProvider>
         </AppStateProvider>
     </AuthProvider>
 )

@@ -17,6 +17,7 @@ const LineBreak: React.FC<{ small: boolean }> = ({ small }) => <span><br /><div 
 
 import React from 'react'
 import ChapterSettings from "./ChapterSettings";
+import { useHistoryProvider } from "../providers/history_provider";
 
 interface ChapterContentProps {
     chapter: TranslationBookChapter;
@@ -35,7 +36,8 @@ export const DEFAULT_BIBLE_ROUTE: BibleRouteParams = {
 }
 
 export const ChapterContent = (props: ChapterContentProps) => {
-    const { chapterContentViewSettings, setLastChapterViewed, setInApp } = useAppProvider();
+    const { chapterContentViewSettings, setInApp } = useAppProvider();
+    const { setLastChapterViewed } = useHistoryProvider();
     const [selected_verse, set_selected_verse] = useState<number>(0);
     const { book, chapter, verse } = useParams<BibleRouteParams>();
 
