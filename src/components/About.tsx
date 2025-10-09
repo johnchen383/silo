@@ -41,7 +41,7 @@ export default function About() {
 
     return (
         <div className="about-container">
-            <div className="about-topbar">
+            <div id="user-content-silo" className="about-topbar">
                 <div className="logo" onClick={() => navigate("/home")}>
                     silo.
                 </div>

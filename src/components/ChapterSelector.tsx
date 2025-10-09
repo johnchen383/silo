@@ -29,7 +29,7 @@ const ChapterSelector = () => {
                                 navigate(`${CONST_BIBLE_ROUTE}/${bookmarkedChapter.book}/${bookmarkedChapter.chapter}`);
                                 exit();
                             }}>
-                                <Icon icon="fluent:bookmark-16-regular" width="24" height="24" />
+                                <Icon icon="fluent:bookmark-16-regular" width="28" height="28" />
                                 <div className="action">
                                     {`${CONST_BOOK_SYMBOL_TO_NAME[bookmarkedChapter.book]} ${bookmarkedChapter.chapter}`}
                                 </div>
