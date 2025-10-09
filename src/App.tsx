@@ -8,6 +8,7 @@ import { type JSX } from "react";
 import { useAppProvider } from "./providers/app_provider";
 import UnderConstruction from "./components/UnderConstruction";
 import About from "./components/About";
+import { GET_LAST_CHAPTER_ROUTE } from "./components/Tabbar";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { user } = useAuth();
@@ -23,6 +24,7 @@ function IndexRoute({ children }: { children: JSX.Element }) {
 
 const App = () => {
   const { loading } = useAuth();
+  const { lastChaptersViewed } = useAppProvider();
   if (loading) {
     return <></>;
   }
@@ -31,7 +33,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route element={<ScaffoldWrapper />}>
-          <Route path="/" element={<IndexRoute><Navigate to={`${CONST_DEFAULT_CHAPTER_URL}`} replace /></IndexRoute>} />
+          <Route path="/" element={<IndexRoute><Navigate to={`${GET_LAST_CHAPTER_ROUTE(lastChaptersViewed)}`} replace /></IndexRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
           <Route path="/home" element={<PrivateRoute><UnderConstruction /></PrivateRoute>} />
