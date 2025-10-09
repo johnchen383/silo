@@ -35,12 +35,13 @@ export const DEFAULT_BIBLE_ROUTE: BibleRouteParams = {
 }
 
 export const ChapterContent = (props: ChapterContentProps) => {
-    const { chapterContentViewSettings, setLastChapterViewed } = useAppProvider();
+    const { chapterContentViewSettings, setLastChapterViewed, setInApp } = useAppProvider();
     const [selected_verse, set_selected_verse] = useState<number>(0);
     const { book, chapter, verse } = useParams<BibleRouteParams>();
 
     useEffect(() => {
         set_selected_verse(0);
+        setInApp(true);
         setLastChapterViewed({
             book: book ?? "GEN",
             chapter: chapter ?? "1",
@@ -134,7 +135,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
             <span className={`verse ${selected_verse == verse.number ? 'selected' : ''}`} onClick={() =>
             {
                 set_selected_verse(verse.number);
-                navigator.clipboard.writeText(JSON.stringify(verse.content))
+                // navigator.clipboard.writeText(JSON.stringify(verse.content))
             }}>
                 {!chapterContentViewSettings.manusriptMode ? <sup className={`verse-num`}>{verse.number}</sup> : <></>}
                 {verse.content.map(VerseContent)}

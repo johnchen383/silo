@@ -5,11 +5,16 @@ import rehypeSlug from "rehype-slug";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import "./About.scss";
+import { useAppProvider } from "../providers/app_provider";
+import { useNavigate } from "react-router-dom";
 
 export default function About() {
     const [markdown, setMarkdown] = useState("");
+    const { setInApp } = useAppProvider();
+    const navigate = useNavigate();
 
     useEffect(() => {
+        setInApp(false);
         fetch("/README.md")
             .then((res) => res.text())
             .then(setMarkdown);
@@ -36,21 +41,28 @@ export default function About() {
 
     return (
         <div className="about-container">
-            <article className="markdown-body">
-                <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeRaw, rehypeSlug, [rehypeSanitize, schema]]}
-                    components={{
-                        details: ({ node, ...props }) => <details {...props} />,
-                        summary: ({ node, ...props }) => <summary {...props} />,
-                        figure: ({ node, ...props }) => <figure {...props} />,
-                        figcaption: ({ node, ...props }) => <figcaption {...props} />,
-                    }}
-                >
-                    {markdown}
-                </ReactMarkdown>
-                <div className="spacer"></div>
-            </article>
+            <div className="about-topbar">
+                <div className="logo" onClick={() => navigate("/home")}>
+                    silo.
+                </div>
+            </div>
+            <div className="content">
+                <article className="markdown-body">
+                    <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        rehypePlugins={[rehypeRaw, rehypeSlug, [rehypeSanitize, schema]]}
+                        components={{
+                            details: ({ node, ...props }) => <details {...props} />,
+                            summary: ({ node, ...props }) => <summary {...props} />,
+                            figure: ({ node, ...props }) => <figure {...props} />,
+                            figcaption: ({ node, ...props }) => <figcaption {...props} />,
+                        }}
+                    >
+                        {markdown}
+                    </ReactMarkdown>
+                    <div className="spacer"></div>
+                </article>
+            </div>
         </div>
     );
 }

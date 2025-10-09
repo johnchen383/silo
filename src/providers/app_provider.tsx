@@ -1,6 +1,7 @@
 // AppStateProvider.tsx
 import React, { createContext, useContext, useState } from "react";
 import { type BibleRouteParams } from "../components/Chapter";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export type Page = "home" | "read" | "notes" | "profile";
 
@@ -49,8 +50,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         showBookmark: true,
         showHistory: true,
     })
-    const [lastChaptersViewed, setLastChaptersViewed] = useState<BibleRouteParams[]>([]);
-    const [bookmarkedChapter, setBookmarkedChapter] = useState<BibleRouteParams | null>(null);
+
+    const [lastChaptersViewed, setLastChaptersViewed] = useLocalStorage<BibleRouteParams[]>("last-chapters-viewed", []);
+    const [bookmarkedChapter, setBookmarkedChapter] = useLocalStorage<BibleRouteParams | null>("bookmarked-chapter", null);
 
     const [inApp, setInApp] = useState(() => {
         const path = window.location.pathname;

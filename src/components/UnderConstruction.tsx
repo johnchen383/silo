@@ -1,7 +1,15 @@
+import { useEffect } from 'react'
 import construction from '../assets/construction.svg'
 import "./UnderConstruction.scss"
+import { useAppProvider } from '../providers/app_provider'
 
 const UnderConstruction = () => {
+    const {setInApp} = useAppProvider();
+    
+    useEffect(() => {
+        setInApp(true);
+    }, [])
+
     return (
         <div className='construction'>
             <img src={construction} />

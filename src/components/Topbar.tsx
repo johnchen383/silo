@@ -11,10 +11,16 @@ const Topbar = () => {
     const { selectedPage, inApp, chapterNavSettings, bookmarkedChapter, setBookmarkedChapter, lastChaptersViewed } = useAppProvider();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
+    }, [book, chapter, verse])
+
     if (!inApp)
         return <></>
 
     const is_bookmarked = selectedPage == 'read' && book && chapter && bookmarkedChapter && book == bookmarkedChapter.book && chapter == bookmarkedChapter.chapter;
+    const has_top_bar = selectedPage == 'read' || selectedPage == 'home'
+    const align_left = selectedPage == 'home'
 
     const open_chapter_selector = () => {
         document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
@@ -52,41 +58,49 @@ const Topbar = () => {
         }
     }
 
-    useEffect(() => {
-        document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
-    }, [book, chapter, verse])
+    const HOME_TOPBAR_ELEMENTS = <>
+        <div className="logo" onClick={
+            () => {
+                navigate("/about")
+            }
+        }>silo.</div>
+    </>
+
+    const READ_TOPBAR_ELEMENTS = <>
+        {
+            chapterNavSettings.showBookmark ? <span><Icon icon={`${is_bookmarked ? "fluent:bookmark-16-filled" : "fluent:bookmark-16-regular"}`} width="36" height="36" onClick={toggle_bookmark} /></span> : <></>
+        }
+        {
+            chapterNavSettings.showHistory ?
+                <span className={`history`}>
+                    <Icon icon="solar:history-linear" width="36" height="36" onClick={toggle_history} />
+                    {
+                        <div id='DOC_EL_HISTORY_ITEMS' className={`history-items`}>
+                            {
+                                [...lastChaptersViewed].reverse().slice(1).map((chapt, i) => {
+                                    return <div className="item" key={i} onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`${CONST_BIBLE_ROUTE}/${chapt.book}/${chapt.chapter}`);
+                                    }}>
+                                        {`${CONST_BOOK_SYMBOL_TO_NAME[chapt.book]} ${chapt.chapter}`}
+                                    </div>
+                                })
+                            }
+                        </div>
+                    }
+                </span>
+                : <></>
+        }
+        <span><Icon icon="basil:book-outline" width="36" height="36" onClick={open_chapter_selector} /></span>
+        <span><Icon icon="solar:settings-outline" width="36" height="36" onClick={open_chapter_settings} /></span>
+    </>
 
     return (
         <>
-            {selectedPage == 'read'
+            {has_top_bar
                 ?
-                <div id="DOC_EL_TOPBAR" className="topbar">
-                    {
-                        chapterNavSettings.showBookmark ? <span><Icon icon={`${is_bookmarked ? "fluent:bookmark-16-filled" : "fluent:bookmark-16-regular"}`} width="36" height="36" onClick={toggle_bookmark} /></span> : <></>
-                    }
-                    {
-                        chapterNavSettings.showHistory ?
-                            <span className={`history`}>
-                                <Icon icon="solar:history-linear" width="36" height="36" onClick={toggle_history} />
-                                {
-                                    <div id='DOC_EL_HISTORY_ITEMS' className={`history-items`}>
-                                        {
-                                            [...lastChaptersViewed].reverse().slice(1).map((chapt, i) => {
-                                                return <div className="item" key={i} onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    navigate(`${CONST_BIBLE_ROUTE}/${chapt.book}/${chapt.chapter}`);
-                                                }}>
-                                                    {`${CONST_BOOK_SYMBOL_TO_NAME[chapt.book]} ${chapt.chapter}`}
-                                                </div>
-                                            })
-                                        }
-                                    </div>
-                                }
-                            </span>
-                            : <></>
-                    }
-                    <span><Icon icon="basil:book-outline" width="36" height="36" onClick={open_chapter_selector} /></span>
-                    <span><Icon icon="solar:settings-outline" width="36" height="36" onClick={open_chapter_settings} /></span>
+                <div id="DOC_EL_TOPBAR" className={`topbar ${align_left ? 'align-left' : ''}`}>
+                    {selectedPage == "read" ? READ_TOPBAR_ELEMENTS : HOME_TOPBAR_ELEMENTS}
                 </div>
                 : <></>
             }

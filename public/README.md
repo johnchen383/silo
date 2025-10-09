@@ -1,5 +1,3 @@
-# Silo
-
 > If you're anything like me, taking notes on Scripture often feels unfruitful. I’ve amassed stacks of sermon outlines with notes I scarcely revisit. I've found most digital alternatives also miss the mark — either clunky Bible apps or generic note-takers not built for Scripture. I've also found myself longing for meaningful discussion beyond bible studies or post-service yarns, yet struggle to find spaces where that can naturally happen.
 
 <figure>
@@ -14,7 +12,7 @@ Think of it as **digital marginalia** — your quiet meditations transformed int
 ### Jump to:
 - [Mission](#user-content-mission)
 - [Our Edge](#user-content-our-edge)
-- [Get Involved](#user-content-getting-involved)
+- [Connect](#user-content-getting-involved)
 - [The Team](#user-content-the-team)
 
 ## Mission

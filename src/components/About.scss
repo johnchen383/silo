@@ -7,6 +7,27 @@
     overflow-y: scroll;
     width: 100vw;
     scroll-behavior: smooth;
+    flex-direction: column;
+    align-items: center;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    .about-topbar {
+        margin-top: 1.5rem;
+        width: 80dvh;
+        margin-left: 1rem;
+        max-width: 100%;
+        padding: 0.5rem 0.5rem;
+        z-index: 1;
+        background-color: $surface;
+
+        .logo {
+            margin-left: 0.5rem;
+            font-size: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    }
 
     .spacer {
         height: 1px;
@@ -32,8 +53,8 @@
     }
 
     .markdown-body {
-        max-width: 800px;
-        width: 100%;
+        max-width: 100%;
+        width: 80dvh;
         padding: 0rem 1.1rem;
         line-height: 1.6;
 
@@ -134,7 +155,7 @@
                 padding: 0.5rem 1rem;
                 border-radius: 12px;
                 text-align: center;
-                width: 150px;
+                width: 120px;
 
                 > a {
                     color: $on-surface;
