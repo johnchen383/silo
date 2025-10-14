@@ -3,8 +3,8 @@ import "./Tabbar.scss";
 import { useAppProvider, type Page } from "../providers/app_provider";
 import { useNavigate } from "react-router-dom";
 import { CONST_BIBLE_ROUTE } from "../consts/bible_data";
-import { DEFAULT_BIBLE_ROUTE, type BibleRouteParams } from "./Chapter";
 import { useHistoryProvider } from "../providers/history_provider";
+import { DEFAULT_BIBLE_ROUTE, type BibleRouteParams } from "../types/bible_route";
 
 const ICONS = [
     "fluent:home-32-filled",

@@ -1,7 +1,7 @@
 // HistoryStateProvider.tsx
 import React, { createContext, useContext } from "react";
-import { type BibleRouteParams } from "../components/Chapter";
 import useLocalStorage from "../hooks/useLocalStorage";
+import type { BibleRouteParams } from "../types/bible_route";
 
 interface HistoryStateContextType {
     lastChaptersViewed: BibleRouteParams[];

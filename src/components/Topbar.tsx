@@ -2,10 +2,10 @@ import { Icon } from '@iconify/react';
 import "./Topbar.scss";
 import { useAppProvider } from '../providers/app_provider';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { BibleRouteParams } from './Chapter';
 import { useEffect } from 'react';
 import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME } from '../consts/bible_data';
 import { useHistoryProvider } from '../providers/history_provider';
+import type { BibleRouteParams } from '../types/bible_route';
 
 const Topbar = () => {
     const { book, chapter, verse } = useParams<BibleRouteParams>();

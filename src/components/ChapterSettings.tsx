@@ -33,6 +33,7 @@ const ToggleItem: React.FC<ToggleItemProps> = ({
 
 const ChapterSettings = () => {
     const { chapterContentViewSettings, setChapterContentViewSettings, chapterNavSettings, setChapterNavSettings } = useAppProvider();
+
     return (
         <div id="DOC_EL_CHAPTER_SETTINGS" className='chapter-settings'>
             <div className="exit">

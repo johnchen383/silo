@@ -10,29 +10,15 @@ import useEvent from "../hooks/useEvent";
 import useScrollDirection from "../hooks/useScroll";
 import { Icon } from "@iconify/react";
 import { useAppProvider } from "../providers/app_provider";
-// import { useAuth } from "../providers/auth_provider";
-// import { supabase } from "../supabase";
-
 const LineBreak: React.FC<{ small: boolean }> = ({ small }) => <span><br /><div className={`spacer ${small ? 'small' : ''}`}></div></span>;
 
 import React from 'react'
 import ChapterSettings from "./ChapterSettings";
 import { useHistoryProvider } from "../providers/history_provider";
+import type { BibleRouteParams } from "../types/bible_route";
 
 interface ChapterContentProps {
     chapter: TranslationBookChapter;
-}
-
-export type BibleRouteParams = {
-    book: string;
-    chapter: string;
-    verse: string;
-};
-
-export const DEFAULT_BIBLE_ROUTE: BibleRouteParams = {
-    book: "GEN",
-    chapter: "1",
-    verse: '1'
 }
 
 export const ChapterContent = (props: ChapterContentProps) => {
@@ -134,8 +120,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
 
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
-            <span className={`verse ${selected_verse == verse.number ? 'selected' : ''}`} onClick={() =>
-            {
+            <span className={`verse ${selected_verse == verse.number ? 'selected' : ''}`} onClick={() => {
                 set_selected_verse(verse.number);
                 // navigator.clipboard.writeText(JSON.stringify(verse.content))
             }}>
@@ -300,22 +285,6 @@ const Chapter = () => {
 
     useEvent("touchend", handle_touch_end, [], document.getElementById("DOC_EL_CHAPTER_CONTAINER"));
 
-    // const {user} = useAuth();
-
-    // const handleAddNote = async () => {
-    //     if (!user) return;
-
-    //     const { error } = await supabase.from("notes").insert([
-    //         {
-    //             user_id: user.id,
-    //             content: "Test note",
-    //         },
-    //     ]);
-
-    //     if (error) {
-    //         console.error("Error inserting note:", error);
-    //     }
-    // };
 
     useEffect(() => {
         window.setTimeout(() => {

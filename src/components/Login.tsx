@@ -1,5 +1,5 @@
 // src/Login.tsx
-import { supabase } from "../supabase";
+import { supabase } from "../supabase/supabase";
 
 export default function Login() {
     async function handleGoogleLogin() {

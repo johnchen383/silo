@@ -7,11 +7,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "types": "supabase gen types typescript --local > src/supabase/types.ts"
   },
   "dependencies": {
     "@iconify/react": "^6.0.2",
     "@supabase/supabase-js": "^2.57.4",
+    "@tanstack/react-query": "^5.90.2",
     "@vercel/analytics": "^1.5.0",
     "axios": "^1.12.2",
     "react": "^19.1.1",

@@ -1,0 +1,1 @@
+export const REFETCH_ON_SETTLED = false;
