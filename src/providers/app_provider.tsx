@@ -1,6 +1,5 @@
 // AppStateProvider.tsx
 import React, { createContext, useContext, useState } from "react";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { useAuth } from "./auth_provider";
 import { IsBibleRouteParams, type BibleRouteParams } from "../types/bible_route";
 import { useUpdateBookmarked } from "../supabase/api/profile";
@@ -53,25 +52,23 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
     const { profile } = useAuth();
 
-    const [bookmarkedChapter, setBookmarkedChapter] = useLocalStorage<BibleRouteParams | null>(
-        "bookmarked-chapter",
-        null,
-        (val) => {
-            const prev = (bookmark.data ?? null);
-            if (val !== prev) {
-                console.log(`Mutating server persistence from ${JSON.stringify(prev)} to ${JSON.stringify(val)}`)
-                bookmark.mutate(val);
-            }
-        },
-        IsBibleRouteParams(profile?.bookmarked) ? profile!.bookmarked : null
-    );
+    // const [bookmarkedChapter, setBookmarkedChapter] = useLocalStorage<BibleRouteParams | null>(
+    //     "bookmarked-chapter",
+    //     null,
+    //     (val) => {
+    //         const prev = (bookmark.data ?? null);
+    //         if (val !== prev) {
+    //             console.log(`Mutating server persistence from ${JSON.stringify(prev)} to ${JSON.stringify(val)}`)
+    //             bookmark.mutate(val);
+    //         }
+    //     },
+    //     IsBibleRouteParams(profile?.bookmarked) ? profile!.bookmarked : null
+    // );
 
-    const bookmark = useUpdateBookmarked(profile?.user_id, (prev: BibleRouteParams | null) => {
-        if (JSON.stringify(prev) !== JSON.stringify(bookmarkedChapter)) {
-            console.log(`Resetting local cache from ${JSON.stringify(bookmarkedChapter)} to ${JSON.stringify(prev)}`)
-            setBookmarkedChapter(prev);
-        }
-    });
+    const bookmark = useUpdateBookmarked(profile?.user_id);
+
+    const bookmarkedChapter = IsBibleRouteParams(profile?.bookmarked) ? profile!.bookmarked : null;
+    const setBookmarkedChapter = (chapter: BibleRouteParams | null) => bookmark.mutate(chapter);
 
     const [inApp, setInApp] = useState(() => {
         const path = window.location.pathname;

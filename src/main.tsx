@@ -8,11 +8,10 @@ import { registerSW } from 'virtual:pwa-register'
 import { AuthProvider } from './providers/auth_provider.tsx'
 import { AppStateProvider } from './providers/app_provider.tsx';
 import { HistoryStateProvider } from './providers/history_provider.tsx';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './query_client.ts';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 registerSW({ immediate: true })
-
-const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient} >

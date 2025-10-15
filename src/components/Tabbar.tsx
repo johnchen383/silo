@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { CONST_BIBLE_ROUTE } from "../consts/bible_data";
 import { useHistoryProvider } from "../providers/history_provider";
 import { DEFAULT_BIBLE_ROUTE, type BibleRouteParams } from "../types/bible_route";
+import { useOnline } from "../hooks/useOnline";
 
 const ICONS = [
     "fluent:home-32-filled",
@@ -33,6 +34,7 @@ export const GET_LAST_CHAPTER_ROUTE = (lasts: BibleRouteParams[]) => {
 const Tabbar = () => {
     const { selectedPage, setSelectedPage, inApp } = useAppProvider();
     const { lastChaptersViewed } = useHistoryProvider();
+    const isOnline = useOnline();
 
     const navigate = useNavigate();
 
@@ -78,6 +80,7 @@ const Tabbar = () => {
                         <div className="label" style={{ fontSize: 14 }}>Profile</div>
                     </div>
                 </div>
+                {!isOnline && <div className="offline">Offline. Data will be synced once connection restored.</div>}
             </div>
         </>
     )

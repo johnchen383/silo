@@ -19,7 +19,7 @@ async function updateProfileBookmarked(userId: string, bookmarked: BibleRoutePar
 /**
  * React Query mutation hook for updating the 'bookmarked' field of the profile.
  */
-export function useUpdateBookmarked(userId: string | undefined, onMutateError: (prev: BibleRouteParams | null) => void) {
+export function useUpdateBookmarked(userId: string | undefined, onMutateError?: (prev: BibleRouteParams | null) => void) {
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -54,11 +54,11 @@ export function useUpdateBookmarked(userId: string | undefined, onMutateError: (
         onError: (__, _, context) => {
             if (context?.previousProfile && userId) {
                 queryClient.setQueryData(["profile", userId], context.previousProfile);
-                onMutateError(IsBibleRouteParams(context.previousProfile.bookmarked) ? context.previousProfile.bookmarked : null);
+                onMutateError?.(IsBibleRouteParams(context.previousProfile.bookmarked) ? context.previousProfile.bookmarked : null);
             }
             else
             {
-                onMutateError(null);
+                onMutateError?.(null);
             }
         },
 
