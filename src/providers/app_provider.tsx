@@ -51,22 +51,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     })
 
     const { profile } = useAuth();
-
-    // const [bookmarkedChapter, setBookmarkedChapter] = useLocalStorage<BibleRouteParams | null>(
-    //     "bookmarked-chapter",
-    //     null,
-    //     (val) => {
-    //         const prev = (bookmark.data ?? null);
-    //         if (val !== prev) {
-    //             console.log(`Mutating server persistence from ${JSON.stringify(prev)} to ${JSON.stringify(val)}`)
-    //             bookmark.mutate(val);
-    //         }
-    //     },
-    //     IsBibleRouteParams(profile?.bookmarked) ? profile!.bookmarked : null
-    // );
-
     const bookmark = useUpdateBookmarked(profile?.user_id);
-
     const bookmarkedChapter = IsBibleRouteParams(profile?.bookmarked) ? profile!.bookmarked : null;
     const setBookmarkedChapter = (chapter: BibleRouteParams | null) => bookmark.mutate(chapter);
 

@@ -1,32 +1,37 @@
 // src/queryClient.ts
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { get, set, del } from 'idb-keyval'
 import { QueryClient } from '@tanstack/react-query'
 import { persistQueryClient } from '@tanstack/react-query-persist-client'
-import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 
-// 1️⃣ Create your QueryClient
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 0,                 // always refetch
+      networkMode: 'offlineFirst',
+      retry: false,
       refetchOnReconnect: true,
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false
     },
     mutations: {
-      retry: Infinity,              // queue mutations until success
+      retry: false,
+      networkMode: 'offlineFirst',
     },
   },
 })
 
-// 2️⃣ Set up persistence using IndexedDB or localStorage
-const persister = createSyncStoragePersister({
-  storage: window.localStorage,    // or use IndexedDB with a custom persister
+const persister = createAsyncStoragePersister({
+  storage: {
+    getItem: (key) => get(key),
+    setItem: (key, value) => set(key, value),
+    removeItem: (key) => del(key),
+  },
 })
 
 persistQueryClient({
   queryClient,
   persister,
-  maxAge: 0,                        // discard old queries on reload
+  maxAge: Infinity,
   dehydrateOptions: {
-    shouldDehydrateMutation: () => true, // queue mutations indefinitely
+    shouldDehydrateMutation: () => true,
   },
 })

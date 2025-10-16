@@ -248,17 +248,17 @@ const Chapter = () => {
         <div className={`chapter-header`}>
             <div className={`book`}>{CONST_BOOK_SYMBOL_TO_NAME[book!]}</div>
             <div className={`chapter`}>{chapter}</div>
-            <div id="DOC_EL_PAGINATION" className="horizontal-arrow">
+            <div id="DOC_EL_PAGINATION" className="horizontal-arrow active">
                 {
                     <div className={`item left`} onClick={() => { navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`) }}>
-                        <Icon icon="basil:caret-left-outline" width="32" height="32" />
+                        <span style={{width: 32, height: 32}}><Icon icon="basil:caret-left-outline" width="32" height="32" /></span>
                         <div className="label">{`${prev_chapter.book} ${prev_chapter.chapter}`}</div>
                     </div>
                 }
                 {
                     <div className={`item right`} onClick={() => navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`)}>
                         <div className="label">{`${next_chapter.book} ${next_chapter.chapter}`}</div>
-                        <Icon icon="basil:caret-right-outline" width="32" height="32" />
+                        <span style={{width: 32, height: 32}}><Icon icon="basil:caret-right-outline" width="32" height="32" /></span>
                     </div>
                 }
             </div>
@@ -272,13 +272,14 @@ const Chapter = () => {
     }
 
     const handle_touch_end = (_: TouchEvent) => {
-        const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
-        if (scroll_left < HOR_SCROLL_LEFT - 100) {
-            navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
-        }
-        else if (scroll_left > HOR_SCROLL_LEFT + 100) {
-            navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
-        }
+        // FIXME: Buggy implementation
+        // const scroll_left = document.getElementById("DOC_EL_CHAPTER_CONTAINER")?.scrollLeft!;
+        // if (scroll_left < HOR_SCROLL_LEFT - 100) {
+        //     navigate(`${CONST_BIBLE_ROUTE}/${prev_chapter.book}/${prev_chapter.chapter}`);
+        // }
+        // else if (scroll_left > HOR_SCROLL_LEFT + 100) {
+        //     navigate(`${CONST_BIBLE_ROUTE}/${next_chapter.book}/${next_chapter.chapter}`);
+        // }
 
         on_general_click();
     }

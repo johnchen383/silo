@@ -19,7 +19,9 @@ const ICONS = [
     "fluent:bookmark-16-filled",
     "fluent:bookmark-16-regular",
     "solar:history-linear",
-    "basil:cross-solid"
+    "basil:cross-solid",
+    "basil:caret-left-outline",
+    "basil:caret-right-outline"
 ]
 
 export const GET_LAST_CHAPTER_ROUTE = (lasts: BibleRouteParams[]) => {

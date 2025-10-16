@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase";
 import { IsBibleRouteParams, type BibleRouteParams } from "../../types/bible_route";
-import { REFETCH_ON_SETTLED } from "./common";
+import { IS_OFFLINE_ERROR, REFETCH_ON_SETTLED } from "./common";
 
 /**
  * Update the 'bookmarked' field of a user's profile in Supabase.
@@ -30,6 +30,7 @@ export function useUpdateBookmarked(userId: string | undefined, onMutateError?: 
 
         // Optimistic update
         onMutate: async (newBookmarked) => {
+            console.log(newBookmarked, userId)
             if (!userId) return;
 
             // Cancel any outgoing refetches
@@ -51,7 +52,12 @@ export function useUpdateBookmarked(userId: string | undefined, onMutateError?: 
         },
 
         // Rollback on error
-        onError: (__, _, context) => {
+        onError: (error, _, context) => {
+            if (IS_OFFLINE_ERROR(error))
+            {
+                return;
+            }
+
             if (context?.previousProfile && userId) {
                 queryClient.setQueryData(["profile", userId], context.previousProfile);
                 onMutateError?.(IsBibleRouteParams(context.previousProfile.bookmarked) ? context.previousProfile.bookmarked : null);
@@ -67,6 +73,6 @@ export function useUpdateBookmarked(userId: string | undefined, onMutateError?: 
             if (userId && REFETCH_ON_SETTLED) {
                 queryClient.invalidateQueries({ queryKey: ["profile", userId] });
             }
-        },
+        }
     });
 }
