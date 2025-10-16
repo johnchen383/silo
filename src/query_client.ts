@@ -21,11 +21,14 @@ export const queryClient = new QueryClient({
 
 const persister = createAsyncStoragePersister({
   storage: {
-    getItem: (key) => get(key),
-    setItem: (key, value) => set(key, value),
-    removeItem: (key) => del(key),
+    getItem: async (key: string): Promise<string | null> => {
+      const value = await get(key);
+      return value ?? null;
+    },
+    setItem: (key: string, value: string): Promise<void> => set(key, value),
+    removeItem: (key: string): Promise<void> => del(key),
   },
-})
+});
 
 persistQueryClient({
   queryClient,
