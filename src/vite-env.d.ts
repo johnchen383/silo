@@ -5,5 +5,3 @@ declare module 'virtual:pwa-register' {
 }
 
 declare const __COMMIT_HASH__: string;
-
-declare module '@tanstack/query-async-storage-persister';
