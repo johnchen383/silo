@@ -1,7 +1,8 @@
 // HistoryStateProvider.tsx
 import React, { createContext, useContext } from "react";
-import useLocalStorage from "../hooks/useLocalStorage";
 import type { BibleRouteParams } from "../types/bible_route";
+import { useUpdateLastChaptersViewed } from "../supabase/api/profile";
+import { useAuth } from "./auth_provider";
 
 interface HistoryStateContextType {
     lastChaptersViewed: BibleRouteParams[];
@@ -13,17 +14,23 @@ const HistoryStateContext = createContext<HistoryStateContextType | undefined>(
 );
 
 export function HistoryStateProvider({ children }: { children: React.ReactNode }) {
-    const [lastChaptersViewed, setLastChaptersViewed] = useLocalStorage<BibleRouteParams[]>("last-chapters-viewed", []);
+    const { profile } = useAuth();
+    const lastChaptersViewed = (profile?.chapter_history as BibleRouteParams[]) ?? [];
+    const chapter_history = useUpdateLastChaptersViewed(profile?.user_id);
 
     const setLastChapterViewed = (chapter: BibleRouteParams) => {
-        setLastChaptersViewed((val) => {
-            const filtered = val.filter(
-                c => c.book !== chapter.book || c.chapter !== chapter.chapter
-            );
-            const updated = [...filtered, chapter];
-            return updated.slice(-6);
-        });
-    }
+        const lastChapter = lastChaptersViewed[lastChaptersViewed.length - 1];
+        if (lastChapter?.book === chapter.book && lastChapter?.chapter === chapter.chapter) {
+            return; // Already the latest, no mutation needed
+        }
+
+        const filtered = lastChaptersViewed.filter(
+            c => c.book !== chapter.book || c.chapter !== chapter.chapter
+        );
+
+        const updated = [...filtered, chapter].slice(-6);
+        chapter_history.mutate(updated);
+    };
 
     return (
         <HistoryStateContext.Provider value={{
