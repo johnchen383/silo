@@ -23,6 +23,7 @@ const Scaffold: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     <button onClick={goOnline}>Go Online</button>
                 </div>
             )}
+            <div id="DOC_EL_SNACKBAR" className="snackbar">Test</div>
             {user ? <Topbar /> : <></>}
             <div className="content">
                 {children}

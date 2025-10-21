@@ -6,6 +6,7 @@ import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME, CONST_BOOKS_ARR, CONST_BO
 import { useHistoryProvider } from "../providers/history_provider";
 import { DEFAULT_BIBLE_ROUTE, type BibleRouteParams } from "../types/bible_route";
 import { useOnline } from "../hooks/useOnline";
+import { useEffect, useRef } from "react";
 
 const ICONS = [
     "fluent:home-32-filled",
@@ -37,7 +38,41 @@ const Tabbar = () => {
     const { selectedPage, setSelectedPage, inApp } = useAppProvider();
     const { book, chapter } = useParams<BibleRouteParams>();
     const { lastChaptersViewed } = useHistoryProvider();
+    const has_mounted = useRef(false);
+
     const isOnline = useOnline();
+
+    useEffect(() => {
+        if (!has_mounted.current) {
+            has_mounted.current = true;
+            if (isOnline)
+            {
+                return;
+            }
+        }
+
+        const shnack = document.getElementById("DOC_EL_SNACKBAR");
+        if (!shnack) return;
+
+        let toggled = false;
+
+        if (!isOnline) {
+            shnack.classList.add("show")
+            shnack.classList.remove("green")
+            shnack.innerText = "Connection lost. Data will be synced when back online."
+            toggled = true;
+        }
+
+        if (isOnline) {
+            shnack.classList.add("show", "green")
+            shnack.innerText = "Connection restored."
+            toggled = true;
+        }
+
+        if (toggled) {
+            window.setTimeout(() => shnack.classList.remove("show"), 4000)
+        }
+    }, [isOnline])
 
     const navigate = useNavigate();
 
@@ -133,7 +168,6 @@ const Tabbar = () => {
                         <div className="label" style={{ fontSize: 14 }}>Profile</div>
                     </div>
                 </div>
-                {!isOnline && <div className="offline">Offline. Data will be synced once connection restored.</div>}
             </div>
         </>
     )

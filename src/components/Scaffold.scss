@@ -12,4 +12,26 @@
         width: 100%;
         height: 100%;
     }
+
+    .snackbar {
+        position: absolute;
+        z-index: 1000000000000;
+        background-color: #FFB3AB;
+        width: 80svh;
+        max-width: 100%;
+        text-align: center;
+        font-size: smaller;
+        padding: 0.2rem;
+        top: -100%;
+        transition: top ease-in 800ms;
+
+        &.show {
+            top: 0;
+            transition: top ease-out 800ms;
+        }
+
+        &.green {
+            background-color: #A8E6CF;
+        }
+    }
 }
