@@ -18,6 +18,63 @@
     justify-content: center;
     flex-direction: column;
 
+    .chapter-navigation {
+        position: absolute;
+        bottom: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 80dvh;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        align-items: center;
+
+        .item {
+            color: $on-surface;
+            background-color: $surface;
+
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 999px;
+
+            font-size: 1rem;
+            font-weight: 500;
+            height: calc(1.1rem + 1.4rem);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+
+            &.label {
+                padding: 0.7rem 3rem;
+            }
+
+            &.btn {
+                display: flex;
+                flex-direction: row;
+                padding: 0.2rem 0.5rem;
+                justify-content: center;
+
+                &.left {
+                    padding-right: 1.4rem;
+
+                    svg {
+                        margin-right: -0.5rem;
+                    }
+                }
+
+                &.right {
+                    padding-left: 1.4rem;
+
+                    svg {
+                        margin-left: -0.5rem;
+                    }
+                }
+            }
+        }
+    }
+
     &.hidden {
         bottom: -100%;
         transition: bottom 1s ease-in-out;

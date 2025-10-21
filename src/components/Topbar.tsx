@@ -24,14 +24,6 @@ const Topbar = () => {
     const has_top_bar = selectedPage == 'read' || selectedPage == 'home'
     const align_left = selectedPage == 'home'
 
-    const open_chapter_selector = () => {
-        document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
-        document.getElementById("DOC_EL_CHAPTER_SELECTOR")?.classList.add("open", "visible");
-        window.setTimeout(() => {
-            document.getElementById("DOC_EL_CHAPTER_SETTINGS")?.classList.remove("open");
-        }, 300);
-    }
-
     const open_chapter_settings = () => {
         document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
         if (document.getElementById("DOC_EL_CHAPTER_SETTINGS")?.classList.contains("open")) {
@@ -93,7 +85,6 @@ const Topbar = () => {
                 </span>
                 : <></>
         }
-        <span><Icon icon="basil:book-outline" width="36" height="36" onClick={open_chapter_selector} /></span>
         <span><Icon icon="solar:settings-outline" width="36" height="36" onClick={open_chapter_settings} /></span>
     </>
 
