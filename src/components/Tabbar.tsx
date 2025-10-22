@@ -145,9 +145,9 @@ const Tabbar = () => {
                 {
                     has_chapter_nav &&
                     <div className="chapter-navigation">
-                        <div className="item btn left" onClick={handle_prev}><Icon icon="basil:caret-left-outline" width="32" height="32" /><div className="text">{prev_chapter!.book == book ? "Ch." : prev_chapter!.book} {prev_chapter!.chapter}</div></div>
+                        <div className="item btn left" onClick={handle_prev}><Icon icon="basil:caret-left-outline" width="32" height="32" /><div className="text">{prev_chapter!.chapter}</div></div>
                         <div className="item label" onClick={open_chapter_selector}>{CONST_BOOK_SYMBOL_TO_NAME[book]} {chapter}</div>
-                        <div className="item btn right" onClick={handle_next}><div className="text">{next_chapter!.book == book ? "Ch." : next_chapter!.book} {next_chapter!.chapter}</div><Icon icon="basil:caret-right-outline" width="32" height="32" /></div>
+                        <div className="item btn right" onClick={handle_next}><div className="text">{next_chapter!.chapter}</div><Icon icon="basil:caret-right-outline" width="32" height="32" /></div>
                     </div>
                 }
                 <div className="content">

@@ -233,8 +233,7 @@ const Chapter = () => {
         document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
     }
 
-    const handle_touch_end = (_: TouchEvent) =>
-    {
+    const handle_touch_end = (_: TouchEvent) => {
         on_general_click();
     }
 
@@ -269,10 +268,11 @@ const Chapter = () => {
             }
 
             set_current_chapter(data);
-            document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTop = 0;
         }
 
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+        document.getElementById("DOC_EL_CHAPTER_CONTAINER")!.scrollTop = 0;
+        set_current_chapter(null);
         Initialise();
     }, [book, chapter, verse]);
 
@@ -283,7 +283,11 @@ const Chapter = () => {
                 <div className="content">
                     <div className="chapter-block">
                         <ChapterHeader />
-                        {current_chapter ? <ChapterContent chapter={current_chapter} /> : <></>}
+                        {current_chapter ? <ChapterContent chapter={current_chapter} /> :
+                            <div className="loading">
+                                <div className="bar"></div>
+                            </div>
+                        }
                     </div>
                     <div className="spacer"></div>
                     <div className="info" style={{ fontSize: "0.7rem", textAlign: "center", paddingBottom: "5rem" }}>hash: {__COMMIT_HASH__}</div>
