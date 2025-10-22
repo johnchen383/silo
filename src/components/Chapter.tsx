@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { GetBSB } from "../api/bsb";
 import type { ChapterVerse, TranslationBookChapter, ChapterVerseContent } from "../api/models";
 import { useNavigate, useParams } from "react-router-dom";
-import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL } from "../consts/bible_data";
+import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME, CONST_BOOKS, CONST_BOOKS_NUM_CHAPTERS, CONST_DEFAULT_CHAPTER_URL, TRANSLATION } from "../consts/bible_data";
 
 import "./Chapter.scss";
 import ChapterSelector from "./ChapterSelector";
@@ -221,7 +221,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
 
         const reference = `(${CONST_BOOK_SYMBOL_TO_NAME[book!]} ${chapter!}:${
             selected_verses.length == 1 ? selected_verses[0] : `${selected_verses[0]}\u2013${selected_verses[1]}`
-        }, BSB)`
+        }, ${TRANSLATION})`
 
         navigator.clipboard.writeText(`${verses_string_to_copy} ${reference}\n\nSilo Bible: ${window.location.href}`);
         set_selected_verses([]);
@@ -364,7 +364,7 @@ const Chapter = () => {
                 return;
             }
 
-            const data = await GetBSB<TranslationBookChapter>(`/api/BSB/${target_book}/${target_chapter}.json`);
+            const data = await GetBSB<TranslationBookChapter>(`/api/${TRANSLATION}/${target_book}/${target_chapter}.json`);
 
             if (verse && Number(verse) > data.numberOfVerses) {
                 navigate(`${CONST_BIBLE_ROUTE}/${target_book}/${target_chapter}`);
