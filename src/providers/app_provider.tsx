@@ -8,6 +8,7 @@ export type Page = "home" | "read" | "notes" | "profile";
 
 export interface ChapterContentViewSettings {
     manusriptMode: boolean
+    readingMode: boolean
 }
 
 export interface ChapterNavSettings {
@@ -43,7 +44,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     });
 
     const [chapterContentViewSettings, setChapterContentViewSettings] = useState<ChapterContentViewSettings>({
-        manusriptMode: false
+        manusriptMode: false,
+        readingMode: false,
     })
     const [chapterNavSettings, setChapterNavSettings] = useState<ChapterNavSettings>({
         showBookmark: true,

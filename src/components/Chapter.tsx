@@ -15,6 +15,7 @@ import React from 'react'
 import ChapterSettings from "./ChapterSettings";
 import { useHistoryProvider } from "../providers/history_provider";
 import type { BibleRouteParams } from "../types/bible_route";
+import { Icon } from "@iconify/react";
 
 interface ChapterContentProps {
     chapter: TranslationBookChapter;
@@ -23,11 +24,11 @@ interface ChapterContentProps {
 export const ChapterContent = (props: ChapterContentProps) => {
     const { chapterContentViewSettings, setInApp } = useAppProvider();
     const { setLastChapterViewed } = useHistoryProvider();
-    const [selected_verse, set_selected_verse] = useState<number>(0);
+    const [selected_verses, set_selected_verses] = useState<number[]>([]);
     const { book, chapter, verse } = useParams<BibleRouteParams>();
 
     useEffect(() => {
-        set_selected_verse(0);
+        set_selected_verses([]);
         setInApp(true);
         setLastChapterViewed({
             book: book ?? "GEN",
@@ -117,21 +118,122 @@ export const ChapterContent = (props: ChapterContentProps) => {
         return null;
     }
 
+    useEffect(() => {
+        if (chapterContentViewSettings.readingMode) {
+            set_selected_verses([]);
+        }
+    }, [chapterContentViewSettings]);
+
+    useEffect(() => {
+        if (selected_verses.length == 0) {
+            document.getElementById("DOC_EL_VERSE_TOOLTIP")?.classList.remove("active");
+        }
+    }, [selected_verses]);
+
+    const handle_verse_click = (e: React.MouseEvent, verse_number: number) => {
+        if (chapterContentViewSettings.readingMode) return;
+        const tooltip = document.getElementById("DOC_EL_VERSE_TOOLTIP");
+        if (!tooltip) return;
+
+        if (selected_verses.length == 0) {
+            set_selected_verses([verse_number]);
+        }
+        else if (selected_verses.length == 1) {
+            if (selected_verses[0] == verse_number) {
+                set_selected_verses([]);
+                return;
+            }
+            else {
+                const start = Math.min(selected_verses[0], verse_number);
+                const end = Math.max(selected_verses[0], verse_number);
+                set_selected_verses([start, end]);
+            }
+        }
+        else if (selected_verses.length == 2) {
+            if (selected_verses[0] == verse_number || selected_verses[1] == verse_number) {
+                set_selected_verses([verse_number]);
+            }
+            else if (verse_number > selected_verses[0]) {
+                // shift end post
+                set_selected_verses([selected_verses[0], verse_number]);
+            }
+            else {
+                // shift start post
+                set_selected_verses([verse_number, selected_verses[1]]);
+            }
+        } else {
+            set_selected_verses([]);
+            return;
+        }
+
+        const rect = e.currentTarget.getBoundingClientRect();
+
+        tooltip.classList.add("active");
+        tooltip.style.left = `${rect.left + rect.width / 2}px`;
+        tooltip.style.top = `${rect.top - 50}px`;
+    }
+
+    const verse_selected = (verse_number: number): boolean => {
+        if (selected_verses.length == 0) return false;
+        if (selected_verses.length == 1) return selected_verses[0] == verse_number;
+        if (selected_verses.length == 2) return verse_number >= selected_verses[0] && verse_number <= selected_verses[1];
+        return false;
+    }
+
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
-            <span className={`verse ${selected_verse == verse.number ? 'selected' : ''}`} onClick={() => {
-                set_selected_verse(verse.number);
-                // navigator.clipboard.writeText(JSON.stringify(verse.content))
-            }}>
+            <span className={`verse ${verse_selected(verse.number) ? 'selected' : ''}`} onClick={(e) => handle_verse_click(e, verse.number)}>
                 {!chapterContentViewSettings.manusriptMode ? <sup className={`verse-num`}>{verse.number}</sup> : <></>}
                 {verse.content.map(VerseContent)}
             </span>
         );
     };
 
+    const get_tooltip_text = () => {
+        if (selected_verses.length == 0) return "";
+        if (selected_verses.length == 1) return `v${selected_verses[0]}`;
+        if (selected_verses.length == 2) return `v${selected_verses[0]}-${selected_verses[1]}`;
+        return "";
+    }
+
+    const handle_copy = () => {
+        if (selected_verses.length == 0) return;
+        let verses_to_copy: ChapterVerse[] = [];
+        if (selected_verses.length == 1) {
+            verses_to_copy = props.chapter.chapter.content.filter(v => v.type === "verse" && v.number === selected_verses[0]) as ChapterVerse[];
+        }
+        else if (selected_verses.length == 2) {
+            verses_to_copy = props.chapter.chapter.content.filter(v => v.type === "verse" && v.number >= selected_verses[0] && v.number <= selected_verses[1]) as ChapterVerse[];
+        }
+
+        const verses_string_to_copy = verses_to_copy.map(v => {
+            const verse_text = v.content.map(c => {
+                if (typeof c === "string") {
+                    return c;
+                }
+                else if ("text" in c) {
+                    return c.text;
+                }
+                return "";
+            }).join(" ");
+            return verse_text;
+        }).join(" ").replace(/\s{2,}/g, ' ');
+
+        const reference = `(${CONST_BOOK_SYMBOL_TO_NAME[book!]} ${chapter!}:${
+            selected_verses.length == 1 ? selected_verses[0] : `${selected_verses[0]}\u2013${selected_verses[1]}`
+        }, BSB)`
+
+        navigator.clipboard.writeText(`${verses_string_to_copy} ${reference}\n\nSilo Bible: ${window.location.href}`);
+        set_selected_verses([]);
+    }
+
     return (
         <>
             <div className="verses">
+                <div id="DOC_EL_VERSE_TOOLTIP" className={`tooltip`}>
+                    <div className="text">{get_tooltip_text()}</div>
+                    <span className="action copy" onClick={handle_copy}><Icon icon={"mynaui:copy"} width={"28px"} height={"28px"}/></span>
+                </div>
                 {props.chapter.chapter.content.map((cont, idx, arr) => {
                     if (cont.type === "heading") {
                         if (!chapterContentViewSettings.manusriptMode) {
@@ -195,12 +297,14 @@ const Chapter = () => {
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
         document.getElementById("DOC_EL_TABBAR")?.classList.remove("hidden");
         document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
+        document.getElementById("DOC_EL_VERSE_TOOLTIP")?.classList.remove("active");
     }
 
     const on_scroll_down = () => {
         document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
         document.getElementById("DOC_EL_TABBAR")?.classList.add("hidden");
         document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
+        document.getElementById("DOC_EL_VERSE_TOOLTIP")?.classList.remove("active");
     }
 
     const handle_vertical_scroll = (e: WheelEvent) => {

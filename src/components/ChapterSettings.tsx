@@ -48,12 +48,12 @@ const ChapterSettings = () => {
                     active={chapterNavSettings.showBookmark}
                     setActive={(val) => {
                         setChapterNavSettings({ ...chapterNavSettings, showBookmark: val });
-                    }}/>
+                    }} />
                 <ToggleItem heading="Show History" caption="Display history of last visited chapters"
                     active={chapterNavSettings.showHistory}
                     setActive={(val) => {
                         setChapterNavSettings({ ...chapterNavSettings, showHistory: val });
-                    }}/>
+                    }} />
             </div>
             <div className="section">
                 <div className="subheading">View</div>
@@ -61,7 +61,12 @@ const ChapterSettings = () => {
                     active={chapterContentViewSettings.manusriptMode}
                     setActive={(val) => {
                         setChapterContentViewSettings({ ...chapterContentViewSettings, manusriptMode: val });
-                    }}/>
+                    }} />
+                <ToggleItem heading="Reading Mode" caption="Disable interactive elements for distraction-free reading"
+                    active={chapterContentViewSettings.readingMode}
+                    setActive={(val) => {
+                        setChapterContentViewSettings({ ...chapterContentViewSettings, readingMode: val });
+                    }} />
             </div>
         </div>
     )
