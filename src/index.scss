@@ -70,6 +70,7 @@ $toggle-height: 1.4rem;
   cursor: pointer;
   position: relative;
   width: calc(2 * $toggle-height);
+  min-width: calc(2 * $toggle-height);
   height: $toggle-height;
   border-radius: 15px;
   background-color: lightgray;
