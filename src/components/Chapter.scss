@@ -209,6 +209,17 @@
     //     opacity: 1;
     //     visibility: hidden;
     // }
+
+    .note-editor-filler {
+        padding-top: 0;
+        width: calc(min(80dvh, 100vw) + 2 * 2rem);
+        position: relative;
+        transition: padding 0.3s ease-in-out;
+
+        &.active {
+            padding-top: calc(50dvh - 4rem);
+        }
+    }
 }
 
 @keyframes loadingAnimation {

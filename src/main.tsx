@@ -10,6 +10,7 @@ import { AppStateProvider } from './providers/app_provider.tsx';
 import { HistoryStateProvider } from './providers/history_provider.tsx';
 import { queryClient } from './query_client.ts';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { NoteStateProvider } from './providers/note_provider.tsx';
 
 registerSW({ immediate: true })
 
@@ -18,8 +19,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <AuthProvider>
             <AppStateProvider>
                 <HistoryStateProvider>
-                    <App />
-                    <Analytics />
+                    <NoteStateProvider>
+                        <App />
+                        <Analytics />
+                    </NoteStateProvider>
                 </HistoryStateProvider>
             </AppStateProvider>
         </AuthProvider>

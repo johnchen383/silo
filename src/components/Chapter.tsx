@@ -16,6 +16,7 @@ import ChapterSettings from "./ChapterSettings";
 import { useHistoryProvider } from "../providers/history_provider";
 import type { BibleRouteParams } from "../types/bible_route";
 import { Icon } from "@iconify/react";
+import { useNoteProvider } from "../providers/note_provider";
 
 interface ChapterContentProps {
     chapter: TranslationBookChapter;
@@ -26,6 +27,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
     const { setLastChapterViewed } = useHistoryProvider();
     const [selected_verses, set_selected_verses] = useState<number[]>([]);
     const { book, chapter, verse } = useParams<BibleRouteParams>();
+    const { pendingNote, setPendingNote } = useNoteProvider();
 
     useEffect(() => {
         clear_tooltip_interaction();
@@ -128,7 +130,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
         document.getElementById("DOC_EL_VERSE_TOOLTIP")?.classList.remove("active");
 
         if (clearSelection)
-            window.setTimeout(() => {set_selected_verses([]);}, 300);
+            window.setTimeout(() => { set_selected_verses([]); }, 300);
     }
 
     const handle_verse_click = (_: React.MouseEvent, verse_number: number) => {
@@ -167,6 +169,8 @@ export const ChapterContent = (props: ChapterContentProps) => {
             return;
         }
 
+        if (pendingNote) return;
+
         tooltip.classList.add("active");
         tooltip.style.top = `${window.innerHeight / 2 - tooltip.getBoundingClientRect().height / 2}px`;
     }
@@ -180,7 +184,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
 
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
-            <span className={`verse ${verse_selected(verse.number) ? 'selected' : ''}`} onClick={(e) => handle_verse_click(e, verse.number)}>
+            <span id={`DOC_EL_VERSE_${verse.number}`} className={`verse ${verse_selected(verse.number) ? 'selected' : ''}`} onClick={(e) => handle_verse_click(e, verse.number)}>
                 {!chapterContentViewSettings.manusriptMode ? <sup className={`verse-num`}>{verse.number}</sup> : <></>}
                 {verse.content.map(VerseContent)}
             </span>
@@ -217,9 +221,8 @@ export const ChapterContent = (props: ChapterContentProps) => {
             return verse_text;
         }).join(" ").replace(/\s{2,}/g, ' ');
 
-        const reference = `(${CONST_BOOK_SYMBOL_TO_NAME[book!]} ${chapter!}:${
-            selected_verses.length == 1 ? selected_verses[0] : `${selected_verses[0]}\u2013${selected_verses[1]}`
-        }, ${TRANSLATION})`
+        const reference = `(${CONST_BOOK_SYMBOL_TO_NAME[book!]} ${chapter!}:${selected_verses.length == 1 ? selected_verses[0] : `${selected_verses[0]}\u2013${selected_verses[1]}`
+            }, ${TRANSLATION})`
 
         navigator.clipboard.writeText(`${verses_string_to_copy} ${reference}\n\nSilo Bible: ${window.location.href}`);
         clear_tooltip_interaction();
@@ -227,6 +230,35 @@ export const ChapterContent = (props: ChapterContentProps) => {
 
     const handle_note = () => {
         clear_tooltip_interaction(false);
+        document.getElementById("DOC_EL_NOTE_EDITOR")?.classList.add("active");
+        document.getElementById("DOC_EL_NOTE_EDITOR_FILLER")?.classList.add("active");
+
+        setPendingNote({
+            start: {
+                book: book!,
+                chapter: chapter!,
+                verse: String(selected_verses[0]),
+            },
+            end: {
+                book: book!,
+                chapter: chapter!,
+                verse: String(selected_verses.length == 2 ? selected_verses[1] : selected_verses[0]),
+            },
+            content: "",
+        });
+
+        window.setTimeout(() => {
+            // smooth scroll
+            const container = document.getElementById("DOC_EL_CHAPTER_CONTAINER");
+            const child = document.getElementById(`DOC_EL_VERSE_${selected_verses[0]}`);
+
+            if (!container || !child) return;
+
+            const containerRect = container.getBoundingClientRect();
+            const childRect = child.getBoundingClientRect();
+            const scrollTop = container.scrollTop + (childRect.top - containerRect.top) - (window.innerHeight * 0.25);
+            container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+        }, 300);
     };
 
     return (
@@ -238,11 +270,11 @@ export const ChapterContent = (props: ChapterContentProps) => {
                         <div className="bottom">{get_tooltip_text()}</div>
                     </div>
                     <span className="action copy" onClick={handle_copy}>
-                        <Icon icon={"mynaui:copy"} width={"24px"} height={"24px"}/>
+                        <Icon icon={"mynaui:copy"} width={"24px"} height={"24px"} />
                         <div className="label">Copy</div>
                     </span>
                     <span className="action note" onClick={handle_note}>
-                        <Icon icon={"proicons:note"} width={"24px"} height={"24px"}/>
+                        <Icon icon={"proicons:note"} width={"24px"} height={"24px"} />
                         <div className="label">Note</div>
                     </span>
                 </div>
@@ -302,10 +334,13 @@ const Chapter = () => {
     // TODO: implement verse logic
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const [current_chapter, set_current_chapter] = useState<TranslationBookChapter | null>(null);
+    const { pendingNote } = useNoteProvider();
 
     const navigate = useNavigate();
 
     const on_scroll_up = () => {
+        if (pendingNote) return;
+
         document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
         document.getElementById("DOC_EL_TABBAR")?.classList.remove("hidden");
         document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
@@ -405,6 +440,7 @@ const Chapter = () => {
                     </div>
                     <div className="spacer"></div>
                     <div className="info" style={{ fontSize: "0.7rem", textAlign: "center", paddingBottom: "5rem" }}>hash: {__COMMIT_HASH__}</div>
+                    <div id="DOC_EL_NOTE_EDITOR_FILLER" className="note-editor-filler"></div>
                 </div>
             </div>
             <ChapterSelector />

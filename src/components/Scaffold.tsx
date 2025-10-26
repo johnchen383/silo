@@ -1,4 +1,5 @@
 import { useAuth } from "../providers/auth_provider";
+import NoteEditor from "./NoteEditor";
 import "./Scaffold.scss";
 import Tabbar from "./Tabbar";
 import Topbar from "./Topbar";
@@ -29,6 +30,7 @@ const Scaffold: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {children}
             </div>
             {user ? <Tabbar /> : <></>}
+            <NoteEditor />
         </div>
     );
 };
