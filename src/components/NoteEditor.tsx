@@ -2,9 +2,10 @@ import { Icon } from "@iconify/react";
 import "./NoteEditor.scss";
 import { useNoteProvider } from "../providers/note_provider";
 import { CONST_BOOK_SYMBOL_TO_NAME } from "../consts/bible_data";
+import LexicalEditor from "./LexicalEditor";
 
 const NoteEditor = () => {
-    const {pendingNote, setPendingNote} = useNoteProvider();
+    const { pendingNote, setPendingNote } = useNoteProvider();
 
     return (
         <div id="DOC_EL_NOTE_EDITOR" className="note-editor">
@@ -15,9 +16,17 @@ const NoteEditor = () => {
                     document.getElementById("DOC_EL_NOTE_EDITOR_FILLER")?.classList.remove("active");
                 }} />
             </div>
-            <div className="heading">{CONST_BOOK_SYMBOL_TO_NAME[pendingNote?.start.book!]} {pendingNote?.start.chapter}:{pendingNote?.start.verse}</div>
+            <div className="heading">
+                `${CONST_BOOK_SYMBOL_TO_NAME[pendingNote?.start.book!]} ${pendingNote?.start.chapter}:${pendingNote?.start.verse}`
+            </div>
             <div className="content">
-                {pendingNote?.content}
+                <LexicalEditor
+                    initialValue={pendingNote?.content}
+                    onChange={(newContent) => {
+                        if (!pendingNote) return;
+                        setPendingNote({ ...pendingNote, content: newContent });
+                    }}
+                />
             </div>
         </div>
     )
