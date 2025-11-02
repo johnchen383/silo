@@ -27,7 +27,33 @@ const Scaffold: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         updateScaffoldHeight();
     }, []);
 
-    useEvent('resize', updateScaffoldHeight, []);
+    useEvent('resize', () => {
+        updateScaffoldHeight();
+    }, []);
+
+    useEffect(() => {
+        const vv = window.visualViewport;
+        if (!vv) return;
+
+        const update = () => {
+            window.scrollTo(0, 0);
+            if (vv.offsetTop === 0) {
+                document.documentElement.style.transform = 'none';
+                return;
+            }
+
+            document.documentElement.style.transform = `translateY(${vv.offsetTop}px)`;
+        };
+
+        vv.addEventListener("resize", update);
+        vv.addEventListener("scroll", update);
+        update();
+
+        return () => {
+            vv.removeEventListener("resize", update);
+            vv.removeEventListener("scroll", update);
+        };
+    }, []);
 
     return (
         <div className="scaffold">

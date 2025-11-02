@@ -12,8 +12,8 @@
     height: calc((var(--app-height) * $note-editor-height) - 7rem);
     overflow-y: scroll;
     overscroll-behavior: contain; /* doesnt bubble scroll event up to parent */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    // scrollbar-width: none;
+    // -ms-overflow-style: none;
     line-height: 1;
 
     p {
