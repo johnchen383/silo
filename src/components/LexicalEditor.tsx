@@ -3,12 +3,12 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
 import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import "./LexicalEditor.scss";
+import ToolbarPlugin from "../lib/ToolbarPlugin";
 
 type LexicalEditorProps = {
     initialValue?: string;
@@ -33,21 +33,21 @@ function InitialisePlugin({ initialValue }: { initialValue: string }) {
             paragraph.append($createTextNode(initialValue));
             root.append(paragraph);
         });
+
+
     }, [editor]);
     return null;
 }
 
 function EditorInner({ initialValue, onChange }: LexicalEditorProps) {
     return (
-        <div className="editor-container">
+        <div className="editor-inner">
             <RichTextPlugin
                 contentEditable={<ContentEditable className="editor-input" />}
-                placeholder={<div className="editor-placeholder">Write your note…</div>}
                 ErrorBoundary={LexicalErrorBoundary}
             />
             <InitialisePlugin initialValue={initialValue || ""} />
             <HistoryPlugin />
-            <AutoFocusPlugin />
             <OnChangePlugin
                 onChange={(editorState) => {
                     editorState.read(() => {
@@ -70,7 +70,10 @@ export default function LexicalEditor({ initialValue, onChange }: LexicalEditorP
                 onError,
             }}
         >
-            <EditorInner initialValue={initialValue} onChange={onChange} />
+            <div className="editor-container">
+                <ToolbarPlugin />
+                <EditorInner initialValue={initialValue} onChange={onChange} />
+            </div>
         </LexicalComposer>
     );
 }
