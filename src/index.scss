@@ -18,11 +18,14 @@
   padding: 0px;
   box-sizing: border-box;
   user-select: none;
-  // background-color: red;
+  height: var(--app-height);
 }
 
 html, body {
-  overscroll-behavior-x: none;
+  height: var(--app-height);
+  position: fixed;
+  overflow: hidden;
+  touch-action: none;
 }
 
 body::after {

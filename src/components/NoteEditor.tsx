@@ -17,7 +17,7 @@ const NoteEditor = () => {
                 }} />
             </div>
             <div className="heading">
-                `${CONST_BOOK_SYMBOL_TO_NAME[pendingNote?.start.book!]} ${pendingNote?.start.chapter}:${pendingNote?.start.verse}`
+                {CONST_BOOK_SYMBOL_TO_NAME[pendingNote?.start.book!]} {pendingNote?.start.chapter}:{pendingNote?.start.verse}
             </div>
             <div className="content">
                 <LexicalEditor

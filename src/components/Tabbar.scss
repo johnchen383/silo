@@ -5,13 +5,13 @@
 }
 
 .tabbar {
-    position: fixed;
+    position: absolute;
     z-index: 10;
     background-color: $surface;
     bottom: 0;
     transition: bottom 0.5s ease-in-out;
     box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
-    width: 80dvh;
+    width: 80svh;
     max-width: 100%;
     display: flex;
     align-items: center;
@@ -24,7 +24,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        width: 80dvh;
+        width: 80svh;
         max-width: 100%;
         margin-bottom: 1.5rem;
         padding-left: 1rem;
@@ -82,7 +82,7 @@
 
     .content {
         padding: 0.5rem 0.5rem;
-        width: 80dvh;
+        width: 80svh;
         max-width: 100%;
         display: flex;
         flex-direction: row;

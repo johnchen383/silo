@@ -1,8 +1,8 @@
 @use "../theme" as *;
 
 .chapter-settings {
-    position: fixed;
-    width: 80dvh;
+    position: absolute;
+    width: 80svh;
     max-width: 100%;
     bottom: -100%;
     z-index: 100;
@@ -11,7 +11,7 @@
     box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
     transition: bottom 0.3s ease-in-out;
     padding: 1rem 2rem;
-    max-height: 50vh;
+    max-height: calc(var(--app-height) * 0.5);;
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;

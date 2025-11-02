@@ -23,23 +23,21 @@ function onError(error: Error) {
     console.error(error);
 }
 
-function EditorInner({ initialValue, onChange }: LexicalEditorProps) {
+function InitialisePlugin({ initialValue }: { initialValue: string }) {
     const [editor] = useLexicalComposerContext();
-
     useEffect(() => {
-        if (!editor) return;
-
         editor.update(() => {
             const root = $getRoot();
             root.clear();
-
             const paragraph = $createParagraphNode();
-            if (initialValue) paragraph.append($createTextNode(initialValue));
+            paragraph.append($createTextNode(initialValue));
             root.append(paragraph);
         });
-
     }, [editor]);
+    return null;
+}
 
+function EditorInner({ initialValue, onChange }: LexicalEditorProps) {
     return (
         <div className="editor-container">
             <RichTextPlugin
@@ -47,6 +45,7 @@ function EditorInner({ initialValue, onChange }: LexicalEditorProps) {
                 placeholder={<div className="editor-placeholder">Write your note…</div>}
                 ErrorBoundary={LexicalErrorBoundary}
             />
+            <InitialisePlugin initialValue={initialValue || ""} />
             <HistoryPlugin />
             <AutoFocusPlugin />
             <OnChangePlugin

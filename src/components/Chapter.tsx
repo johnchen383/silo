@@ -22,6 +22,19 @@ interface ChapterContentProps {
     chapter: TranslationBookChapter;
 }
 
+export const SmoothSnapNoteEditorVerse = (anchor_verse: number) => {
+    // smooth scroll
+    const container = document.getElementById("DOC_EL_CHAPTER_CONTAINER");
+    const child = document.getElementById(`DOC_EL_VERSE_${anchor_verse}`);
+
+    if (!container || !child) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const childRect = child.getBoundingClientRect();
+    const scrollTop = container.scrollTop + (childRect.top - containerRect.top) - (window.innerHeight * 0.25);
+    container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+}
+
 export const ChapterContent = (props: ChapterContentProps) => {
     const { chapterContentViewSettings, setInApp } = useAppProvider();
     const { setLastChapterViewed } = useHistoryProvider();
@@ -248,16 +261,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
         });
 
         window.setTimeout(() => {
-            // smooth scroll
-            const container = document.getElementById("DOC_EL_CHAPTER_CONTAINER");
-            const child = document.getElementById(`DOC_EL_VERSE_${selected_verses[0]}`);
-
-            if (!container || !child) return;
-
-            const containerRect = container.getBoundingClientRect();
-            const childRect = child.getBoundingClientRect();
-            const scrollTop = container.scrollTop + (childRect.top - containerRect.top) - (window.innerHeight * 0.25);
-            container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+            SmoothSnapNoteEditorVerse(selected_verses[0]);
         }, 300);
     };
 
@@ -270,11 +274,11 @@ export const ChapterContent = (props: ChapterContentProps) => {
                         <div className="bottom">{get_tooltip_text()}</div>
                     </div>
                     <span className="action copy" onClick={handle_copy}>
-                        <Icon icon={"mynaui:copy"} width={"24px"} height={"24px"} />
+                        <Icon icon={"mynaui:copy"} width={"25px"} height={"25px"} />
                         <div className="label">Copy</div>
                     </span>
                     <span className="action note" onClick={handle_note}>
-                        <Icon icon={"proicons:note"} width={"24px"} height={"24px"} />
+                        <Icon icon={"proicons:note"} width={"25px"} height={"25px"} />
                         <div className="label">Note</div>
                     </span>
                 </div>

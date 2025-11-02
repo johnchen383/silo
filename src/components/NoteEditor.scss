@@ -4,10 +4,10 @@
 {
     z-index: 100001;
     background-color: $surface;
-    position: fixed;
+    position: absolute;
     bottom: -100%;
-    transition: all 0.3s ease-in-out;
-    height: 50dvh;
+    transition: bottom 0.3s ease-in-out;
+    height: calc(var(--app-height) * $note-editor-height);
     width: 80svh;
     max-width: 100%;
     box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
