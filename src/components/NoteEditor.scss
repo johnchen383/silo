@@ -1,23 +1,31 @@
 @use "../theme" as *;
 
-.note-editor
-{
+.note-editor {
     z-index: 100001;
-    background-color: $surface;
+    width: 100svw;
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     bottom: -100%;
     transition: bottom 0.3s ease-in-out;
     height: calc(var(--app-height) * $note-editor-height);
-    width: 80svh;
-    max-width: 100%;
-    box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
-    padding: 1rem 1rem;
+    background-color: $surface;
+
+    .editor {
+        background-color: $surface;
+        position: absolute;
+        box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
+        padding: 1rem 1rem;
+        width: 80svh;
+        max-width: 100%;
+
+        .content {
+            position: relative;
+        }
+    }
 
     &.active {
         bottom: 0;
-    }
-
-    .content {
-        position: relative;
     }
 }

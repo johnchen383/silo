@@ -33,7 +33,9 @@ const Scaffold: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     useEffect(() => {
         const vv = window.visualViewport;
-        if (!vv) return;
+        const el = document.getElementById("DOC_EL_CHAPTER_CONTAINER");
+        const noteEl = document.getElementById("DOC_EL_NOTE_EDITOR");
+        if (!vv || !el || !noteEl) return;
 
         const update = () => {
             window.scrollTo(0, 0);
