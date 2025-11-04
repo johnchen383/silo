@@ -48,11 +48,31 @@ export const HIDE_CHAPTER_CURTAINS = () => {
 // }
 
 export const ChapterContent = (props: ChapterContentProps) => {
+    const num_verses = props.chapter.chapter.content.filter(c => c.type == "verse").length;
     const { chapterContentViewSettings, setInApp } = useAppProvider();
     const { setLastChapterViewed } = useHistoryProvider();
     const [selected_verses, set_selected_verses] = useState<number[]>([]);
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const { pendingNote, setPendingNote } = useNoteProvider();
+    const [highlights, set_highlights] = useState<number[]>(Array(num_verses + 1).fill(0));
+
+    const highlight = (verse_num: number, highlight_index: number) => {
+        set_highlights(highlights => {
+            const next = [...highlights];
+            next[verse_num] = highlight_index;
+            return next;
+        });
+    }
+
+    const highlight_colour = (verse_num: number): string => {
+        const highlight_index = highlights[verse_num];
+        switch (highlight_index) {
+            case 1:
+                return "#FFF9B0";
+            default:
+                return "none";
+        }
+    }
 
     useEffect(() => {
         clear_tooltip_interaction();
@@ -209,7 +229,9 @@ export const ChapterContent = (props: ChapterContentProps) => {
 
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
-            <span id={`DOC_EL_VERSE_${verse.number}`} className={`verse ${verse_selected(verse.number) ? 'selected' : ''}`} onClick={(e) => handle_verse_click(e, verse.number)}>
+            <span id={`DOC_EL_VERSE_${verse.number}`} className={`verse ${verse_selected(verse.number) ? 'selected' : ''}`}
+                style={{ backgroundColor: highlight_colour(verse.number) }}
+                onClick={(e) => handle_verse_click(e, verse.number)}>
                 {!chapterContentViewSettings.manusriptMode ? <sup className={`verse-num`}>{verse.number}</sup> : <></>}
                 {verse.content.map(VerseContent)}
             </span>
@@ -275,6 +297,17 @@ export const ChapterContent = (props: ChapterContentProps) => {
         // }, 300);
     };
 
+    const handle_highlight = () =>
+    {
+        // FIXME: toggle highlight logic is broken
+        const highlight_index = highlights[selected_verses[0]] > 0 ? 0 : 1;
+        for (let i = selected_verses[0]; i <= (selected_verses.length == 2 ? selected_verses[1] : selected_verses[0]); i++)
+        {
+            // toggle
+            highlight(i, highlight_index);
+        }
+    }
+
     return (
         <>
             <div className="verses">
@@ -286,6 +319,10 @@ export const ChapterContent = (props: ChapterContentProps) => {
                     <span className="action copy" onClick={handle_copy}>
                         <Icon icon={"mynaui:copy"} width={"25px"} height={"25px"} />
                         <div className="label">Copy</div>
+                    </span>
+                    <span className="action highlight" onClick={handle_highlight}>
+                        <Icon icon={"tabler:circle-dotted"} width={"25px"} height={"25px"} />
+                        <div className="label">Mark</div>
                     </span>
                     <span className="action note" onClick={handle_note}>
                         <Icon icon={"proicons:note"} width={"25px"} height={"25px"} />
