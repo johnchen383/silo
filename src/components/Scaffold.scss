@@ -35,3 +35,28 @@
         }
     }
 }
+
+.landscape {
+    width: 80vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.6;
+
+    img {
+        object-fit: contain;
+        width: 60%;
+        margin-bottom: 2rem;
+    }
+
+    .label
+    {
+        margin-top: 1rem;
+        padding: 0rem 2rem;
+    }
+
+    padding: 2rem;
+    text-align: center;
+}

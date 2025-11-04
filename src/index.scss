@@ -34,7 +34,7 @@ body::after {
     height: 0;
     overflow: hidden;
     z-index: -1;
-    content: url("../assets/construction.svg");
+    content: url("../assets/construction.svg") url("../assets/landscape.svg");
 }
 
 svg {
