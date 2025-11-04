@@ -22,18 +22,30 @@ interface ChapterContentProps {
     chapter: TranslationBookChapter;
 }
 
-export const SmoothSnapNoteEditorVerse = (anchor_verse: number) => {
-    // smooth scroll
-    const container = document.getElementById("DOC_EL_CHAPTER_CONTAINER");
-    const child = document.getElementById(`DOC_EL_VERSE_${anchor_verse}`);
-
-    if (!container || !child) return;
-
-    const containerRect = container.getBoundingClientRect();
-    const childRect = child.getBoundingClientRect();
-    const scrollTop = container.scrollTop + (childRect.top - containerRect.top) - (window.innerHeight * 0.25);
-    container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+export const SHOW_CHAPTER_CURTAINS = () => {
+    document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
+    document.getElementById("DOC_EL_TABBAR")?.classList.remove("hidden");
 }
+
+export const HIDE_CHAPTER_CURTAINS = () => {
+    document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
+    document.getElementById("DOC_EL_TABBAR")?.classList.add("hidden");
+}
+
+
+
+// export const SmoothSnapNoteEditorVerse = (anchor_verse: number) => {
+//     // smooth scroll
+//     const container = document.getElementById("DOC_EL_CHAPTER_CONTAINER");
+//     const child = document.getElementById(`DOC_EL_VERSE_${anchor_verse}`);
+
+//     if (!container || !child) return;
+
+//     const containerRect = container.getBoundingClientRect();
+//     const childRect = child.getBoundingClientRect();
+//     const scrollTop = container.scrollTop + (childRect.top - containerRect.top) - (window.innerHeight * 0.25);
+//     container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+// }
 
 export const ChapterContent = (props: ChapterContentProps) => {
     const { chapterContentViewSettings, setInApp } = useAppProvider();
@@ -242,9 +254,7 @@ export const ChapterContent = (props: ChapterContentProps) => {
     }
 
     const handle_note = () => {
-        clear_tooltip_interaction(false);
         document.getElementById("DOC_EL_NOTE_EDITOR")?.classList.add("active");
-        document.getElementById("DOC_EL_NOTE_EDITOR_FILLER")?.classList.add("active");
 
         setPendingNote({
             start: {
@@ -260,9 +270,9 @@ export const ChapterContent = (props: ChapterContentProps) => {
             content: "",
         });
 
-        window.setTimeout(() => {
-            SmoothSnapNoteEditorVerse(selected_verses[0]);
-        }, 300);
+        // window.setTimeout(() => {
+        //     SmoothSnapNoteEditorVerse(selected_verses[0]);
+        // }, 300);
     };
 
     return (
@@ -338,21 +348,16 @@ const Chapter = () => {
     // TODO: implement verse logic
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const [current_chapter, set_current_chapter] = useState<TranslationBookChapter | null>(null);
-    const { pendingNote } = useNoteProvider();
 
     const navigate = useNavigate();
 
     const on_scroll_up = () => {
-        if (pendingNote) return;
-
-        document.getElementById("DOC_EL_TOPBAR")?.classList.remove("hidden");
-        document.getElementById("DOC_EL_TABBAR")?.classList.remove("hidden");
+        SHOW_CHAPTER_CURTAINS();
         document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
     }
 
     const on_scroll_down = () => {
-        document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
-        document.getElementById("DOC_EL_TABBAR")?.classList.add("hidden");
+        HIDE_CHAPTER_CURTAINS();
         document.getElementById("DOC_EL_HISTORY_ITEMS")?.classList.remove("active");
     }
 
@@ -432,7 +437,6 @@ const Chapter = () => {
     return (
         <>
             <div id="DOC_EL_CHAPTER_CONTAINER" className={`chapter-container`} onClick={on_general_click}>
-                {/* <div className="filler" /> */}
                 <div className="content">
                     <div className="chapter-block">
                         <ChapterHeader />
@@ -444,7 +448,6 @@ const Chapter = () => {
                     </div>
                     <div className="spacer"></div>
                     <div className="info" style={{ fontSize: "0.7rem", textAlign: "center", paddingBottom: "5rem" }}>hash: {__COMMIT_HASH__}</div>
-                    <div id="DOC_EL_NOTE_EDITOR_FILLER" className="note-editor-filler"></div>
                 </div>
             </div>
             <ChapterSelector />

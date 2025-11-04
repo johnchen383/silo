@@ -203,17 +203,6 @@
             font-variant-numeric: tabular-nums;
         }
     }
-
-    .note-editor-filler {
-        padding-top: 0;
-        width: calc(min(80svh, 100vw) + 2 * 2rem);
-        position: relative;
-        transition: padding 0.3s ease-in-out;
-
-        &.active {
-            padding-top: calc((var(--app-height) * $note-editor-height));
-        }
-    }
 }
 
 @keyframes loadingAnimation {
