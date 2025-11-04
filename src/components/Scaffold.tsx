@@ -26,7 +26,7 @@ const Scaffold: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     };
 
     const checkAspectRatio = () => {
-        const too_wide = window.innerHeight / window.innerWidth < 0.6 && window.innerWidth < 1000;
+        const too_wide = window.innerHeight / window.innerWidth < 1.3 && window.innerWidth < 1000;
         set_show_landscape_warning(too_wide);
     }
 
