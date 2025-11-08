@@ -18,6 +18,10 @@ const NoteEditor = () => {
                             <div className="title">
                                 <input
                                     type="text"
+                                    inputMode="text"
+                                    autoComplete="off"
+                                    autoCorrect="off"
+                                    spellCheck="false"
                                     value={pendingNote?.title || ""}
                                     onChange={(e) => {
                                         if (!pendingNote) return;

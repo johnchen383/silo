@@ -26,6 +26,17 @@
     border: 1px solid $on-surface;
     border-radius: $border-radius;
     margin-bottom: 1rem;
+    transition: margin-bottom 0.3s ease-in-out;
+
+    &.shrink {
+        margin-bottom: 3rem;
+    }
+
+    // theming
+    .editor-underline
+    {
+        text-decoration: underline;
+    }
 }
 
 .editor-input {
