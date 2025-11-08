@@ -9,15 +9,14 @@
     align-items: center;
     bottom: -100%;
     transition: bottom 0.3s ease-in-out;
-    height: calc(var(--app-height) * $note-editor-height);
+    height: var(--app-height);
     background-color: $surface;
 
     .editor {
         background-color: $surface;
         position: absolute;
-        height: calc((var(--app-height) * $note-editor-height));
+        height: var(--app-height);
         box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
-        padding: 1rem 1rem;
         width: 80svh;
         max-width: 100%;
         display: flex;
@@ -41,7 +40,7 @@
             }
 
             input {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
                 font-weight: 400;
                 border: 1px solid $on-surface;
                 padding: 0.3rem 0.6rem;
@@ -54,8 +53,17 @@
             }
         }
 
-        .content {
-            height: 100%;
+        .top
+        {
+            padding: 0rem 1rem;
+            padding-top: 1rem;
+            height: $note-editor-top-height;
+        }
+
+        .content
+        {
+            height: calc(var(--app-height) - $note-editor-top-height);
+            padding: 0rem 1rem;
         }
     }
 

@@ -13,30 +13,32 @@ const NoteEditor = () => {
         createPortal(
             <div id="DOC_EL_NOTE_EDITOR" className="note-editor">
                 <div className="editor">
-                    <div className="editor-topbar">
-                        <div className="title">
-                            <input
-                                type="text"
-                                value={pendingNote?.title || ""}
-                                onChange={(e) => {
-                                    if (!pendingNote) return;
-                                    setPendingNote({ ...pendingNote, title: e.target.value });
-                                }}
-                            />
+                    <div className="top">
+                        <div className="editor-topbar">
+                            <div className="title">
+                                <input
+                                    type="text"
+                                    value={pendingNote?.title || ""}
+                                    onChange={(e) => {
+                                        if (!pendingNote) return;
+                                        setPendingNote({ ...pendingNote, title: e.target.value });
+                                    }}
+                                />
+                            </div>
+                            <div className="exit">
+                                <Icon icon="basil:cross-solid" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={() => {
+                                    setPendingNote(null);
+                                    document.getElementById("DOC_EL_NOTE_EDITOR")?.classList.remove("active");
+                                    SHOW_CHAPTER_CURTAINS();
+                                }} />
+                            </div>
                         </div>
-                        <div className="exit">
-                            <Icon icon="basil:cross-solid" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={() => {
-                                setPendingNote(null);
-                                document.getElementById("DOC_EL_NOTE_EDITOR")?.classList.remove("active");
-                                SHOW_CHAPTER_CURTAINS();
-                            }} />
+                        <div className="editor-config">
+                            <div className="config-item start">{TO_STRING(pendingNote?.start ?? DEFAULT_BIBLE_ROUTE)}</div>
+                            <div className="config-item end">{TO_STRING(pendingNote?.end ?? DEFAULT_BIBLE_ROUTE)}</div>
+                            <div className="config-item visibility">Private</div>
+                            <div className="config-item type">Insight</div>
                         </div>
-                    </div>
-                    <div className="editor-config">
-                        <div className="config-item start">{TO_STRING(pendingNote?.start ?? DEFAULT_BIBLE_ROUTE)}</div>
-                        <div className="config-item end">{TO_STRING(pendingNote?.end ?? DEFAULT_BIBLE_ROUTE)}</div>
-                        <div className="config-item visibility">Private</div>
-                        <div className="config-item type">Insight</div>
                     </div>
                     <div className="content">
                         <LexicalEditor

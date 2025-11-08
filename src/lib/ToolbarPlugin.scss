@@ -12,6 +12,7 @@
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
   width: 100%;
+  box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
 
   &.hide {
     bottom: -5rem;
@@ -29,6 +30,10 @@
 
       &:disabled {
         cursor: not-allowed;
+
+        svg {
+          cursor: not-allowed;
+        }
       }
 
       &.spaced {
@@ -36,7 +41,7 @@
       }
 
       &.active {
-        background-color: red;
+        background-color: $loading-grey;
       }
     }
   }

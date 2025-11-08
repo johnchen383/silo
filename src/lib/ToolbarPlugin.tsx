@@ -1,5 +1,5 @@
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {mergeRegister} from '@lexical/utils';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { mergeRegister } from '@lexical/utils';
 import {
   $getSelection,
   $isRangeSelection,
@@ -11,14 +11,14 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import "./ToolbarPlugin.scss";
 import { Icon } from '@iconify/react';
 import { ICON_SIZE } from '../theme';
+import useEvent from '../hooks/useEvent';
 
-export default function ToolbarPlugin({visible} : {visible: boolean}) {
+export default function ToolbarPlugin({ visible }: { visible: boolean }) {
   const [editor] = useLexicalComposerContext();
-  const toolbarRef = useRef(null);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -33,14 +33,18 @@ export default function ToolbarPlugin({visible} : {visible: boolean}) {
     }
   }, []);
 
+  useEvent("mousedown", (e: any) => {
+    e.preventDefault();
+  }, [], document.getElementById("DOC_EL_NOTE_TOOLBAR"));
+
   useEffect(() => {
     return mergeRegister(
-      editor.registerUpdateListener(({editorState}) => {
+      editor.registerUpdateListener(({ editorState }) => {
         editorState.read(
           () => {
             $updateToolbar();
           },
-          {editor},
+          { editor },
         );
       }),
       editor.registerCommand(
@@ -71,19 +75,21 @@ export default function ToolbarPlugin({visible} : {visible: boolean}) {
   }, [editor, $updateToolbar]);
 
   return (
-    <div className={`toolbar ${visible ? '' : 'hide'}`} ref={toolbarRef}>
+    <div id='DOC_EL_NOTE_TOOLBAR' className={`toolbar ${visible ? '' : 'hide'}`}>
       <button
         disabled={!canUndo}
         onClick={() => {
+          if (!canUndo) return;
           editor.dispatchCommand(UNDO_COMMAND, undefined);
         }}
         className="toolbar-item spaced"
         aria-label="Undo">
-        <Icon icon={`majesticons:undo-line`} height={ICON_SIZE} width={ICON_SIZE}/>
+        <Icon icon={`majesticons:undo-line`} height={ICON_SIZE} width={ICON_SIZE} />
       </button>
       <button
         disabled={!canRedo}
         onClick={() => {
+          if (!canRedo) return;
           editor.dispatchCommand(REDO_COMMAND, undefined);
         }}
         className="toolbar-item"
@@ -95,8 +101,16 @@ export default function ToolbarPlugin({visible} : {visible: boolean}) {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
         }}
         className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
+        aria-label="Format Heading">
+        <Icon icon={`mingcute:heading-1-line`} height={ICON_SIZE} width={ICON_SIZE} />
+      </button>
+      <button
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
+        }}
+        className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
         aria-label="Format Bold">
-        <i className="format bold" />
+        <Icon icon={`mingcute:bold-line`} height={ICON_SIZE} width={ICON_SIZE} />
       </button>
       <button
         onClick={() => {
@@ -104,7 +118,7 @@ export default function ToolbarPlugin({visible} : {visible: boolean}) {
         }}
         className={'toolbar-item spaced ' + (isUnderline ? 'active' : '')}
         aria-label="Format Underline">
-        <i className="format underline" />
+        <Icon icon={`mingcute:underline-line`} height={ICON_SIZE} width={ICON_SIZE} />
       </button>
     </div>
   );

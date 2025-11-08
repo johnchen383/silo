@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    height: calc((var(--app-height) * $note-editor-height) - 8rem); // TODO: this is a little hacky and gross
+    height: calc(var(--app-height) - $note-editor-top-height);
 
     p {
         margin-top: 0.7rem;
@@ -25,6 +25,7 @@
     -ms-overflow-style: none;
     border: 1px solid $on-surface;
     border-radius: $border-radius;
+    margin-bottom: 1rem;
 }
 
 .editor-input {
