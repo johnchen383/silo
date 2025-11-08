@@ -37,6 +37,10 @@ body::after {
     content: url("../assets/construction.svg") url("../assets/landscape.svg");
 }
 
+input {
+  background-color: $surface;
+}
+
 svg {
   cursor: pointer;
   color: $on-surface;

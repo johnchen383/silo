@@ -6,6 +6,7 @@ export interface Note {
     start: BibleRouteParams;
     end: BibleRouteParams;
     content: string;
+    title: string;
 }
 
 interface NoteStateContextType {

@@ -4,11 +4,12 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
-import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
-import { useEffect } from "react";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { $getRoot} from "lexical";
 import "./LexicalEditor.scss";
 import ToolbarPlugin from "../lib/ToolbarPlugin";
+import { InitialisePlugin } from "../lib/InitialisePlugin";
+import { FocusListenerPlugin } from "../lib/FocusListenerPlugin";
+import { useState } from "react";
 
 type LexicalEditorProps = {
     initialValue?: string;
@@ -23,21 +24,6 @@ function onError(error: Error) {
     console.error(error);
 }
 
-function InitialisePlugin({ initialValue }: { initialValue: string }) {
-    const [editor] = useLexicalComposerContext();
-    useEffect(() => {
-        editor.update(() => {
-            const root = $getRoot();
-            root.clear();
-            const paragraph = $createParagraphNode();
-            paragraph.append($createTextNode(initialValue));
-            root.append(paragraph);
-        });
-
-
-    }, [editor]);
-    return null;
-}
 
 function EditorInner({ initialValue, onChange }: LexicalEditorProps) {
     return (
@@ -62,6 +48,8 @@ function EditorInner({ initialValue, onChange }: LexicalEditorProps) {
 }
 
 export default function LexicalEditor({ initialValue, onChange }: LexicalEditorProps) {
+    const [showToolbar, setShowToolbar] = useState(false);
+
     return (
         <LexicalComposer
             initialConfig={{
@@ -70,9 +58,10 @@ export default function LexicalEditor({ initialValue, onChange }: LexicalEditorP
                 onError,
             }}
         >
+            <FocusListenerPlugin onFocus={() => setShowToolbar(true)} onBlur={() => setShowToolbar(false)} />
             <div className="editor-container">
-                <ToolbarPlugin />
                 <EditorInner initialValue={initialValue} onChange={onChange} />
+                <ToolbarPlugin visible={showToolbar} />
             </div>
         </LexicalComposer>
     );

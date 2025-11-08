@@ -1,18 +1,14 @@
 @use "../theme" as *;
 
 .editor-container {
-    margin-top: 1rem;
-    border-radius: 5px;
     width: 100%;
-    color: #000;
-    position: absolute;
     font-weight: 400;
     text-align: left;
-    border: 1px solid $on-surface;
-    height: calc((var(--app-height) * $note-editor-height) - 7rem);
     line-height: 1;
     display: flex;
     flex-direction: column;
+    position: relative;
+    height: calc((var(--app-height) * $note-editor-height) - 8rem); // TODO: this is a little hacky and gross
 
     p {
         margin-top: 0.7rem;
@@ -22,16 +18,16 @@
 
 .editor-inner {
     flex: 1;
-    position: relative;
     width: 100%;
     overflow-y: scroll;
     overscroll-behavior: contain; /* doesnt bubble scroll event up to parent */
     scrollbar-width: none;
     -ms-overflow-style: none;
+    border: 1px solid $on-surface;
+    border-radius: $border-radius;
 }
 
 .editor-input {
-    position: relative;
     tab-size: 1;
     outline: 0;
     padding: 0.5rem 1rem;

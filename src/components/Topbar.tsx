@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { CONST_BIBLE_ROUTE, CONST_BOOK_SYMBOL_TO_NAME } from '../consts/bible_data';
 import { useHistoryProvider } from '../providers/history_provider';
 import type { BibleRouteParams } from '../types/bible_route';
+import { ICON_SIZE_LARGE } from '../theme';
 
 const Topbar = () => {
     const { book, chapter, verse } = useParams<BibleRouteParams>();
@@ -62,12 +63,12 @@ const Topbar = () => {
 
     const READ_TOPBAR_ELEMENTS = <>
         {
-            chapterNavSettings.showBookmark ? <span><Icon icon={`${is_bookmarked ? "fluent:bookmark-16-filled" : "fluent:bookmark-16-regular"}`} width="36" height="36" onClick={toggle_bookmark} /></span> : <></>
+            chapterNavSettings.showBookmark ? <span><Icon icon={`${is_bookmarked ? "fluent:bookmark-16-filled" : "fluent:bookmark-16-regular"}`} width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={toggle_bookmark} /></span> : <></>
         }
         {
             chapterNavSettings.showHistory ?
                 <span className={`history`}>
-                    <Icon icon="solar:history-linear" width="36" height="36" onClick={toggle_history} />
+                    <Icon icon="solar:history-linear" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={toggle_history} />
                     {
                         <div id='DOC_EL_HISTORY_ITEMS' className={`history-items`}>
                             {
@@ -85,7 +86,7 @@ const Topbar = () => {
                 </span>
                 : <></>
         }
-        <span><Icon icon="solar:settings-outline" width="36" height="36" onClick={open_chapter_settings} /></span>
+        <span><Icon icon="solar:settings-outline" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={open_chapter_settings} /></span>
     </>
 
     return (

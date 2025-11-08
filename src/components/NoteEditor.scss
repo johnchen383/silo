@@ -15,13 +15,47 @@
     .editor {
         background-color: $surface;
         position: absolute;
+        height: calc((var(--app-height) * $note-editor-height));
         box-shadow: 0 -6px 6px -4px rgba(0, 0, 0, 0.1);
         padding: 1rem 1rem;
         width: 80svh;
         max-width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .editor-config {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            padding: 0.5rem 0.5rem;
+        }
+
+        .editor-topbar {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            .title {
+                width: 100%;
+            }
+
+            input {
+                font-size: 1.3rem;
+                font-weight: 400;
+                border: 1px solid $on-surface;
+                padding: 0.3rem 0.6rem;
+                border-radius: $border-radius;
+                width: 100%;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
 
         .content {
-            position: relative;
+            height: 100%;
         }
     }
 

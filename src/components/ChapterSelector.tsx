@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import "./ChapterSelector.scss";
 import { Icon } from '@iconify/react';
 import { useAppProvider } from '../providers/app_provider';
+import { ICON_SIZE, ICON_SIZE_LARGE } from '../theme';
 
 const ChapterSelector = () => {
     const [selected_book, set_selected_book] = useState<string>("");
@@ -29,7 +30,7 @@ const ChapterSelector = () => {
                                 navigate(`${CONST_BIBLE_ROUTE}/${bookmarkedChapter.book}/${bookmarkedChapter.chapter}`);
                                 exit();
                             }}>
-                                <Icon icon="fluent:bookmark-16-regular" width="28" height="28" />
+                                <Icon icon="fluent:bookmark-16-regular" width={ICON_SIZE} height={ICON_SIZE} />
                                 <div className="action">
                                     {`${CONST_BOOK_SYMBOL_TO_NAME[bookmarkedChapter.book]} ${bookmarkedChapter.chapter}`}
                                 </div>
@@ -38,7 +39,7 @@ const ChapterSelector = () => {
                             </>
                         }
                     </div>
-                    <Icon icon="basil:cross-solid" width="36" height="36" onClick={() => {
+                    <Icon icon="basil:cross-solid" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={() => {
                         exit();
                     }} />
                 </div>

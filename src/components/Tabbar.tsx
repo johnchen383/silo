@@ -7,6 +7,7 @@ import { useHistoryProvider } from "../providers/history_provider";
 import { DEFAULT_BIBLE_ROUTE, type BibleRouteParams } from "../types/bible_route";
 import { useOnline } from "../hooks/useOnline";
 import { useEffect, useRef } from "react";
+import { ICON_SIZE, ICON_SIZE_LARGE } from "../theme";
 
 const ICONS = [
     "fluent:home-32-filled",
@@ -145,26 +146,26 @@ const Tabbar = () => {
                 {
                     has_chapter_nav &&
                     <div className="chapter-navigation">
-                        <div className="item btn left" onClick={handle_prev}><Icon icon="basil:caret-left-outline" width="32" height="32" /><div className="text">{prev_chapter!.chapter}</div></div>
+                        <div className="item btn left" onClick={handle_prev}><Icon icon="basil:caret-left-outline" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} /><div className="text">{prev_chapter!.chapter}</div></div>
                         <div className="item label" onClick={open_chapter_selector}>{CONST_BOOK_SYMBOL_TO_NAME[book]} {chapter}</div>
-                        <div className="item btn right" onClick={handle_next}><div className="text">{next_chapter!.chapter}</div><Icon icon="basil:caret-right-outline" width="32" height="32" /></div>
+                        <div className="item btn right" onClick={handle_next}><div className="text">{next_chapter!.chapter}</div><Icon icon="basil:caret-right-outline" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} /></div>
                     </div>
                 }
                 <div className="content">
                     <div className="item" onClick={() => handle_tab_navigation('home')}>
-                        <Icon icon={selectedPage == 'home' ? "fluent:home-32-filled" : "fluent:home-32-regular"} width="25" height="25" />
+                        <Icon icon={selectedPage == 'home' ? "fluent:home-32-filled" : "fluent:home-32-regular"} width={ICON_SIZE} height={ICON_SIZE} />
                         <div className="label" style={{ fontSize: 14 }}>Home</div>
                     </div>
                     <div className="item" onClick={() => handle_tab_navigation('read')} >
-                        <Icon icon={selectedPage == 'read' ? "famicons:book" : "famicons:book-outline"} width="25" height="25" />
+                        <Icon icon={selectedPage == 'read' ? "famicons:book" : "famicons:book-outline"} width={ICON_SIZE} height={ICON_SIZE} />
                         <div className="label" style={{ fontSize: 14 }}>Read</div>
                     </div>
                     <div className="item" onClick={() => handle_tab_navigation('notes')}>
-                        <Icon icon={selectedPage == 'notes' ? "solar:notes-bold" : "solar:notes-outline"} width="25" height="25" />
+                        <Icon icon={selectedPage == 'notes' ? "solar:notes-bold" : "solar:notes-outline"} width={ICON_SIZE} height={ICON_SIZE} />
                         <div className="label" style={{ fontSize: 14 }}>Notes</div>
                     </div>
                     <div className="item" onClick={() => handle_tab_navigation('profile')}>
-                        <Icon icon={selectedPage == 'profile' ? "fluent:person-32-filled" : "fluent:person-32-regular"} width="25" height="25" />
+                        <Icon icon={selectedPage == 'profile' ? "fluent:person-32-filled" : "fluent:person-32-regular"} width={ICON_SIZE} height={ICON_SIZE} />
                         <div className="label" style={{ fontSize: 14 }}>Profile</div>
                     </div>
                 </div>

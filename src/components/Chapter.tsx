@@ -14,9 +14,10 @@ const LineBreak: React.FC<{ small: boolean }> = ({ small }) => <span><br /><div 
 import React from 'react'
 import ChapterSettings from "./ChapterSettings";
 import { useHistoryProvider } from "../providers/history_provider";
-import type { BibleRouteParams } from "../types/bible_route";
+import { TO_STRING, type BibleRouteParams } from "../types/bible_route";
 import { Icon } from "@iconify/react";
 import { useNoteProvider } from "../providers/note_provider";
+import { ICON_SIZE } from "../theme";
 
 interface ChapterContentProps {
     chapter: TranslationBookChapter;
@@ -31,8 +32,6 @@ export const HIDE_CHAPTER_CURTAINS = () => {
     document.getElementById("DOC_EL_TOPBAR")?.classList.add("hidden");
     document.getElementById("DOC_EL_TABBAR")?.classList.add("hidden");
 }
-
-
 
 // export const SmoothSnapNoteEditorVerse = (anchor_verse: number) => {
 //     // smooth scroll
@@ -268,8 +267,13 @@ export const ChapterContent = (props: ChapterContentProps) => {
             return verse_text;
         }).join(" ").replace(/\s{2,}/g, ' ');
 
-        const reference = `(${CONST_BOOK_SYMBOL_TO_NAME[book!]} ${chapter!}:${selected_verses.length == 1 ? selected_verses[0] : `${selected_verses[0]}\u2013${selected_verses[1]}`
-            }, ${TRANSLATION})`
+        const start: BibleRouteParams = {
+            book: book!,
+            chapter: chapter!,
+            verse: String(selected_verses[0]),
+        }
+
+        const reference = `(${TO_STRING(start, false, selected_verses.length == 1 ? null : selected_verses[1])}, ${TRANSLATION})`
 
         navigator.clipboard.writeText(`${verses_string_to_copy} ${reference}\n\nSilo Bible: ${window.location.href}`);
         clear_tooltip_interaction();
@@ -278,18 +282,26 @@ export const ChapterContent = (props: ChapterContentProps) => {
     const handle_note = () => {
         document.getElementById("DOC_EL_NOTE_EDITOR")?.classList.add("active");
 
+        const start: BibleRouteParams = {
+            book: book!,
+            chapter: chapter!,
+            verse: String(selected_verses[0]),
+        }
+
+        const title_suffix = TO_STRING(start, false, selected_verses.length == 1 ? null : selected_verses[1]);
+
+        const today = new Date();
+        const date_prefix = `${String(today.getDate()).padStart(2, '0')}.${String(today.getMonth() + 1).padStart(2, '0')}.${today.getFullYear().toString().slice(-2)}`;
+
         setPendingNote({
-            start: {
-                book: book!,
-                chapter: chapter!,
-                verse: String(selected_verses[0]),
-            },
+            start: start,
             end: {
                 book: book!,
                 chapter: chapter!,
                 verse: String(selected_verses.length == 2 ? selected_verses[1] : selected_verses[0]),
             },
             content: "",
+            title: `${date_prefix} ${title_suffix}`,
         });
 
         // window.setTimeout(() => {
@@ -297,12 +309,10 @@ export const ChapterContent = (props: ChapterContentProps) => {
         // }, 300);
     };
 
-    const handle_highlight = () =>
-    {
+    const handle_highlight = () => {
         // FIXME: toggle highlight logic is broken
         const highlight_index = highlights[selected_verses[0]] > 0 ? 0 : 1;
-        for (let i = selected_verses[0]; i <= (selected_verses.length == 2 ? selected_verses[1] : selected_verses[0]); i++)
-        {
+        for (let i = selected_verses[0]; i <= (selected_verses.length == 2 ? selected_verses[1] : selected_verses[0]); i++) {
             // toggle
             highlight(i, highlight_index);
         }
@@ -317,15 +327,15 @@ export const ChapterContent = (props: ChapterContentProps) => {
                         <div className="bottom">{get_tooltip_text()}</div>
                     </div>
                     <span className="action copy" onClick={handle_copy}>
-                        <Icon icon={"mynaui:copy"} width={"25px"} height={"25px"} />
+                        <Icon icon={"mynaui:copy"} width={ICON_SIZE} height={ICON_SIZE} />
                         <div className="label">Copy</div>
                     </span>
                     <span className="action highlight" onClick={handle_highlight}>
-                        <Icon icon={"tabler:circle-dotted"} width={"25px"} height={"25px"} />
+                        <Icon icon={"tabler:circle-dotted"} width={ICON_SIZE} height={ICON_SIZE} />
                         <div className="label">Mark</div>
                     </span>
                     <span className="action note" onClick={handle_note}>
-                        <Icon icon={"proicons:note"} width={"25px"} height={"25px"} />
+                        <Icon icon={"proicons:note"} width={ICON_SIZE} height={ICON_SIZE} />
                         <div className="label">Note</div>
                     </span>
                 </div>

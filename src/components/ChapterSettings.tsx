@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react";
 import { useAppProvider } from "../providers/app_provider";
 import "./ChapterSettings.scss";
+import { ICON_SIZE_LARGE } from "../theme";
 
 interface ToggleItemProps {
     heading: string;
@@ -37,7 +38,7 @@ const ChapterSettings = () => {
     return (
         <div id="DOC_EL_CHAPTER_SETTINGS" className='chapter-settings'>
             <div className="exit">
-                <Icon icon="basil:cross-solid" width="36" height="36" onClick={() => {
+                <Icon icon="basil:cross-solid" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={() => {
                     document.getElementById("DOC_EL_CHAPTER_SETTINGS")?.classList.remove("open");
                 }} />
             </div>
