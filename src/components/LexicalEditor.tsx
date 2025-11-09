@@ -24,6 +24,9 @@ type LexicalEditorInnerProps = LexicalEditorProps & {
 
 const theme = {
     paragraph: "editor-paragraph",
+    heading: {
+        h1: 'editor-heading',
+    },
     text: {
         bold: 'editor-bold',
         underline: 'editor-underline',

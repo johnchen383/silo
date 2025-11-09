@@ -1,6 +1,7 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { mergeRegister } from '@lexical/utils';
 import {
+  $createParagraphNode,
   $getSelection,
   $isRangeSelection,
   CAN_REDO_COMMAND,
@@ -16,11 +17,14 @@ import "./ToolbarPlugin.scss";
 import { Icon } from '@iconify/react';
 import { ICON_SIZE } from '../theme';
 import useEvent from '../hooks/useEvent';
+import { $createHeadingNode, $isHeadingNode } from '@lexical/rich-text';
+import { $setBlocksType } from '@lexical/selection';
 
 export default function ToolbarPlugin({ visible }: { visible: boolean }) {
   const [editor] = useLexicalComposerContext();
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
+  const [isHeading, setIsHeading] = useState(false);
   const [isBold, setIsBold] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
 
@@ -30,12 +34,32 @@ export default function ToolbarPlugin({ visible }: { visible: boolean }) {
       // Update text format
       setIsBold(selection.hasFormat('bold'));
       setIsUnderline(selection.hasFormat('underline'));
+
+      const anchorNode = selection.anchor.getNode();
+      const topLevel = anchorNode.getTopLevelElementOrThrow();
+      setIsHeading($isHeadingNode(topLevel) && topLevel.getTag() === 'h1');
     }
   }, []);
 
   useEvent("mousedown", (e: any) => {
     e.preventDefault();
   }, [], document.getElementById("DOC_EL_NOTE_TOOLBAR"));
+
+  const toggle_heading = useCallback(() => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if (!$isRangeSelection(selection)) return;
+
+      const anchorNode = selection.anchor.getNode();
+      const parent = anchorNode.getTopLevelElementOrThrow();
+
+      if ($isHeadingNode(parent) && parent.getTag() === 'h1') {
+        $setBlocksType(selection, () => $createParagraphNode());
+      } else {
+        $setBlocksType(selection, () => $createHeadingNode('h1'));
+      }
+    });
+  }, [editor]);
 
   useEffect(() => {
     return mergeRegister(
@@ -98,9 +122,9 @@ export default function ToolbarPlugin({ visible }: { visible: boolean }) {
       </button>
       <button
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
+          toggle_heading();
         }}
-        className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
+        className={'toolbar-item spaced ' + (isHeading ? 'active' : '')}
         aria-label="Format Heading">
         <Icon icon={`mingcute:heading-1-line`} height={ICON_SIZE} width={ICON_SIZE} />
       </button>

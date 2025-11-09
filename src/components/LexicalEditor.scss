@@ -9,11 +9,6 @@
     flex-direction: column;
     position: relative;
     height: calc(var(--app-height) - $note-editor-top-height);
-
-    p {
-        margin-top: 0.7rem;
-        margin-bottom: 0.7rem;
-    }
 }
 
 .editor-inner {
@@ -36,6 +31,17 @@
     .editor-underline
     {
         text-decoration: underline;
+    }
+
+    .editor-heading
+    {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    p, h1 {
+        margin-top: 0.7rem;
+        margin-bottom: 0.7rem;
     }
 }
 
