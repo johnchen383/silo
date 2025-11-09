@@ -11,4 +11,7 @@ $highlight: #A02C2C;
 
 $border-radius: 5px;
 $note-editor-top-height: 5rem;
-$note-editor-preview-height: 6rem;
+$note-editor-preview-height: 9rem;
+$note-editor-margin: 0.5rem;
+
+$note-editor-peripherals-height: calc($note-editor-top-height + $note-editor-preview-height + (2 * $note-editor-margin))

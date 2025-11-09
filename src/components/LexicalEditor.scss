@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    height: calc(var(--app-height) - $note-editor-top-height - $note-editor-preview-height);
+    height: calc(var(--app-height) - $note-editor-peripherals-height);
 }
 
 .editor-inner {
@@ -34,7 +34,7 @@
     .editor-heading
     {
         font-size: 1.25rem;
-        font-weight: 600;
+        font-weight: normal;
     }
 
     p, h1 {

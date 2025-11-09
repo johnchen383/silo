@@ -29,6 +29,8 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
             padding: 0.5rem 0.5rem;
+            margin: $note-editor-margin 0rem;
+            line-height: 1.4;
         }
 
         .editor-config {
@@ -83,7 +85,7 @@
         }
 
         .content {
-            height: calc(var(--app-height) - $note-editor-top-height - $note-editor-preview-height);
+            height: calc(var(--app-height) - $note-editor-peripherals-height);
             padding: 0rem 1rem;
         }
     }

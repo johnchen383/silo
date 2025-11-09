@@ -19,20 +19,6 @@
         left: 0;
     }
 
-    .loading {
-        width: 80svh;
-        max-width: 100%;
-        height: var(--app-height);
-
-        .bar {
-            width: 100%;
-            height: 4px;
-            background-color: $loading-grey;
-            opacity: 0.6;
-            animation: loadingAnimation 2s infinite;
-        }
-    }
-
     .chapter-block {
         display: flex;
         flex-direction: column;
@@ -57,162 +43,11 @@
         }
     }
 
-    .hebrew-subtitle {
-        font-style: italic;
-        font-weight: 400;
-        margin-bottom: 1rem;
-    }
-
-    .verses {
-        width: fit-content;
-
-        .tooltip {
-            position: fixed;
-            top: calc(var(--app-height) * 0.5);
-            right: -100%;
-            z-index: 100000;
-            visibility: hidden;
-            opacity: 0;
-            transition: all 0.3s ease-in-out;
-            background-color: $surface;
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            padding: 1.2rem 0.8rem;
-            align-items: center;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 20px 0px 0px 20px;
-            font-weight: 400;
-            font-size: 0.9rem;
-
-            .text {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-
-                .top {
-                    font-size: 0.9rem;
-                }
-
-                .bottom {
-                    font-size: 1.1rem;
-                    font-weight: 600;
-                }
-            }
-
-            &.active {
-                visibility: visible;
-                opacity: 1;
-                right: 0;
-            }
-
-            .action {
-                cursor: pointer;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: end;
-            }
-        }
-    }
-
-    .verse {
-        cursor: pointer;
-
-        &.selected {
-            border-bottom: 0.1rem dotted $on-surface;
-        }
-    }
-
-    .verse,
-    .hebrew-subtitle {
-        .text {
-            margin-right: 0.2rem;
-            line-height: 2;
-
-            &.selah {
-                display: block;
-                width: 100%;
-                text-align: end;
-            }
-
-            &.poem {
-                font-style: italic;
-
-                &.indented {
-                    margin-left: 0.2rem;
-                }
-            }
-        }
-    }
-
     .spacer {
         margin-bottom: 1rem;
 
         &.small {
             margin-bottom: 0.5rem;
         }
-    }
-
-    .chapter-subheading {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-top: 1.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .verse-num,
-    .footnote,
-    .footnote-num {
-        font-size: 0.8rem;
-        vertical-align: 0.3rem;
-        margin-right: 0.2rem;
-        color: $accent;
-
-        &.footnote {
-            cursor: pointer;
-            user-select: none;
-            color: $highlight;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-    }
-
-    .footnotes {
-        margin-top: 1.5rem;
-        color: $highlight;
-        font-size: 0.8rem;
-        line-height: 1.4;
-
-        .footnote-container {
-            display: flex;
-            flex-direction: row;
-        }
-
-        .footnote-num {
-            vertical-align: 0rem;
-            color: $highlight;
-            margin-right: 0.5rem;
-            width: 1.3rem;
-            flex: 0 0 1.3rem;
-            text-align: right;
-            display: inline-block;
-            font-size: 0.7rem;
-            font-variant-numeric: tabular-nums;
-        }
-    }
-}
-
-@keyframes loadingAnimation {
-    0% {
-        transform: translateX(-100%);
-    }
-    50% {
-        transform: translateX(0%);
-    }
-    100% {
-        transform: translateX(100%);
     }
 }

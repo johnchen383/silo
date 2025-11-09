@@ -6,8 +6,42 @@ import { createPortal } from "react-dom";
 import { SHOW_CHAPTER_CURTAINS } from "./Chapter";
 import { DEFAULT_BIBLE_ROUTE, TO_STRING } from "../types/bible_route";
 import { ICON_SIZE_LARGE } from "../theme";
+import { useEffect, useState } from "react";
+import type { TranslationBookChapter } from "../api/models";
+import { GetBSB } from "../api/bsb";
+import { TRANSLATION } from "../consts/bible_data";
+import { ChapterContent } from "./ChapterContent";
+
+const SmoothSnap = (anchor_verse: number) => {
+    // smooth scroll
+    const container = document.getElementById("DOC_EL_EDITOR_PREVIEW_CONTAINER");
+    const child = document.getElementById(`DOC_EL_VERSE_${anchor_verse}_EMBED`);
+
+    if (!container || !child) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const childRect = child.getBoundingClientRect();
+    const scrollTop = container.scrollTop + (childRect.top - containerRect.top) - 13;
+    container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+}
+
 const NoteEditor = () => {
     const { pendingNote, setPendingNote } = useNoteProvider();
+    const [ preview_chapter, set_preview_chapter ] = useState<TranslationBookChapter | null>(null);
+
+    useEffect(() => {
+        if (!pendingNote) return;
+        if (preview_chapter) return;
+
+        const Initialise = async () =>
+        {
+            const data = await GetBSB<TranslationBookChapter>(`/api/${TRANSLATION}/${pendingNote.start.book}/${pendingNote.start.chapter}.json`);
+            set_preview_chapter(data);
+            window.setTimeout(() => SmoothSnap(Number(pendingNote.start.verse)), 100);
+        }
+
+        Initialise();
+    }, [pendingNote, preview_chapter])
 
     return (
         createPortal(
@@ -34,21 +68,23 @@ const NoteEditor = () => {
                                 <div className="exit">
                                     <Icon icon="basil:cross-solid" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={() => {
                                         setPendingNote(null);
+                                        set_preview_chapter(null);
                                         document.getElementById("DOC_EL_NOTE_EDITOR")?.classList.remove("active");
                                         SHOW_CHAPTER_CURTAINS();
                                     }} />
                                 </div>
                             </div>
                             <div className="editor-config">
-                                <div className="config-item start">{TO_STRING(pendingNote?.start ?? DEFAULT_BIBLE_ROUTE)}</div>
-                                <div className="config-item end">{TO_STRING(pendingNote?.end ?? DEFAULT_BIBLE_ROUTE)}</div>
-                                <div className="config-item visibility">Private</div>
-                                <div className="config-item type">Insight</div>
+                                <div className="config-item start clickable" onClick={() => SmoothSnap(Number(pendingNote?.start.verse ?? 1))}>{TO_STRING(pendingNote?.start ?? DEFAULT_BIBLE_ROUTE)}</div>
+                                <div className="config-item end clickable" onClick={() => SmoothSnap(Number(pendingNote?.end.verse ?? 1))}>{TO_STRING(pendingNote?.end ?? DEFAULT_BIBLE_ROUTE)}</div>
+                                <div className="config-item visibility clickable">Private</div>
+                                <div className="config-item type clickable">Insight</div>
                             </div>
                         </div>
-                        <div className="editor-preview">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum, nisi quo! Ipsum et aperiam sint rerum, quis atque ullam aut totam, porro mollitia minus dignissimos, hic consectetur deleniti! Rerum, itaque!
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque placeat amet ex asperiores cupiditate nihil molestiae dignissimos nesciunt voluptatibus earum dolor sint error cum, iusto rerum repellat itaque veniam omnis. Odit obcaecati repellat quas impedit quos ducimus recusandae deleniti debitis cumque, ipsam porro praesentium, atque inventore. Magni quis veritatis aliquam?
+                        <div id="DOC_EL_EDITOR_PREVIEW_CONTAINER" className="editor-preview">
+                            {
+                                preview_chapter && <ChapterContent chapter_data={preview_chapter} embedded={true} />
+                            }
                         </div>
                     </div>
                     <div className="content">
