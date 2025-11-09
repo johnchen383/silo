@@ -14,34 +14,41 @@ const NoteEditor = () => {
             <div id="DOC_EL_NOTE_EDITOR" className="note-editor">
                 <div className="editor">
                     <div className="top">
-                        <div className="editor-topbar">
-                            <div className="title">
-                                <input
-                                    type="text"
-                                    inputMode="text"
-                                    autoComplete="off"
-                                    autoCorrect="off"
-                                    spellCheck="false"
-                                    value={pendingNote?.title || ""}
-                                    onChange={(e) => {
-                                        if (!pendingNote) return;
-                                        setPendingNote({ ...pendingNote, title: e.target.value });
-                                    }}
-                                />
+                        <div className="editor-top">
+                            <div className="editor-topbar">
+                                <div className="title">
+                                    <input
+                                        name="title"
+                                        type="text"
+                                        inputMode="text"
+                                        autoComplete="off"
+                                        autoCorrect="off"
+                                        spellCheck="false"
+                                        value={pendingNote?.title || ""}
+                                        onChange={(e) => {
+                                            if (!pendingNote) return;
+                                            setPendingNote({ ...pendingNote, title: e.target.value });
+                                        }}
+                                    />
+                                </div>
+                                <div className="exit">
+                                    <Icon icon="basil:cross-solid" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={() => {
+                                        setPendingNote(null);
+                                        document.getElementById("DOC_EL_NOTE_EDITOR")?.classList.remove("active");
+                                        SHOW_CHAPTER_CURTAINS();
+                                    }} />
+                                </div>
                             </div>
-                            <div className="exit">
-                                <Icon icon="basil:cross-solid" width={ICON_SIZE_LARGE} height={ICON_SIZE_LARGE} onClick={() => {
-                                    setPendingNote(null);
-                                    document.getElementById("DOC_EL_NOTE_EDITOR")?.classList.remove("active");
-                                    SHOW_CHAPTER_CURTAINS();
-                                }} />
+                            <div className="editor-config">
+                                <div className="config-item start">{TO_STRING(pendingNote?.start ?? DEFAULT_BIBLE_ROUTE)}</div>
+                                <div className="config-item end">{TO_STRING(pendingNote?.end ?? DEFAULT_BIBLE_ROUTE)}</div>
+                                <div className="config-item visibility">Private</div>
+                                <div className="config-item type">Insight</div>
                             </div>
                         </div>
-                        <div className="editor-config">
-                            <div className="config-item start">{TO_STRING(pendingNote?.start ?? DEFAULT_BIBLE_ROUTE)}</div>
-                            <div className="config-item end">{TO_STRING(pendingNote?.end ?? DEFAULT_BIBLE_ROUTE)}</div>
-                            <div className="config-item visibility">Private</div>
-                            <div className="config-item type">Insight</div>
+                        <div className="editor-preview">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum, nisi quo! Ipsum et aperiam sint rerum, quis atque ullam aut totam, porro mollitia minus dignissimos, hic consectetur deleniti! Rerum, itaque!
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque placeat amet ex asperiores cupiditate nihil molestiae dignissimos nesciunt voluptatibus earum dolor sint error cum, iusto rerum repellat itaque veniam omnis. Odit obcaecati repellat quas impedit quos ducimus recusandae deleniti debitis cumque, ipsam porro praesentium, atque inventore. Magni quis veritatis aliquam?
                         </div>
                     </div>
                     <div className="content">
