@@ -16,10 +16,9 @@
     width: 100%;
     overflow-y: scroll;
     overscroll-behavior: contain; /* doesnt bubble scroll event up to parent */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
     margin-bottom: 1rem;
     transition: margin-bottom 0.3s ease-in-out;
+    @include scroll-y();
 
     &.shrink {
         margin-bottom: 3rem;

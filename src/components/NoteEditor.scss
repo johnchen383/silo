@@ -26,11 +26,13 @@
             height: $note-editor-preview-height;
             overflow-y: scroll;
             overscroll-behavior: contain; /* doesnt bubble scroll event up to parent */
-            scrollbar-width: none;
-            -ms-overflow-style: none;
             padding: 0.5rem 0.5rem;
             margin: $note-editor-margin 0rem;
             line-height: 1.4;
+            margin-left: 1rem;
+            padding-left: 1rem;
+            border-left: 3px solid $on-surface;
+            @include scroll-y();
         }
 
         .editor-config {
@@ -38,6 +40,13 @@
             flex-direction: row;
             gap: 1rem;
             padding: 0.5rem 0.5rem;
+
+            .config-item {
+                border-radius: 12px;
+                padding: 0.25em 0.75em;
+                margin-right: 0.4em;
+                background-color: $loading-grey;
+            }
         }
 
         .editor-topbar {

@@ -58,6 +58,12 @@
         margin-bottom: 0.5rem;
     }
 
+    &.embedded {
+        .chapter-subheading {
+            margin-top: 0rem;
+        }
+    }
+
     .tooltip {
         position: fixed;
         top: calc(var(--app-height) * 0.5);

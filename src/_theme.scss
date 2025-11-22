@@ -12,6 +12,22 @@ $highlight: #A02C2C;
 $border-radius: 5px;
 $note-editor-top-height: 5rem;
 $note-editor-preview-height: 9rem;
-$note-editor-margin: 0.5rem;
+$note-editor-margin: 2rem;
 
-$note-editor-peripherals-height: calc($note-editor-top-height + $note-editor-preview-height + (2 * $note-editor-margin))
+$note-editor-peripherals-height: calc($note-editor-top-height + $note-editor-preview-height + (2 * $note-editor-margin));
+
+@mixin scroll-y() {
+  &::-webkit-scrollbar {
+    width: 18px;
+  }
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #bcbcbc;
+    border-radius: 30px;
+    border: 7px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+  }
+}

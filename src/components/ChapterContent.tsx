@@ -24,7 +24,7 @@ export const ChapterContent = ({ chapter_data, embedded }: ChapterContentProps) 
     const [selected_verses, set_selected_verses] = useState<number[]>([]);
     const { book, chapter, verse } = useParams<BibleRouteParams>();
     const { pendingNote, setPendingNote } = useNoteProvider();
-    const [ highlights, set_highlights ] = useState<number[]>(Array(num_verses + 1).fill(0));
+    const [highlights, set_highlights] = useState<number[]>(Array(num_verses + 1).fill(0));
 
     const highlight = (verse_num: number, highlight_index: number) => {
         set_highlights(highlights => {
@@ -198,7 +198,7 @@ export const ChapterContent = ({ chapter_data, embedded }: ChapterContentProps) 
 
     const Verse: React.FC<{ verse: ChapterVerse }> = ({ verse }) => {
         return (
-            <span id={`DOC_EL_VERSE_${verse.number}${embedded ? '_EMBED' :''}`} className={`verse ${verse_selected(verse.number) ? 'selected' : ''} ${embedded ? 'embedded' : ''}`}
+            <span id={`DOC_EL_VERSE_${verse.number}${embedded ? '_EMBED' : ''}`} className={`verse ${verse_selected(verse.number) ? 'selected' : ''} ${embedded ? 'embedded' : ''}`}
                 style={{ backgroundColor: highlight_colour(verse.number) }}
                 onClick={(e) => handle_verse_click(e, verse.number)}>
                 {!chapterContentViewSettings.manusriptMode ? <sup className={`verse-num`}>{verse.number}</sup> : <></>}
@@ -288,7 +288,7 @@ export const ChapterContent = ({ chapter_data, embedded }: ChapterContentProps) 
 
     return (
         <>
-            <div className="chapter-content-verses">
+            <div className={`chapter-content-verses ${embedded ? 'embedded' : ''}`}>
                 {!embedded &&
                     <div id="DOC_EL_VERSE_TOOLTIP" className={`tooltip`}>
                         <div className="text">
@@ -344,20 +344,19 @@ export const ChapterContent = ({ chapter_data, embedded }: ChapterContentProps) 
 
                     return null;
                 })}
-
+                {!embedded &&
+                    <div className={`footnotes`}>
+                        {chapter_data.chapter.footnotes.map((note, idx) => {
+                            return (
+                                <div key={idx} className="footnote-container">
+                                    <sup className="footnote-num">{note.noteId + 1}</sup>
+                                    <span className="footnote-text">{note.text}</span>
+                                </div>
+                            )
+                        })}
+                    </div>
+                }
             </div>
-            {!embedded &&
-                <div className={`footnotes`}>
-                    {chapter_data.chapter.footnotes.map((note, idx) => {
-                        return (
-                            <div key={idx} className="footnote-container">
-                                <sup className="footnote-num">{note.noteId + 1}</sup>
-                                <span className="footnote-text">{note.text}</span>
-                            </div>
-                        )
-                    })}
-                </div>
-            }
         </>
     )
 }
