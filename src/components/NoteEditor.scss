@@ -40,12 +40,46 @@
             flex-direction: row;
             gap: 1rem;
             padding: 0.5rem 0.5rem;
+            justify-content: space-between;
+            align-items: center;
 
-            .config-item {
-                border-radius: 12px;
+            .references {
+                display: flex;
+                flex-direction: row;
+                gap: 0.3rem;
+                align-items: center;
+
+                .config-item {
+                    // border-radius: 12px;
+                    padding: 0.25em 0.75em;
+                    margin-right: 0.4em;
+                    border-bottom: 2px solid $grey-2;
+                }
+
+                svg {
+                    color: $grey-1;
+                    margin-left: -0.4rem;
+                }
+            }
+
+            .post-btn {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.4rem;
+                background-color: $primary;
+                color: $surface;
                 padding: 0.25em 0.75em;
-                margin-right: 0.4em;
-                background-color: $loading-grey;
+                border-radius: 12px;
+                cursor: pointer;
+
+                .text {
+                    font-weight: 500;
+                }
+
+                svg {
+                    color: $surface;
+                }
             }
         }
 

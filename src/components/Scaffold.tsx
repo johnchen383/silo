@@ -48,8 +48,7 @@ const Scaffold: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     useEffect(() => {
         const vv = window.visualViewport;
         const el = document.getElementById("DOC_EL_CHAPTER_CONTAINER");
-        const noteEl = document.getElementById("DOC_EL_NOTE_EDITOR");
-        if (!vv || !el || !noteEl) return;
+        if (!vv || !el) return;
 
         const update = () => {
             window.scrollTo(0, 0);
