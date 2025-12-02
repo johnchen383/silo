@@ -12,7 +12,10 @@ import { GET_LAST_CHAPTER_ROUTE } from "./components/Tabbar";
 import { useHistoryProvider } from "./providers/history_provider";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading)
+    return <></>;
 
   return user ? children : <Navigate to="/login" replace />;
 }
@@ -24,17 +27,13 @@ function IndexRoute({ children }: { children: JSX.Element }) {
 }
 
 const App = () => {
-  const { loading } = useAuth();
   const { lastChaptersViewed } = useHistoryProvider();
-  if (loading) {
-    return <></>;
-  }
 
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<ScaffoldWrapper />}>
-          <Route path="/" element={<IndexRoute><Navigate to={`${GET_LAST_CHAPTER_ROUTE(lastChaptersViewed)}`} replace /></IndexRoute>} />
+          <Route path="/" element={<PrivateRoute><IndexRoute><Navigate to={`${GET_LAST_CHAPTER_ROUTE(lastChaptersViewed)}`} replace /></IndexRoute></PrivateRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
           <Route path="/home" element={<PrivateRoute><UnderConstruction /></PrivateRoute>} />

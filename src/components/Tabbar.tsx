@@ -29,7 +29,7 @@ const ICONS = [
 export const GET_LAST_CHAPTER_ROUTE = (lasts: BibleRouteParams[]) => {
     const lastChapt = lasts.at(-1);
     if (!lastChapt) {
-        return `${DEFAULT_BIBLE_ROUTE}`;
+        return `${CONST_BIBLE_ROUTE}/${DEFAULT_BIBLE_ROUTE.book}/${DEFAULT_BIBLE_ROUTE.chapter}`;
     }
 
     return `${CONST_BIBLE_ROUTE}/${lastChapt.book}/${lastChapt.chapter}/${lastChapt.verse}`;
